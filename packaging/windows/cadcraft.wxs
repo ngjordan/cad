@@ -3,8 +3,8 @@
   <?ifndef HasCraftFontLicences ?>
   <?define HasCraftFontLicences=0 ?>
   <?endif?>
-  <Package Name="Iridium CAD" Manufacturer="Learning Machines LLC" Version="$(var.Version)" UpgradeCode="119D7D76-0167-4A9E-8F37-09DA0235F68E" Scope="perUserOrMachine" Compressed="yes" Language="1033">
-    <SummaryInformation Description="Iridium CAD computer-aided design" Manufacturer="Learning Machines LLC" />
+  <Package Name="Iridium CAD" Manufacturer="Iridium Technologies, Inc." Version="$(var.Version)" UpgradeCode="119D7D76-0167-4A9E-8F37-09DA0235F68E" Scope="perUserOrMachine" Compressed="yes" Language="1033">
+    <SummaryInformation Description="Iridium CAD computer-aided design" Manufacturer="Iridium Technologies, Inc." />
     <?include $(sys.SOURCEFILEDIR)install-policy.wxi?>
     <!-- Same-version upgrades let successive pre-releases of one X.Y.Z replace each other
          (MSI versions are numeric, so 1.2.3-rc.1 and 1.2.3-rc.2 are both 1.2.3). -->
@@ -45,8 +45,8 @@
       <?endif?>
       <ComponentGroupRef Id="CadcraftFiles" />
     </Feature>
-  <Property Id="CRAFT_OPTION_1_M" Secure="yes"><RegistrySearch Id="CRAFT_OPTION_1_MSearch" Root="HKLM" Key="Software\Learning Machines LLC\Iridium CAD" Name="DesktopShortcut" Type="raw" />
-    </Property><SetProperty Id="PREVIOUSDESKTOPSHORTCUT" Action="CraftLoadOption1M" Value="[CRAFT_OPTION_1_M]" After="LaunchConditions" Sequence="both" Condition="ALLUSERS = 1" /><Property Id="CRAFT_OPTION_1_U" Secure="yes"><RegistrySearch Id="CRAFT_OPTION_1_USearch" Root="HKCU" Key="Software\Learning Machines LLC\Iridium CAD" Name="DesktopShortcut" Type="raw" />
+  <Property Id="CRAFT_OPTION_1_M" Secure="yes"><RegistrySearch Id="CRAFT_OPTION_1_MSearch" Root="HKLM" Key="Software\Iridium Technologies, Inc.\Iridium CAD" Name="DesktopShortcut" Type="raw" />
+    </Property><SetProperty Id="PREVIOUSDESKTOPSHORTCUT" Action="CraftLoadOption1M" Value="[CRAFT_OPTION_1_M]" After="LaunchConditions" Sequence="both" Condition="ALLUSERS = 1" /><Property Id="CRAFT_OPTION_1_U" Secure="yes"><RegistrySearch Id="CRAFT_OPTION_1_USearch" Root="HKCU" Key="Software\Iridium Technologies, Inc.\Iridium CAD" Name="DesktopShortcut" Type="raw" />
     </Property><SetProperty Id="PREVIOUSDESKTOPSHORTCUT" Action="CraftLoadOption1U" Value="[CRAFT_OPTION_1_U]" After="CraftLoadOption1M" Sequence="both" Condition="ALLUSERS &lt;&gt; 1" /><SetProperty Id="PREVIOUSDESKTOPSHORTCUT" Action="CraftLoadLegacyOption1" Value="[CRAFT_OPTION_1_U]" After="CraftLoadOption1U" Sequence="both" Condition="ALLUSERS = 1 AND NOT PREVIOUSDESKTOPSHORTCUT AND CRAFT_OPTION_1_U" /></Package>
 
   <Fragment>
@@ -78,7 +78,7 @@
            Public desktop) must be under HKCU (ICE38, ICE43, ICE57). -->
       <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="76029CD7-EBDB-420F-AC34-FF0E82A99E32" Condition="DESKTOPSHORTCUT = &quot;1&quot;">
         <Shortcut Id="DesktopShortcut" Name="Iridium CAD" Description="Iridium CAD computer-aided design" Target="[INSTALLFOLDER]cadcraft.exe" WorkingDirectory="INSTALLFOLDER" Icon="CadcraftIcon.ico" IconIndex="0" />
-        <RegistryValue Root="HKMU" Key="Software\Learning Machines LLC\Iridium CAD" Name="DesktopShortcut" Value="1" Type="string" KeyPath="yes" />
+        <RegistryValue Root="HKMU" Key="Software\Iridium Technologies, Inc.\Iridium CAD" Name="DesktopShortcut" Value="1" Type="string" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>

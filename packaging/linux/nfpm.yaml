@@ -13,7 +13,7 @@ release: 1
 section: graphics
 priority: optional
 maintainer: ${CADCRAFT_MAINTAINER}
-vendor: Learning Machines LLC
+vendor: Iridium Technologies, Inc.
 homepage: https://iridium.ph
 license: MIT OR Apache-2.0
 description: |-

@@ -14,7 +14,7 @@ fn main() {
     }
     res.set("ProductName", "Iridium CAD")
         .set("FileDescription", "Iridium CAD computer-aided design")
-        .set("CompanyName", "Learning Machines LLC")
+        .set("CompanyName", "Iridium Technologies, Inc.")
         .set("LegalCopyright", "Copyright (c) 2026 ArtCraft Team and the Iridium CAD contributors. MIT OR Apache-2.0.")
         .set("OriginalFilename", "cadcraft.exe")
         .set("InternalName", "cadcraft");
