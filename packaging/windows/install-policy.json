@@ -5,7 +5,7 @@
   "sources": [
     "cadcraft.wxs"
   ],
-  "icon": "assets/app-icon/cadcraft.ico",
+  "icon": "assets/app-icon/iridium-cad.ico",
   "localization": [],
   "extensions": [
     "UI"

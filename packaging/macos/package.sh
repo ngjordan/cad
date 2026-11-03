@@ -117,7 +117,7 @@ echo "==> assembling $APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # Executable and icon carry the display name (CFBundleExecutable / CFBundleIconFile).
 cp "$WORK/bin/cadcraft" "$APP/Contents/MacOS/Iridium CAD"
-cp "$ROOT/assets/app-icon/cadcraft.icns" "$APP/Contents/Resources/Iridium CAD.icns"
+cp "$ROOT/assets/app-icon/iridium-cad.icns" "$APP/Contents/Resources/Iridium CAD.icns"
 # Bundled dependency font notices are installed before the app is signed.
 cp "$ROOT/NOTICE" "$ROOT/ATTRIBUTION.md" "$APP/Contents/Resources/"
 # Licences of the embedded craft-fonts fonts (only when built with CRAFT_FONTS_DIR).

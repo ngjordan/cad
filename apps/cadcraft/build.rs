@@ -2,15 +2,15 @@
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=../../assets/app-icon/cadcraft.ico");
+    println!("cargo:rerun-if-changed=../../assets/app-icon/iridium-cad.ico");
     println!("cargo:rerun-if-env-changed=CADCRAFT_REQUIRE_WINRES");
     println!("cargo:rerun-if-env-changed=CADCRAFT_BUILD_SHA");
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() != Ok("windows") {
         return;
     }
     let mut res = winresource::WindowsResource::new();
-    if std::path::Path::new("../../assets/app-icon/cadcraft.ico").exists() {
-        res.set_icon("../../assets/app-icon/cadcraft.ico");
+    if std::path::Path::new("../../assets/app-icon/iridium-cad.ico").exists() {
+        res.set_icon("../../assets/app-icon/iridium-cad.ico");
     }
     res.set("ProductName", "Iridium CAD")
         .set("FileDescription", "Iridium CAD computer-aided design")

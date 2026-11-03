@@ -244,9 +244,9 @@ const WINDOW_KEY: &str = "window";
 const STENCIL_BITS: u8 = 8;
 
 #[cfg(target_os = "macos")]
-const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/app-icon/cadcraft-macos-512.png");
+const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/app-icon/iridium-cad-macos-512.png");
 #[cfg(not(target_os = "macos"))]
-const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/app-icon/cadcraft-256.png");
+const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/app-icon/iridium-cad-256.png");
 
 fn app_icon() -> Option<egui::IconData> {
     eframe::icon_data::from_png_bytes(APP_ICON_PNG).map_err(|e| log::warn!("app icon: {e}")).ok()
