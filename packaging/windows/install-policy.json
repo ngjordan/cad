@@ -23,12 +23,6 @@
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\cadcraft.exe\\shell\\open\\command",
-      "",
-      "\"[#CadcraftExe]\" \"%1\""
-    ],
-    [
-      "-1",
       "Software\\Classes\\.dxf\\OpenWithProgids",
       "Iridium CAD.Drawing",
       ""
@@ -41,15 +35,27 @@
     ],
     [
       "-1",
+      "Software\\Iridium CAD",
+      "DesktopShortcut",
+      "1"
+    ],
+    [
+      "-1",
+      "Software\\Classes\\Applications\\cadcraft.exe\\shell\\open\\command",
+      "",
+      "&quot;[#CadcraftExe]&quot; &quot;%1&quot;"
+    ],
+    [
+      "-1",
       "Software\\Classes\\Iridium CAD.Drawing\\shell\\open\\command",
       "",
-      "\"[#CadcraftExe]\" \"%1\""
+      "&quot;[#CadcraftExe]&quot; &quot;%1&quot;"
     ],
     [
       "-1",
       "Software\\Iridium CAD",
-      "DesktopShortcut",
-      "1"
+      "InstallDir",
+      "[INSTALLFOLDER]"
     ]
   ],
   "mode": "dualScope"
