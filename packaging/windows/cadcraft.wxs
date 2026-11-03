@@ -3,7 +3,7 @@
   <?ifndef HasCraftFontLicences ?>
   <?define HasCraftFontLicences=0 ?>
   <?endif?>
-  <Package Name="Iridium CAD" Manufacturer="Iridium Technologies, Inc." Version="$(var.Version)" UpgradeCode="119D7D76-0167-4A9E-8F37-09DA0235F68E" Scope="perUserOrMachine" Compressed="yes" Language="1033">
+  <Package Name="Iridium CAD" Manufacturer="Iridium Technologies, Inc." Version="$(var.Version)" UpgradeCode="D79EE0B6-2F3A-5114-A9C3-EB039CB13E73" Scope="perUserOrMachine" Compressed="yes" Language="1033">
     <SummaryInformation Description="Iridium CAD computer-aided design" Manufacturer="Iridium Technologies, Inc." />
     <?include $(sys.SOURCEFILEDIR)install-policy.wxi?>
     <!-- Same-version upgrades let successive pre-releases of one X.Y.Z replace each other

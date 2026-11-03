@@ -12,7 +12,7 @@
   A fast, open-source CAD workflow: the command line, object snaps, layers,
   dimensions, hatches, blocks and DXF drawings you already know. It runs natively on macOS,
   Windows, Linux and FreeBSD, and in the browser via WebAssembly.<br>
-  <i>By the ArtCraft team.</i>
+  
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@
 </p>
 
 > [!NOTE]
-> **Iridium CAD is built for people who draft, dimension and document their designs.** Iridium Technologies, Inc. builds it from an open-source clean-room project in pure Rust.
+> **Iridium CAD is built for people who draft, dimension and document their designs.** Iridium Technologies, Inc. builds it from an open-source independent project in pure Rust.
 
 <p align="center">
   <a href="#screenshots">Screenshots</a> ·
@@ -358,7 +358,7 @@ RISC-V (riscv64): `cadcraft-<ver>-linux-riscv64.tar.gz`, cross-compiled; needs g
 ## The Crafting Apps
 
 Iridium CAD is one of the Iridium applications, alongside the Iridium Docs word processor and the
-Iridium Sheets spreadsheet. Each is built from an open-source clean-room project, in pure Rust, and
+Iridium Sheets spreadsheet. Each is built from an open-source independent project, in pure Rust, and
 each stands on its own.
 
 | App | What it's for | Code |
@@ -370,7 +370,7 @@ each stands on its own.
 ## License and credits
 
 Iridium CAD is dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
-Copyright (c) 2026 ArtCraft Team and the Iridium CAD contributors. Required notices are in [NOTICE](NOTICE).
+Copyright (c) 2026 ArtCraft Team and the CADCraft contributors. Required notices are in [NOTICE](NOTICE).
 
 Bundled fonts, icons, images and other assets keep their own open licenses; each one is listed
 with its author, source and license in [ATTRIBUTION.md](ATTRIBUTION.md).

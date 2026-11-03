@@ -12,9 +12,15 @@
 /// prompt shows both, and an AppImage's menu entry gets the icon.
 #[cfg(not(target_arch = "wasm32"))]
 pub const UPDATE_APP: craft_update::app::App = craft_update::app::App {
+    id: "iridium-cad",
+    name: "Iridium CAD",
+    tagline: "Computer-aided design",
+    repo: "ngjordan/iridium-cad",
+    former_ids: &[],
+    former_names: &[],
     icon_png: Some(include_bytes!("../../../assets/app-icon/hicolor/128x128/apps/ph.iridium.cad.png")),
-    accent: Some([0x3e, 0xa6, 0xe8]),
-    ..craft_update::suite::CADCRAFT
+    accent: Some([0x0b, 0x6e, 0x4f]),
+    developer: "Iridium Technologies, Inc.",
 };
 
 pub mod aliasdlg;
