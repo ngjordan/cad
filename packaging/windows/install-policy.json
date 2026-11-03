@@ -41,21 +41,21 @@
     ],
     [
       "-1",
+      "Software\\Iridium CAD",
+      "InstallDir",
+      "[INSTALLFOLDER]"
+    ],
+    [
+      "-1",
       "Software\\Classes\\Applications\\cadcraft.exe\\shell\\open\\command",
       "",
-      "&quot;[#CadcraftExe]&quot; &quot;%1&quot;"
+      "\"[#CadcraftExe]\" \"%1\""
     ],
     [
       "-1",
       "Software\\Classes\\Iridium CAD.Drawing\\shell\\open\\command",
       "",
-      "&quot;[#CadcraftExe]&quot; &quot;%1&quot;"
-    ],
-    [
-      "-1",
-      "Software\\Iridium CAD",
-      "InstallDir",
-      "[INSTALLFOLDER]"
+      "\"[#CadcraftExe]\" \"%1\""
     ]
   ],
   "mode": "dualScope"
