@@ -126,7 +126,7 @@ fn class_records_follow_the_version() {
     }
 }
 
-/// R2000 ASCII is the R2000 DXF CADCraft always wrote, tag for tag; only the text is in the
+/// R2000 ASCII is the R2000 DXF Iridium CAD always wrote, tag for tag; only the text is in the
 /// code page instead of all `\U+` escapes.
 #[test]
 fn r2000_ascii_is_unchanged() {
@@ -138,7 +138,7 @@ fn r2000_ascii_is_unchanged() {
 }
 
 /// Without a version asked for: 2018 for a new drawing, otherwise the file's own version (the
-/// nearest one CADCraft writes for older or newer files).
+/// nearest one Iridium CAD writes for older or newer files).
 #[test]
 fn default_version_is_the_drawings_own() {
     let d = sample();

@@ -1,5 +1,5 @@
 //! Independent bridge expectations, not an independent DWG codec. Writer checks inspect native
-//! objects without CADCraft's reader; reader fixtures originate in native objects without our
+//! objects without Iridium CAD's reader; reader fixtures originate in native objects without our
 //! DXF writer. acadrust still supplies the binary codec in both directions, so these tests do
 //! not establish interoperability with another DWG implementation. All fixtures are synthetic.
 

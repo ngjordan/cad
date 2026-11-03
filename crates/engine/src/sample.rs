@@ -1,4 +1,4 @@
-//! Sample drawings generated in code (original CADCraft content, used for demos and tests).
+//! Sample drawings generated in code (original Iridium CAD content, used for demos and tests).
 
 use cadcraft_color::Color;
 use cadcraft_doc::{Common, DimKind, Dimension, Drawing, EntityKind, Hatch, HatchLoop, Layer, Lineweight, MText, Space, Text};

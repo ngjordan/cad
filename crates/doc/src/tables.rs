@@ -128,7 +128,7 @@ impl Default for TextStyle {
     fn default() -> Self {
         TextStyle {
             name: "Standard".into(),
-            font: "CADCraft Stroke".into(),
+            font: "Iridium CAD Stroke".into(),
             big_font: String::new(),
             height: 0.0,
             width_factor: 1.0,
@@ -800,7 +800,7 @@ pub struct PageSetup {
     /// drawing's MEASUREMENT says; otherwise paper units follow MEASUREMENT (#1058).
     pub paper_mm: bool,
     /// The paper image origin (DXF groups 148/149, in plot paper units) as the file had it, so a
-    /// save keeps where the sheet sits; `None` for a page CADCraft made, written as 0,0 (#2109).
+    /// save keeps where the sheet sits; `None` for a page Iridium CAD made, written as 0,0 (#2109).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_origin: Option<Vec2>,
 }
@@ -841,7 +841,7 @@ pub struct Layout {
     #[serde(default)]
     pub view: Option<(Vec2, f64)>,
     /// The layout's limits (LAYOUT groups 10/11, lower left and upper right) as the file had
-    /// them; `None` for a layout CADCraft made, written as 0,0 to 12,9 (#2109).
+    /// them; `None` for a layout Iridium CAD made, written as 0,0 to 12,9 (#2109).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub limits: Option<(Vec2, Vec2)>,
 }

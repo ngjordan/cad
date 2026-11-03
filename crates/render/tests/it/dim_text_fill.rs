@@ -132,7 +132,7 @@ fn inspection_frame_is_drawn_over_the_background() {
 #[test]
 fn a_dimension_read_with_its_block_keeps_the_block_and_gets_the_background() {
     // The block (as read from a file) holds a circle the dimension's own geometry does not have,
-    // then the text, placed away from where CADCraft would put it.
+    // then the text, placed away from where Iridium CAD would put it.
     let mut d = Drawing::new_imperial();
     d.dim_styles.push(style(1, Color::ByBlock));
     let mut blk = Block::new("*D1");
@@ -192,7 +192,7 @@ fn every_text_of_a_block_gets_a_background() {
 
 #[test]
 fn a_block_that_holds_its_background_gets_no_second_one() {
-    // A block with a SOLID, then its text at (20, 20), away from where CADCraft would put it: the
+    // A block with a SOLID, then its text at (20, 20), away from where Iridium CAD would put it: the
     // number of masks drawn.
     let masks = |solid: [(f64, f64); 4]| {
         let mut d = Drawing::new_imperial();

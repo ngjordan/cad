@@ -210,7 +210,7 @@ fn builtin_font_name_roundtrips_and_other_readers_get_txt() {
     assert_eq!(file, Some("txt"), "font file group stays a file other readers have");
     let r = read_dxf(text.as_bytes()).expect("reopen");
     let font = |n: &str| r.text_styles.iter().find(|s| s.name == n).map(|s| s.font.clone());
-    assert_eq!(font("Standard").as_deref(), Some("CADCraft Stroke"));
+    assert_eq!(font("Standard").as_deref(), Some("Iridium CAD Stroke"));
     assert_eq!(font("Notes").as_deref(), Some("romans.shx"));
 
     // Another program that changed the font file wins over the stale xdata.

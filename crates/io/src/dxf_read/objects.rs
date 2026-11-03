@@ -80,7 +80,7 @@ impl Objects {
         }
     }
 
-    /// The text of the CADCraft XRECORD stored under `key` in a dictionary (its 1/3 strings).
+    /// The text of the Iridium CAD XRECORD stored under `key` in a dictionary (its 1/3 strings).
     pub(super) fn xrecord_text(&self, key: &str) -> Option<String> {
         let h = self.names.iter().find(|(_, n)| n.as_str() == key).map(|(h, _)| h)?;
         let tags = self.xrecords.get(h)?;
@@ -199,7 +199,7 @@ impl Objects {
             d.parametric = p;
         }
         // The annotation scale list (a metric drawing without one gets the metric defaults),
-        // then CADCraft's annotative scaling record.
+        // then Iridium CAD's annotative scaling record.
         if !self.scales.is_empty() {
             d.scales = self.scales.clone();
         } else if d.header.i64("MEASUREMENT", 0) == 1 {
@@ -224,7 +224,7 @@ impl Objects {
             }
         }
         self.apply_groups(d);
-        // Standard associativity, for dimensions without CADCraft's exact links.
+        // Standard associativity, for dimensions without Iridium CAD's exact links.
         for tags in &self.dimassocs {
             dimassoc(d, tags);
         }
@@ -244,7 +244,7 @@ pub(super) fn page_setup(t: &T) -> PageSetup {
         p.height_mm = w.max(h);
     }
     p.margins_mm = [mm(40, p.margins_mm[0]), mm(41, p.margins_mm[1]), mm(42, p.margins_mm[2]), mm(43, p.margins_mm[3])];
-    // Plot paper units 1: millimetres. 0 (inches) is left to MEASUREMENT: earlier CADCraft
+    // Plot paper units 1: millimetres. 0 (inches) is left to MEASUREMENT: earlier Iridium CAD
     // versions wrote 0 for every layout.
     p.paper_mm = t.i(72) == Some(1);
     // Plot rotation 1 or 3 turns the media a quarter turn; media defined wider than tall is
@@ -292,7 +292,7 @@ pub(super) fn page_setup(t: &T) -> PageSetup {
     p
 }
 
-/// A layout's saved paper-space view (centre, height) from CADCraft xdata.
+/// A layout's saved paper-space view (centre, height) from Iridium CAD xdata.
 fn layout_view(tags: &[Tag]) -> Option<(Vec2, f64)> {
     let list = crate::dxf_ext::xdata_list(crate::dxf_ext::xdata(tags, crate::dxf_ext::APP), "PSVIEW");
     let g = |c: i32| list.iter().find(|t| t.code == c).map(Tag::f64).filter(|v| v.is_finite());

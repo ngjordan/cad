@@ -1,8 +1,8 @@
-//! CADCraft file formats: DXF/DWG read, SVG and SVGZ import, SVG/PNG/PDF export (plotting).
+//! Iridium CAD file formats: DXF/DWG read, SVG and SVGZ import, SVG/PNG/PDF export (plotting).
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 #![forbid(unsafe_code)]
 
-/// What a DXF file holds that CADCraft doesn't model, kept and written back (#528).
+/// What a DXF file holds that Iridium CAD doesn't model, kept and written back (#528).
 mod dxf_raw;
 
 mod dxf_ext;
@@ -42,7 +42,7 @@ pub struct SaveOptions {
 }
 
 /// The version a drawing is saved in when none is asked for: the version of the file it was
-/// read from (`$ACADVER`, the nearest one CADCraft writes), and 2018 for a new drawing.
+/// read from (`$ACADVER`, the nearest one Iridium CAD writes), and 2018 for a new drawing.
 pub fn save_version(d: &Drawing) -> Version {
     d.header.get("ACADVER").and_then(cadcraft_doc::HVal::as_str).and_then(Version::for_acadver).unwrap_or_default()
 }

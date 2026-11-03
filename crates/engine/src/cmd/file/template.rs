@@ -3,7 +3,7 @@
 //!
 //! A new drawing from a template is the template's content (layers, styles, layouts, objects…)
 //! as an untitled drawing: saving asks for a name, so the template file is never overwritten by
-//! accident. CADCraft ships no template; templates are the user's files.
+//! accident. Iridium CAD ships no template; templates are the user's files.
 
 use std::sync::{Mutex, MutexGuard, OnceLock, PoisonError};
 

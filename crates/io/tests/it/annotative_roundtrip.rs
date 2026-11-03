@@ -1,5 +1,5 @@
 //! Annotative scaling survives DXF (#468): the scale list (ACAD_SCALELIST of SCALE objects), the
-//! multileader style's annotative flag (group 296), and CADCraft's own record of CANNOSCALE,
+//! multileader style's annotative flag (group 296), and Iridium CAD's own record of CANNOSCALE,
 //! ANNOALLVISIBLE, annotative blocks and each object's scales.
 
 use std::sync::Arc;

@@ -1,9 +1,9 @@
-# Customizing and automating CADCraft
+# Customizing and automating Iridium CAD
 
-What you can use today to automate CADCraft or bring over add-ons written for other CAD programs,
+What you can use today to automate Iridium CAD or bring over add-ons written for other CAD programs,
 and what is not there yet.
 
-| You have | In CADCraft | More |
+| You have | In Iridium CAD | More |
 |---|---|---|
 | LISP routines (`.lsp`) | Run with APPLOAD or `(load "name")`. The core language, `command`, entity lists, selection sets, `get…` input and `c:` commands work. | [autolisp.md](autolisp.md) |
 | Startup LISP (`acad.lsp`, `acaddoc.lsp`) | Loaded from the support folder at startup and for each drawing. | [autolisp.md](autolisp.md#at-startup) |
@@ -38,7 +38,7 @@ ALIASEDIT reads a `.pgp` alias file (`ALIAS, *COMMAND` lines) and adds its alias
 the session. Lines that would start external programs are skipped. From a script or the control
 channel: `aliasedit {"file": "/path/to/aliases.pgp"}`.
 
-## Driving CADCraft from another program
+## Driving Iridium CAD from another program
 
 Every command has a JSON form that runs without dialogs. `cadcraft-cli commands [FILTER]` prints
 the catalog: each command's id and its parameters.

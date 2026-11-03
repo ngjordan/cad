@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build and package CADCraft for FreeBSD:
+# Build and package Iridium CAD for FreeBSD:
 #
 #   $DIST/cadcraft-<version>-freebsd-<arch>.tar.gz   a /usr/local-style tree (<arch> is x86_64, or
 #       aarch64 when CARGO_BUILD_TARGET=aarch64-unknown-freebsd):
@@ -18,7 +18,7 @@ set -euo pipefail
 # shellcheck source=../env.sh
 . "$(dirname "${BASH_SOURCE[0]}")/../env.sh"
 LINUX="$ROOT/packaging/linux"
-APP_ID=ai.storyteller.cadcraft
+APP_ID=ph.iridium.cad
 
 SKIP_BUILD=0
 DRY_RUN=0
@@ -58,7 +58,7 @@ if [[ -n "${CARGO_BUILD_TARGET:-}" ]] && [[ "$(uname -s)" != FreeBSD ]]; then
 fi
 BASENAME="cadcraft-$VERSION-freebsd-$ARCH"
 
-echo "==> CADCraft $VERSION for FreeBSD $ARCH"
+echo "==> Iridium CAD $VERSION for FreeBSD $ARCH"
 
 # cadcraft-cli's man-and-completions example is built on its own, not with the binaries: its
 # dev-dependencies would otherwise be unified into them (packaging/linux/package.sh). It runs on

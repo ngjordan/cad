@@ -413,7 +413,7 @@ fn write_dimension_entity(w: &mut W, d: &Drawing, e: &Entity, owner: &str, paper
             DimKind::Radius => 4,
             DimKind::Angular3P => 5,
             DimKind::Ordinate { x_type } => 6 | if x_type { 64 } else { 0 },
-            // Written as aligned, marked by CADCraft xdata (see `dim_xdata`).
+            // Written as aligned, marked by Iridium CAD xdata (see `dim_xdata`).
             DimKind::ArcLength => 1,
         };
         w.i(70, ty | 32 | if dm.user_text_pos { 128 } else { 0 });
@@ -691,7 +691,7 @@ fn write_viewport_entity(w: &mut W, d: &Drawing, e: &Entity, owner: &str, paper:
         let clip = v.clip.filter(|h| *h != e.handle && d.entity(*h).is_some());
         let flags = 32768 | if v.locked { 16384 } else { 0 } | if clip.is_some() { 65536 } else { 0 } | if v.on { 0 } else { 131072 };
         // AutoCAD's frozen-layer list, before group 90 as in the DXF Reference: one pointer per
-        // layer, to its LAYER record. A name with no record goes in CADCraft's xdata below.
+        // layer, to its LAYER record. A name with no record goes in Iridium CAD's xdata below.
         let mut unrecorded: Vec<String> = Vec::new();
         for name in &v.frozen_layers {
             match w.layers.get(&name.to_ascii_uppercase()).cloned() {
@@ -703,7 +703,7 @@ fn write_viewport_entity(w: &mut W, d: &Drawing, e: &Entity, owner: &str, paper:
         if let Some(h) = clip {
             w.s(340, h.hex());
         }
-        // One CADCraft xdata group holds both lists: readers stop at the first group of an app.
+        // One Iridium CAD xdata group holds both lists: readers stop at the first group of an app.
         if !unrecorded.is_empty() || !v.layer_colors.is_empty() {
             w.s(1001, dxf_ext::APP);
             if !unrecorded.is_empty() {
@@ -757,7 +757,7 @@ fn write_other_entity(w: &mut W, _d: &Drawing, e: &Entity, owner: &str, paper: b
             w.s(1, &t.text);
             w.p(11, t.dir);
         }
-        // Entity types CADCraft doesn't model aren't written; the save command reports them.
+        // Entity types Iridium CAD doesn't model aren't written; the save command reports them.
         EntityKind::Unknown(_) => {}
         _ => {}
     }

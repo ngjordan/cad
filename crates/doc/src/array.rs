@@ -3,7 +3,7 @@
 //! An associative array is a block reference to an anonymous block (`*U…`, the *array block*)
 //! that holds one block reference per item. Each item refers to the array's *source block*
 //! (another anonymous block holding the source objects) or, for items replaced with ARRAYEDIT,
-//! to another block. Other programs see an ordinary block reference; CADCraft keeps the
+//! to another block. Other programs see an ordinary block reference; Iridium CAD keeps the
 //! parameters below on the array block ([`Block::array`](crate::Block)) so the items can be
 //! regenerated when the array is edited.
 //!

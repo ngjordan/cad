@@ -91,7 +91,7 @@ fn write_tables(w: &mut W, plan: TableWritePlan<'_>) -> HashMap<String, String> 
         w.i(71, if s.backwards { 2 } else { 0 } | if s.upside_down { 4 } else { 0 });
         w.f(42, 0.2);
         // The built-in font goes out as `txt`, which every reader has, and a Linux font as its
-        // Windows one with portable fonts; CADCraft's own name travels in `CADCRAFT` xdata
+        // Windows one with portable fonts; Iridium CAD's own name travels in `CADCRAFT` xdata
         // (`1000 FONT`, name) so the style reopens with it.
         let file = if s.font == cadcraft_fonts_name() { "txt" } else { cadcraft_fonts::windows::written_font(&s.font, d.portable_fonts) };
         w.s(3, file);
@@ -129,7 +129,7 @@ fn write_tables(w: &mut W, plan: TableWritePlan<'_>) -> HashMap<String, String> 
             *t = Tag::s(340, h.unwrap_or_else(|| fallback_style.clone()));
         }
     }
-    // VIEW: named views (DXF Reference, VIEW). A view's layer state is CADCraft xdata.
+    // VIEW: named views (DXF Reference, VIEW). A view's layer state is Iridium CAD xdata.
     let th = table_head(w, "VIEW", d.views.len());
     for v in &d.views {
         record_head(w, "VIEW", &th, "AcDbViewTableRecord");
@@ -471,7 +471,7 @@ fn layout_obj(w: &mut W, context: LayoutWriteContext<'_>, data: LayoutWriteData<
     w.p(17, Vec3::new(0.0, 1.0, 0.0));
     w.i(76, 0);
     w.s(330, brh);
-    // The saved paper-space view (centre, height) as CADCraft xdata.
+    // The saved paper-space view (centre, height) as Iridium CAD xdata.
     if let Some((c, height)) = view.filter(|(c, v)| c.x.is_finite() && c.y.is_finite() && v.is_finite()) {
         w.s(1001, dxf_ext::APP);
         w.s(1000, "PSVIEW");
@@ -677,7 +677,7 @@ fn write_named_objects(w: &mut W, plan: &ObjectWritePlan<'_>) {
         w.group("ACAD_REACTORS", 330, &[pstyle_dict]);
         w.s(330, pstyle_dict.clone());
     }
-    // Parametric constraints and parameters, saved layer states, plot style tables (CADCraft
+    // Parametric constraints and parameters, saved layer states, plot style tables (Iridium CAD
     // data).
     for (_, h, chunks) in xrecords {
         w.s(0, "XRECORD");
@@ -963,7 +963,7 @@ pub(super) fn tags_for(d: &Drawing, version: Version, target: Version, frozen_34
     let group_dict = w.h();
     let layout_dict = w.h();
     let table_style_dict = w.h();
-    // CADCraft data in XRECORDs of the named object dictionary: (key, handle, text chunks).
+    // Iridium CAD data in XRECORDs of the named object dictionary: (key, handle, text chunks).
     let mut xrecords: Vec<(&str, String, Vec<String>)> = Vec::new();
     // The drawing's own next handle: table records and objects are numbered above it, so
     // reading it back (instead of $HANDSEED) keeps their handles across saves (#495).

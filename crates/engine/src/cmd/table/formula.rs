@@ -24,7 +24,7 @@ const MAX_DEP_VISITS: usize = 4_000_000;
 /// Arguments of one function call.
 const MAX_ARGS: usize = 256;
 
-/// Why a formula has no value. The texts are CADCraft's own.
+/// Why a formula has no value. The texts are Iridium CAD's own.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FormulaError {
     /// Not a formula we can read.

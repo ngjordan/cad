@@ -15,7 +15,7 @@ pub(super) fn table_style_obj(w: &mut W, d: &Drawing, s: &TableStyle, h: &str, d
     w.f(41, s.margin);
     w.i(280, i64::from(!s.title));
     w.i(281, i64::from(!s.header));
-    // Data, column header and title cell styles; CADCraft's complete cell styles in xdata.
+    // Data, column header and title cell styles; Iridium CAD's complete cell styles in xdata.
     for kind in crate::dxf_table::CELL_TYPES {
         let cs = s.cell_style(kind);
         let style = if d.text_style(&cs.text_style).is_some() { cs.text_style.clone() } else { "Standard".to_string() };
@@ -134,5 +134,5 @@ pub(super) fn scale_list(w: &mut W, scales: &[(&cadcraft_doc::AnnoScale, String)
 }
 
 pub(super) fn cadcraft_fonts_name() -> &'static str {
-    "CADCraft Stroke"
+    "Iridium CAD Stroke"
 }

@@ -8,7 +8,7 @@
 //! taken gets a fresh one. Pasted objects get new handles.
 //!
 //! The clipboard can also travel as DXF text ([`system_text`], [`load_system_text`]), so a front
-//! end can put it on the system clipboard and paste it into another CADCraft window.
+//! end can put it on the system clipboard and paste it into another Iridium CAD window.
 
 use std::collections::{BTreeMap, HashSet};
 use std::sync::Arc;

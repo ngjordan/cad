@@ -1,6 +1,6 @@
 //! #1651: angular, diameter and radius dimensions are saved with a DIMASSOC object, as linear
 //! and ordinate dimensions already are, so AutoCAD follows their geometry. The standard objects
-//! alone (CADCraft xdata stripped) must associate the same points, in DXF and in DWG.
+//! alone (Iridium CAD xdata stripped) must associate the same points, in DXF and in DWG.
 
 use cadcraft_doc::{AssocSnap, Circle, Common, DimAssoc, DimKind, Dimension, Drawing, EntityKind, Handle, Line, Space};
 use cadcraft_geom::Vec3;
@@ -177,7 +177,7 @@ fn string(rec: &[(i32, String)], code: i32) -> Option<&str> {
     rec.iter().find(|(c, _)| *c == code).map(|(_, v)| v.as_str())
 }
 
-/// A DXF without CADCraft's xdata, as a file from another writer (whose DIMASSOC objects must
+/// A DXF without Iridium CAD's xdata, as a file from another writer (whose DIMASSOC objects must
 /// stand on their own).
 fn without_cadcraft_xdata(text: &str) -> String {
     let mut out = String::new();
@@ -210,7 +210,7 @@ fn same_angle(a: f64, b: f64) -> bool {
     d.min(turn - d) < 1e-6
 }
 
-/// The associations the standard objects give, without CADCraft's xdata.
+/// The associations the standard objects give, without Iridium CAD's xdata.
 fn assert_standard_assoc(c: &Case, d: &Drawing, what: &str) {
     let dia = assoc_of(d, c.hd);
     assert_eq!(dia.len(), 2, "{what}: diameter defpt and p15");
@@ -273,7 +273,7 @@ fn angular_diameter_and_radius_dimensions_are_saved_with_dimassoc() {
     assert!(string(&refs[2], 332).is_some_and(|h| h.eq_ignore_ascii_case(&c.l2.hex())), "angular: the intersection's other line");
 }
 
-/// The reader half of #1651, and the one that matters for interchange: with CADCraft's xdata
+/// The reader half of #1651, and the one that matters for interchange: with Iridium CAD's xdata
 /// stripped, the standard DIMASSOC objects alone must rebuild the same associations, both from
 /// DXF and through the DWG bridge. Guards the dimension-kind slot table and the radial centre
 /// reference in `dxf_read::dimassoc`, plus the curve start/end osnap semantics in `infer_snap`.

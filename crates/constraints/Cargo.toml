@@ -1,6 +1,6 @@
 [package]
 name = "cadcraft-constraints"
-description = "CADCraft parametric solver: geometric and dimensional constraints (own damped Gauss-Newton solver), expressions"
+description = "Iridium CAD parametric solver: geometric and dimensional constraints (own damped Gauss-Newton solver), expressions"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

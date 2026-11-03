@@ -1,6 +1,6 @@
 [package]
 name = "cadcraft-render"
-description = "CADCraft rendering: display lists (linetypes, hatches, text, blocks, dimensions) and a CPU rasteriser"
+description = "Iridium CAD rendering: display lists (linetypes, hatches, text, blocks, dimensions) and a CPU rasteriser"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

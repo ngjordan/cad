@@ -10,9 +10,9 @@ The built-in devices come first:
 
 | Device | Output |
 |---|---|
-| `CADCraft PDF` | vector PDF |
-| `CADCraft PNG` | raster PNG on white paper at the device resolution (300 dpi) |
-| `CADCraft SVG` | vector SVG |
+| `Iridium CAD PDF` | vector PDF |
+| `Iridium CAD PNG` | raster PNG on white paper at the device resolution (300 dpi) |
+| `Iridium CAD SVG` | vector SVG |
 
 They offer the standard sizes:
 
@@ -23,14 +23,14 @@ They offer the standard sizes:
 ISO sheets have 5 mm margins. Inch sheets have quarter-inch (6.35 mm) margins. A page setup
 with the device `None` plots to PDF on the page setup's paper, as before.
 
-User devices are files in our own format, kept in the `plotters` folder of the CADCraft
+User devices are files in our own format, kept in the `plotters` folder of the Iridium CAD
 settings directory:
 
 | System | Folder |
 |---|---|
 | Linux and FreeBSD | `$XDG_CONFIG_HOME/cadcraft/plotters` or `~/.config/cadcraft/plotters` |
-| macOS | `~/Library/Application Support/CADCraft/plotters` |
-| Windows | `%APPDATA%\CADCraft\plotters` |
+| macOS | `~/Library/Application Support/Iridium CAD/plotters` |
+| Windows | `%APPDATA%\Iridium CAD\plotters` |
 
 `CADCRAFT_CONFIG_DIR` replaces the settings directory; empty means none (`cadcraft-cli`:
 `--config-dir`, which falls back to the same variable). On the web, devices last for the

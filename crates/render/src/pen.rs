@@ -10,7 +10,7 @@
 //!   round or diamond joins. "Use object" ends and joins stay round, as lines are drawn anyway;
 //! - a filled area whose style sets a fill pattern is filled with that pattern instead.
 //!
-//! The patterns are CADCraft's own definitions, measured in millimetres on paper and anchored to
+//! The patterns are Iridium CAD's own definitions, measured in millimetres on paper and anchored to
 //! the paper origin. Layouts apply them while building (paper units are known); a model-space
 //! plot applies them once its plot scale is known.
 

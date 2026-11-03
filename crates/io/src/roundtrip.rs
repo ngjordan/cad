@@ -1,9 +1,9 @@
 //! Round-trip checks (gaps FF1 and FF5): open a drawing, save it, open the saved file again and
 //! list everything that differs between the two drawings.
 //!
-//! [`compare`] works on CADCraft's own model ([`Drawing`]), so it measures what saving and
+//! [`compare`] works on Iridium CAD's own model ([`Drawing`]), so it measures what saving and
 //! reopening lose or change: entities per type in every space and block (matched by handle,
-//! geometry and properties within a tolerance), table records, blocks, layouts, the data CADCraft
+//! geometry and properties within a tolerance), table records, blocks, layouts, the data Iridium CAD
 //! keeps without modelling it (other programs' objects and entities, dictionaries, CLASS records,
 //! extension dictionaries, reactors, xdata) and header variables. [`census`] counts what the
 //! file itself holds, so opening a file can be checked against it too.
@@ -38,7 +38,7 @@ pub enum Category {
     Geometry,
     /// An entity's common properties (layer, colour, linetype, lineweight, transparency…).
     Properties,
-    /// Entities CADCraft doesn't model, kept as their DXF groups.
+    /// Entities Iridium CAD doesn't model, kept as their DXF groups.
     Opaque,
     /// Other applications' extended data.
     Xdata,
@@ -51,7 +51,7 @@ pub enum Category {
     Block,
     /// Layouts and their page setups.
     Layout,
-    /// Non-graphical objects CADCraft doesn't model, kept as their DXF groups; constraints.
+    /// Non-graphical objects Iridium CAD doesn't model, kept as their DXF groups; constraints.
     Object,
     /// Entries of the named object dictionary.
     Dictionary,

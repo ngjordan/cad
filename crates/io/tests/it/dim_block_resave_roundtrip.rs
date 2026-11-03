@@ -1,7 +1,7 @@
 //! Reopening and saving a drawing keeps one anonymous `*D` block per dimension and the same
 //! handles: the block read with a dimension is regenerated under its own name instead of being
 //! kept next to a fresh copy, `*D` blocks nothing references are dropped, and table records and
-//! objects keep their handles because CADCraft's own next handle is saved with the drawing
+//! objects keep their handles because Iridium CAD's own next handle is saved with the drawing
 //! (issue #495, gaps FF7).
 
 use std::sync::Arc;
@@ -241,7 +241,7 @@ fn dwg_reopen_and_save_keeps_one_block_per_dimension() {
 fn an_unedited_dimension_keeps_the_block_it_was_read_with() {
     use cadcraft_doc::{Circle, Point};
     let mut d = Drawing::new_metric();
-    // The block another program drew: geometry CADCraft never generates (a circle) and the
+    // The block another program drew: geometry Iridium CAD never generates (a circle) and the
     // definition point on Defpoints.
     let mut b = Block::new("*D3");
     for kind in [

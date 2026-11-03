@@ -1,10 +1,10 @@
 //! DXF data shared by the reader and the writer beyond plain entity geometry:
 //! dimension-variable group codes (DIMSTYLE records and the `ACAD` "DSTYLE" override xdata,
 //! both per the DXF Reference), arrowhead block names, extended-data helpers and the
-//! CADCraft-owned payloads (exact associativity, table flags, hatch gradients, parametric
+//! Iridium CAD-owned payloads (exact associativity, table flags, hatch gradients, parametric
 //! constraints).
 //!
-//! CADCraft's own data lives under the registered application `CADCRAFT` (xdata) and the
+//! Iridium CAD's own data lives under the registered application `CADCRAFT` (xdata) and the
 //! named-object-dictionary entries `CADCRAFT_CONSTRAINTS`, `CADCRAFT_LAYERSTATES`,
 //! `CADCRAFT_PLOTSTYLES`, `CADCRAFT_HANDSEED` and `CADCRAFT_MLEADERSTYLE` (XRECORDs). Other
 //! readers keep or ignore them.
@@ -18,7 +18,7 @@ use cadcraft_render::Arrowhead;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// Registered application name of CADCraft's extended data.
+/// Registered application name of Iridium CAD's extended data.
 pub(crate) const APP: &str = "CADCRAFT";
 /// Named-object-dictionary key of the constraint XRECORD.
 pub(crate) const CONSTRAINTS_KEY: &str = "CADCRAFT_CONSTRAINTS";
@@ -423,17 +423,17 @@ fn read_dimvar_list(
 }
 
 /// Xdata marker of the paper-space viewport (id 1) the writer adds to layouts that have none;
-/// CADCraft keeps that viewport implicit, so the reader drops it.
+/// Iridium CAD keeps that viewport implicit, so the reader drops it.
 pub(crate) const PAPER_VIEW: &str = "PAPERVIEW";
 
-/// True for a VIEWPORT record carrying the [`PAPER_VIEW`] marker as the first string of its CADCraft
+/// True for a VIEWPORT record carrying the [`PAPER_VIEW`] marker as the first string of its Iridium CAD
 /// xdata, where the writer puts it. Later strings are layer names (VPFROZEN, VPCOLORS), so a layer
 /// called PAPERVIEW does not count.
 pub(crate) fn is_paper_view(tags: &[Tag]) -> bool {
     xdata(tags, APP).iter().find(|t| t.code == 1000).is_some_and(|t| t.str().trim().eq_ignore_ascii_case(PAPER_VIEW))
 }
 
-/// Snap kinds in CADCraft's ASSOC xdata.
+/// Snap kinds in Iridium CAD's ASSOC xdata.
 fn snap_code(s: &AssocSnap) -> i64 {
     match s {
         AssocSnap::Start => 0,
@@ -446,7 +446,7 @@ fn snap_code(s: &AssocSnap) -> i64 {
     }
 }
 
-/// Exact associativity as CADCraft xdata groups: per link `1000 point`, `1005 object`,
+/// Exact associativity as Iridium CAD xdata groups: per link `1000 point`, `1005 object`,
 /// `1070 snap` and the snap's argument (`1040 angle`, `1005 other object`, `1071 vertex`).
 pub(crate) fn assoc_xdata(assoc: &[DimAssoc]) -> Vec<Tag> {
     let mut v = vec![Tag::s(1000, "ASSOC"), Tag::s(1002, "{")];
@@ -467,14 +467,14 @@ pub(crate) fn assoc_xdata(assoc: &[DimAssoc]) -> Vec<Tag> {
     v
 }
 
-/// An arc-length dimension as CADCraft xdata: `1000 ARCLEN`, `1002 {`, the arc centre as an xdata
+/// An arc-length dimension as Iridium CAD xdata: `1000 ARCLEN`, `1002 {`, the arc centre as an xdata
 /// point (`1010`/`1020`/`1030`), `1002 }`. The record itself stays a standard aligned dimension
 /// (DXF has no arc-length DIMENSION type), so other programs still read it.
 pub(crate) fn arclen_xdata(center: cadcraft_geom::Vec3) -> Vec<Tag> {
     vec![Tag::s(1000, "ARCLEN"), Tag::s(1002, "{"), Tag::f(1010, center.x), Tag::f(1020, center.y), Tag::f(1030, center.z), Tag::s(1002, "}")]
 }
 
-/// Dimension marks as CADCraft xdata (`1000 MARKS`, `1002 {`, items, `1002 }`): `1000 JOGLINE`
+/// Dimension marks as Iridium CAD xdata (`1000 MARKS`, `1002 {`, items, `1002 }`): `1000 JOGLINE`
 /// and a point; `1000 JOGGED`, the centre and the jog point; `1000 BREAK`, a point, `1040` size
 /// and `1070` auto; `1000 INSPECT`, `1070` shape, `1000` label and `1000` rate. Points are
 /// `1010/1020/1030`. The oblique angle is the standard group 52 instead.
@@ -553,7 +553,7 @@ pub(crate) fn read_arclen(tags: &[Tag]) -> Option<cadcraft_geom::Vec3> {
     Some(cadcraft_geom::Vec3::new(g(1010)?, g(1020)?, g(1030).unwrap_or(0.0)))
 }
 
-/// A viewport's frozen layer names as CADCraft xdata: `1000 VPFROZEN`, `1002 {`, one `1000` per layer, `1002 }`.
+/// A viewport's frozen layer names as Iridium CAD xdata: `1000 VPFROZEN`, `1002 {`, one `1000` per layer, `1002 }`.
 pub(crate) fn frozen_xdata(layers: &[String]) -> Vec<Tag> {
     let mut v = vec![Tag::s(1000, "VPFROZEN"), Tag::s(1002, "{")];
     v.extend(layers.iter().map(|l| Tag::s(1000, l.clone())));
@@ -567,7 +567,7 @@ pub(crate) fn read_frozen(tags: &[Tag]) -> Vec<String> {
     list.iter().take(MAX_XDATA_ITEMS).filter(|t| t.code == 1000).map(Tag::str).collect()
 }
 
-/// A viewport's layer colour overrides as CADCraft xdata: `1000 VPCOLORS`, `1002 {`, then per override
+/// A viewport's layer colour overrides as Iridium CAD xdata: `1000 VPCOLORS`, `1002 {`, then per override
 /// `1000 layer` and `1000 colour` (the [`Color::name`] text, which keeps true colours), `1002 }`.
 pub(crate) fn layer_colors_xdata(colors: &[(String, Color)]) -> Vec<Tag> {
     let mut v = vec![Tag::s(1000, "VPCOLORS"), Tag::s(1002, "{")];
@@ -588,7 +588,7 @@ pub(crate) fn read_layer_colors(tags: &[Tag]) -> Vec<(String, Color)> {
 
 const POINT_NAMES: [&str; 5] = ["defpt", "p13", "p14", "p15", "p16"];
 
-/// Associativity links from CADCraft xdata; malformed links are skipped.
+/// Associativity links from Iridium CAD xdata; malformed links are skipped.
 pub(crate) fn read_assoc(tags: &[Tag]) -> Vec<DimAssoc> {
     let list = xdata_list(xdata(tags, APP), "ASSOC");
     let mut out = Vec::new();
@@ -676,7 +676,7 @@ fn json_chunks(json: &str) -> Vec<String> {
     chars.chunks(250).map(|c| c.iter().collect()).collect()
 }
 
-/// An associative array's parameters as CADCraft xdata on its block record: `1000 ARRAY`,
+/// An associative array's parameters as Iridium CAD xdata on its block record: `1000 ARRAY`,
 /// `1002 {`, the JSON text in `1000` strings short enough for the 255-byte limit even when
 /// characters are written as `\U+XXXX` escapes, `1002 }`.
 pub(crate) fn array_xdata(p: &ArrayParams) -> Vec<Tag> {
@@ -775,7 +775,7 @@ pub(crate) fn parse_plot_styles(text: &str) -> Option<Vec<PlotStyleTable>> {
 /// Annotative scaling stored in the `CADCRAFT_ANNOTATION` XRECORD: the current annotation scale
 /// (CANNOSCALE), ANNOALLVISIBLE, the annotative blocks and the scales each annotative object
 /// supports, by handle. The DXF Reference doesn't document how objects refer to their scales,
-/// so this is CADCraft's own record; the scale list itself is the standard `ACAD_SCALELIST`.
+/// so this is Iridium CAD's own record; the scale list itself is the standard `ACAD_SCALELIST`.
 #[derive(Default, Serialize, Deserialize)]
 pub(crate) struct AnnoPayload {
     version: u32,

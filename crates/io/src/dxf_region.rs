@@ -1,5 +1,5 @@
 //! Regions in DXF. A REGION entity holds ACIS solid-modeler data, which no public specification
-//! describes in enough detail, so CADCraft writes a region as closed LWPOLYLINEs, one per loop,
+//! describes in enough detail, so Iridium CAD writes a region as closed LWPOLYLINEs, one per loop,
 //! which every DXF reader understands. The first carries `CADCRAFT` xdata naming it a region
 //! and holding its other loops (`1000 REGION`); the others are marked `1000 REGIONPART`. Reading
 //! our own file builds the region back from the first and drops the others. Foreign REGIONs are
@@ -57,7 +57,7 @@ pub(crate) fn polylines(r: &Region) -> Vec<Vec<Tag>> {
     out
 }
 
-/// What a closed LWPOLYLINE read as `pl` stands for: a region CADCraft wrote, nothing (a loop
+/// What a closed LWPOLYLINE read as `pl` stands for: a region Iridium CAD wrote, nothing (a loop
 /// of such a region, read with it), or the polyline itself.
 pub(crate) fn from_polyline(tags: &[Tag], pl: LwPolyline) -> Option<EntityKind> {
     let x = xdata(tags, APP);

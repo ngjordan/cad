@@ -191,7 +191,7 @@ fn to_json_bounded(v: &Value, depth: usize, budget: &mut u64) -> Option<serde_js
     })
 }
 
-/// Angle variables CADCraft reports and takes in degrees, as the SETVAR command shows them, which
+/// Angle variables Iridium CAD reports and takes in degrees, as the SETVAR command shows them, which
 /// AutoLISP's `getvar` and `setvar` give and take in radians, as AutoCAD 2024's do: each of these
 /// set to 30 by the SETVAR command, or to `(/ pi 6)` by `setvar`, reads 0.5235987755982987.
 const RADIAN_VARS: [&str; 6] = ["ANGBASE", "CHAMFERD", "DIMJOGANG", "HPANG", "POLARANG", "SNAPANG"];

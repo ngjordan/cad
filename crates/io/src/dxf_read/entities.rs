@@ -46,7 +46,7 @@ fn ellipse(c: &Common, t: &T) -> Ellipse {
     e
 }
 
-/// A LWPOLYLINE, or the region CADCraft wrote as one.
+/// A LWPOLYLINE, or the region Iridium CAD wrote as one.
 fn lwpolyline(tags: &[Tag], c: &Common, t: &T) -> Option<EntityKind> {
     let mut verts = Vec::new();
     let mut cur: Option<PolyVertex> = None;
@@ -90,7 +90,7 @@ fn lwpolyline(tags: &[Tag], c: &Common, t: &T) -> Option<EntityKind> {
         }
     }
     let pl = LwPolyline { vertices: verts, closed: flags & 1 != 0, const_width: t.fd(43, 0.0), elevation: t.fd(38, 0.0), plinegen: flags & 128 != 0 };
-    // A region CADCraft wrote as polylines (`dxf_region`).
+    // A region Iridium CAD wrote as polylines (`dxf_region`).
     crate::dxf_region::from_polyline(tags, pl)
 }
 
@@ -286,7 +286,7 @@ pub(super) fn entity_with_table_budget(kind: &str, tags: &[Tag], table_cells_lef
     Some((c, k))
 }
 
-/// An ACAD_TABLE entity: sizes, cell texts and merges (DXF Reference), plus CADCraft's
+/// An ACAD_TABLE entity: sizes, cell texts and merges (DXF Reference), plus Iridium CAD's
 /// title/header flags, text height and style name from xdata when present.
 pub(super) fn acad_table(tags: &[Tag], table_cells_left: &mut usize) -> Table {
     const MAX_CELLS: usize = 1_000_000;
@@ -337,7 +337,7 @@ pub(super) fn acad_table(tags: &[Tag], table_cells_left: &mut usize) -> Table {
         text.push_str(&c.s(1).unwrap_or_default());
         let span = |code: i32| c.i(code).and_then(|v| u32::try_from(v).ok());
         // A merge starts at the cell whose span (rows 176, columns 175) is more than one cell.
-        // Its own merged flag (173) varies by writer: CADCraft sets it, while AutoCAD-style
+        // Its own merged flag (173) varies by writer: Iridium CAD sets it, while AutoCAD-style
         // writers (acadrust 0.6.4) set it only on the cells the merge covers, whose span is 0.
         let merged = match (span(176), span(175)) {
             (Some(rs), Some(cs)) if rs >= 1 && cs >= 1 && (rs, cs) != (1, 1) => Some((rs, cs)),
@@ -479,7 +479,7 @@ pub(super) fn entity_extras(kind: &str, tags: &[Tag], h: Handle, k: &mut EntityK
             rx.mleader_fix.push((h, pending));
         }
         // The frozen layers: the LAYER handles of group 331 (341 in DXF 2000), outside `102 {…}`
-        // application groups, then the names in CADCraft's VPFROZEN xdata, which holds those
+        // application groups, then the names in Iridium CAD's VPFROZEN xdata, which holds those
         // without one; each layer once.
         ("VIEWPORT", EntityKind::Viewport(v)) => {
             let mut app_group = false;

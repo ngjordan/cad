@@ -835,7 +835,7 @@ fn viewport_layer_colors_roundtrip() {
     let colors = vec![("Walls".to_string(), Color::Index(5)), ("A B".to_string(), Color::True(cadcraft_color::Rgb(255, 128, 0)))];
     d.add(&paper, Common::default(), vp(2, Vec::new(), colors.clone())).unwrap();
     d.add(&paper, Common::default(), vp(3, Vec::new(), Vec::new())).unwrap();
-    // Frozen layers and colour overrides share one CADCraft xdata group.
+    // Frozen layers and colour overrides share one Iridium CAD xdata group.
     d.add(&paper, Common::default(), vp(4, vec!["Walls".into()], colors.clone())).unwrap();
     let back = roundtrip(&d);
     let found: Vec<(u32, Vec<String>, Vec<(String, Color)>)> = back
@@ -938,8 +938,8 @@ fn user_block_arrowheads_are_referenced_not_regenerated() {
     assert_eq!(back.blocks.len(), d.blocks.len());
 }
 
-/// Every standard arrowhead CADCraft generates reads back as its own geometry, through DXF and
-/// DWG, so reopening a drawing CADCraft wrote never turns them into user blocks.
+/// Every standard arrowhead Iridium CAD generates reads back as its own geometry, through DXF and
+/// DWG, so reopening a drawing Iridium CAD wrote never turns them into user blocks.
 #[test]
 fn generated_arrowhead_blocks_are_not_kept_as_user_blocks() {
     let mut d = Drawing::new_metric();
@@ -959,8 +959,8 @@ fn generated_arrowhead_blocks_are_not_kept_as_user_blocks() {
 }
 
 /// A file's own arrowhead block with a standard name (AutoCAD's `_Dot` is a closed polyline
-/// with width, not CADCraft's disc of solids) is kept when only a dimension style names it, and
-/// saved as it was, through DXF and DWG, instead of being replaced by CADCraft's geometry.
+/// with width, not Iridium CAD's disc of solids) is kept when only a dimension style names it, and
+/// saved as it was, through DXF and DWG, instead of being replaced by Iridium CAD's geometry.
 #[test]
 fn file_arrowhead_blocks_with_standard_names_are_kept() {
     let mut d = Drawing::new_metric();
@@ -989,7 +989,7 @@ fn file_arrowhead_blocks_with_standard_names_are_kept() {
             assert_eq!(kinds(&back, name), kinds(&d, name), "{what}: {name}");
         }
         let again = write_dxf(&back);
-        assert!(!again.contains("\nSOLID\r"), "{what}: no arrowhead geometry of CADCraft's is written");
+        assert!(!again.contains("\nSOLID\r"), "{what}: no arrowhead geometry of Iridium CAD's is written");
         assert_eq!(kinds(&roundtrip(&back), "_Dot"), kinds(&d, "_Dot"), "{what}: a second save keeps it too");
     }
 }
@@ -1092,12 +1092,12 @@ fn oversized_dwg_and_dxf_are_rejected_early() {
 
     let limits = cadcraft_dwg::Limits { max_dwg_bytes: 100_000, ..cadcraft_dwg::Limits::DEFAULT };
     let e = cadcraft_dwg::dwg_to_dxf_with(&dwg, limits).unwrap_err();
-    assert!(e.starts_with("DWG: the file is 0.") && e.ends_with("MB, larger than the 0.1 MB CADCraft opens"), "{e}");
+    assert!(e.starts_with("DWG: the file is 0.") && e.ends_with("MB, larger than the 0.1 MB Iridium CAD opens"), "{e}");
 
     // Lines that aren't even group codes: the size is reported before anything is parsed.
     let text = "not a group code\nx\n".repeat(60);
     let e = cadcraft_dxf::parse_with_limit(text.as_bytes(), 50).unwrap_err();
-    assert_eq!(e.to_string(), "drawing too large: 60 DXF group codes, more than the 50 CADCraft reads (set CADCRAFT_MAX_DXF_TAGS to read more)");
+    assert_eq!(e.to_string(), "drawing too large: 60 DXF group codes, more than the 50 Iridium CAD reads (set CADCRAFT_MAX_DXF_TAGS to read more)");
 }
 
 /// Issue #800: one unreadable object record doesn't fail the whole DWG. The reader skips it, the
@@ -1135,7 +1135,7 @@ fn damaged_dwg_opens_partially_and_says_what_it_left_out() {
     assert!(partial > 0, "no damaged copy read partially");
 }
 
-/// A dimension's standard DIMASSOC objects carry the same associations as CADCraft's xdata, so
+/// A dimension's standard DIMASSOC objects carry the same associations as Iridium CAD's xdata, so
 /// a file from another writer (xdata stripped) still follows its geometry: a linear dimension's
 /// two origins, a polyline's vertex named by its segment (#1049), and since #1651 a radial
 /// dimension's circle, whose centre comes back as a `Center` link and its rim point as
@@ -1190,7 +1190,7 @@ fn dimension_associativity_roundtrips() {
     assert_eq!(back.model.len(), d.model.len());
     assert!(back.layouts.iter().all(|l| l.entities.is_empty()));
 
-    // Without CADCraft's xdata (a file from another writer), the standard DIMASSOC objects
+    // Without Iridium CAD's xdata (a file from another writer), the standard DIMASSOC objects
     // still give the extension-line links.
     let tags = cadcraft_dxf::parse(text.as_bytes()).unwrap();
     let mut stripped = Vec::new();
@@ -1295,7 +1295,7 @@ fn polyline_vertex_dimensions_round_trip_by_segment() {
         .collect();
     assert_eq!(refs, [(13, 2, 1), (1, 2, 3)]);
 
-    // Without CADCraft's xdata and with the reference points at 0,0 (as AutoCAD writes them),
+    // Without Iridium CAD's xdata and with the reference points at 0,0 (as AutoCAD writes them),
     // the segments still give the vertices.
     let mut stripped = Vec::new();
     let mut skipping = false;
@@ -1981,7 +1981,7 @@ fn gradient_hatch_roundtrips_through_dxf() {
     assert_eq!(roundtrip(&back).model.iter().map(|e| &e.kind).collect::<Vec<_>>(), back.model.iter().map(|e| &e.kind).collect::<Vec<_>>());
 }
 
-/// R2000 readers and DWG conversions drop the native groups; CADCraft's xdata copy restores the
+/// R2000 readers and DWG conversions drop the native groups; Iridium CAD's xdata copy restores the
 /// gradient. When native groups are present (another program may have edited them) they win.
 #[test]
 fn gradient_falls_back_to_xdata_and_native_groups_win() {
@@ -2129,7 +2129,7 @@ fn autocad_header_dim_variables_are_not_overrides() {
     assert_eq!(back.header.str("DIMDSEP", ""), ",");
     assert!(back.header.get("DIMTXT").is_some() && back.header.get("DIMCLRD").is_some());
     assert_eq!(back.dim_overrides(), serde_json::Map::new());
-    // A variable that really differs from the style is an override. CADCraft writes the current
+    // A variable that really differs from the style is an override. Iridium CAD writes the current
     // style's variables in the header too (#1051), so both copies change.
     let text = text.replacen("$DIMDEC\r\n70\r\n3\r\n", "$DIMDEC\r\n70\r\n5\r\n", 1).replacen("$DIMDEC\r\n 70\r\n3\r\n", "$DIMDEC\r\n 70\r\n5\r\n", 1);
     assert_eq!(read_dxf(text.as_bytes()).unwrap().dim_overrides().get("decimals"), Some(&serde_json::json!(5)));
@@ -2463,7 +2463,7 @@ fn svg_left_out_content_is_noted() {
     assert_eq!(kinds(&d), ["Polyline", "Polyline"]);
     assert_eq!(
         d.read_notes,
-        ["SVG: CADCraft doesn't read these yet, so they were left out: 2 texts, 1 raster image, 2 `<use>` copies, \
+        ["SVG: Iridium CAD doesn't read these yet, so they were left out: 2 texts, 1 raster image, 2 `<use>` copies, \
           1 `<style>` sheet (its class rules aren't applied), 1 rectangle with rounded corners (drawn square)"]
     );
     let plain = read(format!("{SVG_PAGE}<rect x=\"1\" y=\"1\" width=\"4\" height=\"3\"/></svg>").as_bytes(), "a.svg").unwrap();
@@ -2714,7 +2714,7 @@ fn pdf_strokes_each_transparent_primitive_inside_a_block() {
 
 #[test]
 fn foreign_table_reads_cell_text_height_and_keeps_style_scale() {
-    // A table from another writer: no CADCraft xdata; cell 1 sets 140 before its value block
+    // A table from another writer: no Iridium CAD xdata; cell 1 sets 140 before its value block
     // (the cell's text height), cell 2 only has a 140 inside the value block (a number).
     let dxf = "0\nSECTION\n2\nENTITIES\n0\nACAD_TABLE\n100\nAcDbTable\n91\n1\n92\n2\n141\n300\n142\n900\n142\n900\n\
         171\n1\n140\n150\n301\nCELL_VALUE\n1\nA\n304\nACVALUE_END\n\

@@ -1,4 +1,4 @@
-//! `cadcraft-cli`: headless CADCraft. The subcommands and their options are the clap types in
+//! `cadcraft-cli`: headless Iridium CAD. The subcommands and their options are the clap types in
 //! `args.rs`; `cadcraft-cli --help` lists them.
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 

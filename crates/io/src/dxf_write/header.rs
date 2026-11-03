@@ -135,7 +135,7 @@ pub(super) fn header_vars(w: &mut W, d: &Drawing) {
     dim_header_vars(w, d);
 }
 
-/// `$DWGCODEPAGE`: before 2007 the code page read from the file when CADCraft knows it, in which
+/// `$DWGCODEPAGE`: before 2007 the code page read from the file when Iridium CAD knows it, in which
 /// a saved file's text is written (characters outside it as `\U+XXXX` escapes); otherwise, and
 /// from 2007 (UTF-8 text), `ANSI_1252`.
 pub(crate) fn code_page(d: &Drawing, version: Version) -> String {

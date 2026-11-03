@@ -1,9 +1,9 @@
 //! DWG support through a DXF bridge.
 //!
 //! DWG files are read with the `acadrust` crate (MPL-2.0, used unmodified as a dependency) and
-//! converted to DXF bytes, which CADCraft's own DXF reader maps to its document model; saving
+//! converted to DXF bytes, which Iridium CAD's own DXF reader maps to its document model; saving
 //! goes the other way. Keeping the dependency behind this byte-level API isolates it: nothing
-//! else in CADCraft depends on its types. Native targets only (it memory-maps files).
+//! else in Iridium CAD depends on its types. Native targets only (it memory-maps files).
 //!
 //! # Guardrails around the third-party decoder
 //!
@@ -92,7 +92,11 @@ mod native {
     /// passes for a complete one.
     pub fn dwg_to_dxf_noted(bytes: &[u8], limits: Limits) -> Result<(Vec<u8>, Vec<String>), String> {
         if bytes.len() > limits.max_dwg_bytes {
-            return Err(format!("DWG: the file is {}, larger than the {} CADCraft opens", mb(bytes.len() as u64), mb(limits.max_dwg_bytes as u64)));
+            return Err(format!(
+                "DWG: the file is {}, larger than the {} Iridium CAD opens",
+                mb(bytes.len() as u64),
+                mb(limits.max_dwg_bytes as u64)
+            ));
         }
         let outcome = std::panic::catch_unwind(|| {
             acadrust::DwgReader::from_stream_with_options(Cursor::new(bytes), acadrust::DwgReadOptions::failsafe()).read_with_stats()
@@ -326,7 +330,7 @@ mod native {
     /// merged cells into the table's `merged_ranges` only, while its DXF writer writes each cell's
     /// own merge groups (173, 175, 176), so without this the merges would be lost. Tables whose
     /// cells already carry merges are left alone. Each range's first cell gets the span; the
-    /// cells it covers are marked merged with no span of their own, as CADCraft's DXF writer does.
+    /// cells it covers are marked merged with no span of their own, as Iridium CAD's DXF writer does.
     fn table_merges(doc: &mut acadrust::CadDocument) {
         table_merges_within(doc, MAX_MERGE_CELLS);
     }
@@ -337,7 +341,7 @@ mod native {
 
     /// A table cell's own text height only when the file says it overrides the table style's.
     /// acadrust's DXF writer writes a cell style's height (group 140) whenever the cell has a
-    /// style record, even a default 0.18 with no override flag, and CADCraft reads a 140 as an
+    /// style record, even a default 0.18 with no override flag, and Iridium CAD reads a 140 as an
     /// override (#2501). The override is the cell style's TEXT_HEIGHT property flag or the
     /// content's format override bit 128; without either the height is cleared (0 is no
     /// override), so the table style's height applies.
@@ -348,7 +352,7 @@ mod native {
             let acadrust::entities::EntityType::Table(t) = e else { continue };
             for cell in t.rows.iter_mut().flat_map(|r| r.cells.iter_mut()) {
                 // The first content's own height (group 144) when its format override sets bit 128.
-                // CADCraft keeps one height for the cell's text, so a later content's override
+                // Iridium CAD keeps one height for the cell's text, so a later content's override
                 // must not stand in for the first content's.
                 let content_height = cell
                     .contents
@@ -357,7 +361,7 @@ mod native {
                     .map(|c| c.text_height)
                     .filter(|h| h.is_finite() && *h > 0.0);
                 if let Some(h) = content_height {
-                    // CADCraft reads only the style's height (group 140), so carry it there.
+                    // Iridium CAD reads only the style's height (group 140), so carry it there.
                     cell.style.get_or_insert_with(acadrust::entities::table::CellStyle::new).text_height = h;
                     continue;
                 }
@@ -476,7 +480,7 @@ mod native {
 
     /// The DWG dimension flags byte. Its bit 1 is DXF group 70's bit 32 (ODA DWG specification,
     /// common dimension data), which acadrust keeps no copy of from DXF: it is set here as
-    /// CADCraft's DXF writer always sets it (#1094). Bit 0, the opposite of group 70's bit 128,
+    /// Iridium CAD's DXF writer always sets it (#1094). Bit 0, the opposite of group 70's bit 128,
     /// acadrust 0.6.6 reads and writes itself.
     fn dimension_flags(doc: &mut acadrust::CadDocument) {
         for e in doc.entities_mut() {
@@ -491,7 +495,7 @@ mod native {
     /// removes them as orphaned data): in a real 83 MB site plan they were 888,483 of 889,053
     /// components and made its DXF rendition 1.2 GB, over [`Limits::DEFAULT`], so the file
     /// didn't open at all. No definition that was read refers to them (a definition the reader
-    /// skipped can't use them either) and CADCraft doesn't draw DGN line styles, so nothing
+    /// skipped can't use them either) and Iridium CAD doesn't draw DGN line styles, so nothing
     /// visible is lost.
     /// Every component a definition reaches (directly, or through compound and point
     /// components) is kept, as are the definitions; dictionary entries that named a dropped
@@ -543,7 +547,7 @@ mod native {
 
     /// Leave out what acadrust can't write as this DWG version: other programs' custom entities
     /// and objects without raw DWG data of that version. acadrust 0.6.4 refuses the whole file
-    /// for one of them (0.6.3 left them out); CADCraft already tells the user which entity types
+    /// for one of them (0.6.3 left them out); Iridium CAD already tells the user which entity types
     /// a DWG doesn't keep (`not_saved`), so the rest of the drawing is written. Returns how many
     /// records of each DXF type were left out, so a save can say so.
     fn drop_unwritable(doc: &mut acadrust::CadDocument) -> super::Unwritten {
@@ -729,7 +733,7 @@ mod native {
         // runs inside `catch_unwind` so a decode failure is reported rather than crashing.
         if dxf.len() > Limits::DEFAULT.max_dxf_bytes {
             return Err(format!(
-                "DXF: the input is {}, larger than the {} CADCraft converts to DWG",
+                "DXF: the input is {}, larger than the {} Iridium CAD converts to DWG",
                 mb(dxf.len() as u64),
                 mb(Limits::DEFAULT.max_dxf_bytes as u64)
             ));
@@ -786,7 +790,7 @@ mod native {
     /// dictionary, with the variables it keeps there, when the drawing has none (#1813).
     /// Vectric Aspire 10.5 reads a 2004 (AC1018) DWG without it as empty ("No data was imported
     /// from the DXF / DWG file"), though it reads the same drawing as DXF — which has no such
-    /// dictionary either, as CADCraft's and ezdxf's writers don't make one. AutoCAD's AC1032 DWGs
+    /// dictionary either, as Iridium CAD's and ezdxf's writers don't make one. AutoCAD's AC1032 DWGs
     /// read there without it, so newer output is left as it was, and a dictionary the drawing
     /// does have keeps its own entries and values.
     fn add_variable_dictionary(doc: &mut acadrust::CadDocument) {
@@ -943,11 +947,11 @@ fn fail_in_test(_stage: &str) {
     }
 }
 
-/// The error for a DWG version CADCraft can't write.
+/// The error for a DWG version Iridium CAD can't write.
 #[cfg_attr(no_dwg_bridge, allow(dead_code))]
 fn unsupported(version: &str) -> String {
     let list: Vec<&str> = VERSIONS.iter().map(|(_, year)| *year).collect();
-    format!("DWG version `{version}` can't be written (CADCraft writes {})", list.join(", "))
+    format!("DWG version `{version}` can't be written (Iridium CAD writes {})", list.join(", "))
 }
 
 /// Which build has no DWG bridge, for the stubs' errors.
@@ -1137,7 +1141,7 @@ mod tests {
             assert_eq!(seen.iter().filter(|(t, _)| t == text).count(), 4, "{seen:?}");
         }
 
-        // And CADCraft reads its own DWG back as it wrote it: 128 only on the moved texts.
+        // And Iridium CAD reads its own DWG back as it wrote it: 128 only on the moved texts.
         let dxf = String::from_utf8(dwg_to_dxf(&dwg).unwrap()).unwrap();
         let lines: Vec<&str> = dxf.lines().map(str::trim).collect();
         let mut flags = Vec::new();
@@ -1287,7 +1291,7 @@ mod tests {
 
     /// AutoCAD's DWG scale action (BLOCKSCALEACTION) ends with a byte after its three
     /// connections that DXF doesn't carry. acadrust 0.6.4 neither read nor wrote it, so AutoCAD
-    /// read past the object and refused every DWG CADCraft wrote with a dynamic block that scales
+    /// read past the object and refused every DWG Iridium CAD wrote with a dynamic block that scales
     /// ("Error Decrypting Data"); 0.6.5 added it and 0.6.6, which this uses, still keeps it (0.6.6 also
     /// fixes multi-layout DWGs, #1463). The byte reaches the DWG, and a scale action
     /// from DXF is written whole, with the byte AutoCAD writes (0).
@@ -1352,7 +1356,7 @@ mod tests {
         assert!(unwritten.is_empty(), "{unwritten:?}");
     }
 
-    /// An OLE2FRAME, which CADCraft keeps as its DXF groups without modelling it, is written to
+    /// An OLE2FRAME, which Iridium CAD keeps as its DXF groups without modelling it, is written to
     /// the DWG with its data: it isn't in the list of what the writer left out.
     #[cfg(not(no_dwg_bridge))]
     #[test]

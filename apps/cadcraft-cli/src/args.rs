@@ -64,7 +64,7 @@ fn convert_long_about() -> &'static str {
     })
 }
 
-/// cadcraft-cli: headless CADCraft
+/// cadcraft-cli: headless Iridium CAD
 #[derive(Parser)]
 #[command(name = "cadcraft-cli", version = cadcraft_engine::build_version(), arg_required_else_help = true)]
 pub(crate) struct Cli {

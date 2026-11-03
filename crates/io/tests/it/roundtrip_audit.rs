@@ -1,4 +1,4 @@
-//! What survives DXF open → save → reopen of data CADCraft does not model (#528): unknown
+//! What survives DXF open → save → reopen of data Iridium CAD does not model (#528): unknown
 //! entities and objects, other applications' xdata, extension dictionaries, layer states, colour
 //! books, hyperlinks, DICTIONARYVAR objects, XRECORDs and persistent reactors. One test per item.
 //!
@@ -732,7 +732,7 @@ fn unknown_objects_in_named_and_nested_dictionaries_are_kept() {
         assert_eq!(s(obj, 1), "nested-object");
         assert_eq!(owner(obj), h(nested));
         assert!(o.of("CLASS").iter().any(|c| s(c, 1) == "ACME_OBJECT"), "ACME_OBJECT class");
-        // CADCraft's own dictionaries are not doubled.
+        // Iridium CAD's own dictionaries are not doubled.
         let keys: Vec<String> = entries(root).into_iter().map(|e| e.0).collect();
         for k in ["ACAD_GROUP", "ACAD_IMAGE_DICT"] {
             assert_eq!(keys.iter().filter(|x| *x == k).count(), 1, "{k} in {keys:?}");

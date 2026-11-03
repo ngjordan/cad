@@ -289,7 +289,7 @@ pub fn read_file(path: &std::path::Path) -> std::result::Result<ReadFile, String
             let shown = path.display();
             // The session keeps paths as text; a name that isn't Unicode could never be saved back to.
             let Some(text_path) = path.to_str() else {
-                return Err(bad("open", format!("{shown}: the file name is not valid Unicode, so CADCraft can't save back to it")));
+                return Err(bad("open", format!("{shown}: the file name is not valid Unicode, so Iridium CAD can't save back to it")));
             };
             let bytes = crate::capped_read::read_capped(path, MAX_DRAWING_BYTES).map_err(|e| bad("open", format!("{shown}: {e}")))?;
             read_bytes(&bytes, text_path, Some(text_path.to_string()))
@@ -735,7 +735,7 @@ fn run_bytes(s: &mut Session, p: &Value) -> Result<Value> {
     Ok(r)
 }
 
-/// Entities a DXF or DWG file doesn't keep: those of object types CADCraft doesn't model
+/// Entities a DXF or DWG file doesn't keep: those of object types Iridium CAD doesn't model
 /// (3DSOLID, MULTILEADER… read from other programs' files and kept in the drawing, but
 /// not written), counted by DXF type across model space, layouts and block definitions. Saved
 /// at the drawing's own version; see [`not_saved_as`].
@@ -748,7 +748,7 @@ pub fn not_saved(d: &Drawing) -> std::collections::BTreeMap<String, usize> {
 /// store section, which is written back with the drawing (`Foreign::data_store`).
 const MODELER_TYPES: [&str; 3] = ["3DSOLID", "REGION", "BODY"];
 
-/// Entity types CADCraft doesn't model that the DWG bridge writes all the same: acadrust reads
+/// Entity types Iridium CAD doesn't model that the DWG bridge writes all the same: acadrust reads
 /// them from our DXF into entities of its own and writes them to DWG of every version we save,
 /// an OLE object with its frame and its embedded object's bytes unchanged. Matched exactly: the
 /// bridge gets the type as stored, and acadrust knows only this spelling of it.

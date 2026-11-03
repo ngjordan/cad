@@ -1,5 +1,5 @@
 //! Design tokens. Colours were measured from the reference look (dark slate chrome, near-black
-//! navy model space) and are CADCraft's own values; every widget reads them from here.
+//! navy model space) and are Iridium CAD's own values; every widget reads them from here.
 //!
 //! Two palettes: [`Tokens::DARK`] (the original look) and [`Tokens::LIGHT`]. The interface theme
 //! changes the chrome (title and tool bar, menus, palettes, tabs, command line, status bar,
@@ -19,7 +19,7 @@ pub enum ThemePref {
     /// Follow the operating system's light/dark appearance, live.
     System,
     Light,
-    /// The default: CADCraft's original look.
+    /// The default: Iridium CAD's original look.
     #[default]
     Dark,
 }
@@ -144,9 +144,9 @@ impl Tokens {
         text_dim: Color32::from_rgb(0xa3, 0xaa, 0xb4),
         text_faint: Color32::from_rgb(0x87, 0x8d, 0x96),
         icon: Color32::from_rgb(0xcf, 0xd4, 0xdb),
-        icon_accent: Color32::from_rgb(0x4f, 0xa3, 0xf7),
+        icon_accent: Color32::from_rgb(0x2f, 0x9e, 0x74),
         icon_point: Color32::from_rgb(0xf0, 0x7a, 0x3a),
-        accent: Color32::from_rgb(0x3d, 0x8b, 0xfd),
+        accent: Color32::from_rgb(0x0B, 0x6E, 0x4F),
         selection: Color32::from_rgb(0x4a, 0x8f, 0xff),
         hover: Color32::from_rgb(0x9c, 0xc6, 0xff),
         grip: Color32::from_rgb(0x2f, 0x6b, 0xff),
@@ -188,9 +188,9 @@ impl Tokens {
         text_dim: Color32::from_rgb(0x47, 0x50, 0x5c),
         text_faint: Color32::from_rgb(0x62, 0x6a, 0x76),
         icon: Color32::from_rgb(0x34, 0x3c, 0x48),
-        icon_accent: Color32::from_rgb(0x1b, 0x6f, 0xd6),
+        icon_accent: Color32::from_rgb(0x4F, 0xB3, 0x89),
         icon_point: Color32::from_rgb(0xd3, 0x5a, 0x1c),
-        accent: Color32::from_rgb(0x2f, 0x7c, 0xf6),
+        accent: Color32::from_rgb(0x3F, 0xA8, 0x6C),
         cmd_bg: Color32::from_rgba_unmultiplied_const(0xf9, 0xfa, 0xfb, 0xf0),
         toggle_on: Color32::from_rgb(0x2f, 0x7c, 0xf6),
         field: Color32::from_rgb(0xff, 0xff, 0xff),

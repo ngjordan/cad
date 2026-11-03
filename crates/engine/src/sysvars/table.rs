@@ -1,7 +1,7 @@
 //! System variables the engine already keeps in the drawing header (or in [`crate::Settings`]) and
 //! reads with a default, described once in a table: their type, allowed values and default. GETVAR
 //! reports the default until a value is set, SETVAR checks the value against the table, and
-//! `SETVAR ?` lists them. Variables CADCraft doesn't model are not in the table.
+//! `SETVAR ?` lists them. Variables Iridium CAD doesn't model are not in the table.
 
 use serde_json::{Value, json};
 

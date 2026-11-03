@@ -1,4 +1,4 @@
-//! The Model layout's plot settings say what CADCraft plots for model space: the drawing extents
+//! The Model layout's plot settings say what Iridium CAD plots for model space: the drawing extents
 //! fitted to the paper. Plot type 5 ("Layout information", DXF Reference, PLOTSETTINGS group 74)
 //! means nothing for model space; another program's Plot dialog then showed no plot area and no
 //! scale for Model.

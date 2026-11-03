@@ -1,4 +1,4 @@
-//! Another program's file can name a $HANDSEED below handles it uses. Entities CADCraft makes
+//! Another program's file can name a $HANDSEED below handles it uses. Entities Iridium CAD makes
 //! while reading (the faces a polygon mesh becomes) must not take handles that records further
 //! on still have: a DWG keeps one object per handle, so the duplicates were lost on save.
 

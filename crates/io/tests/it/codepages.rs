@@ -96,7 +96,7 @@ fn utf8_wins_when_valid() {
     assert_eq!(names(&d).0, "Слой");
 }
 
-/// A code page CADCraft doesn't know (or none) reads as ANSI_1252, as before.
+/// A code page Iridium CAD doesn't know (or none) reads as ANSI_1252, as before.
 #[test]
 fn unknown_code_page_falls_back_to_ansi_1252() {
     for cp in ["ANSI_1361", "EBCDIC", "", "\u{1}"] {

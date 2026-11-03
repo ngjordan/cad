@@ -104,7 +104,7 @@ fn dwg_keeps_table_styles() {
 
 /// DWG doesn't store viewport ids; readers number a layout's viewports in order, and id 1 is the
 /// paper-space viewport (the sheet, not drawn). The writer puts that viewport ahead of a layout's
-/// own viewports, so a viewport made in CADCraft (id 2) keeps its id instead of becoming the
+/// own viewports, so a viewport made in Iridium CAD (id 2) keeps its id instead of becoming the
 /// sheet; our reader drops the added viewport again, so a DXF round trip is unchanged.
 #[test]
 fn viewport_ids_survive_dwg_and_the_paper_viewport_stays_implicit() {

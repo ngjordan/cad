@@ -184,7 +184,7 @@ fn code_page_is_kept_before_2007() {
         assert!(back.model.iter().any(|e| matches!(&e.kind, EntityKind::Text(t) if t.value == "Привет")));
     }
     assert_eq!(code_page(&dxf(&d, Version::R2018)), "ANSI_1252", "2007+: UTF-8 text");
-    // Without one, or with one CADCraft doesn't know: ANSI_1252.
+    // Without one, or with one Iridium CAD doesn't know: ANSI_1252.
     d.header.set_str("DWGCODEPAGE", "NO_SUCH\n0\nEOF");
     assert_eq!(code_page(&dxf(&d, Version::R2000)), "ANSI_1252");
     assert_eq!(code_page(&dxf(&Drawing::new_metric(), Version::R2000)), "ANSI_1252");
@@ -204,7 +204,7 @@ fn modelled_dictionaries_are_not_kept_twice() {
     let first = dxf(&d, Version::R2018);
     let read = cadcraft_io::read_dxf(first.as_bytes()).unwrap();
     let kept: Vec<&str> = read.foreign.objects.iter().map(|o| o.kind.as_str()).collect();
-    assert!(kept.is_empty(), "nothing CADCraft writes itself is kept raw: {kept:?}");
+    assert!(kept.is_empty(), "nothing Iridium CAD writes itself is kept raw: {kept:?}");
     let again = dxf(&read, Version::R2018);
     let third = dxf(&cadcraft_io::read_dxf(again.as_bytes()).unwrap(), Version::R2018);
     for kind in ["MLINESTYLE", "SCALE", "MLEADERSTYLE", "TABLESTYLE", "DICTIONARY", "XRECORD", "GROUP", "LAYOUT"] {

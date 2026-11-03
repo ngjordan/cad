@@ -1,4 +1,4 @@
-//! The CADCraft engine.
+//! The Iridium CAD engine.
 //!
 //! Every user-visible action is a command with a stable id (AutoCAD's command names in lower
 //! case: `line`, `circle`, `zoom`, `layer`…, plus dotted ids for UI operations). Commands run two

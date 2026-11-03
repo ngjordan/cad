@@ -101,7 +101,7 @@ fn legacy_column_groups_stay_in_the_mtext_subclass() {
 
 #[test]
 fn heights_written_without_a_count_are_all_kept() {
-    // Files written before the height count (CADCraft up to f536bf4) have group 76 = n and n
+    // Files written before the height count (Iridium CAD up to f536bf4) have group 76 = n and n
     // heights, no count: the first 50 is a height there (#2247 review).
     let mut d = Drawing::new_metric();
     d.add(&Space::Model, Common::default(), EntityKind::MText(mtext("x", 0.0, None))).unwrap();

@@ -1,5 +1,5 @@
 //! Portable fonts: a drawing saved with them gets the Windows font for each Linux font in its
-//! STYLE table, keeps its own in CADCraft xdata, and reopens with it, from DXF and DWG.
+//! STYLE table, keeps its own in Iridium CAD xdata, and reopens with it, from DXF and DWG.
 
 use cadcraft_doc::{Drawing, TextStyle};
 use cadcraft_io::{read, read_dxf, write, write_dxf};

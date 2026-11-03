@@ -1,5 +1,5 @@
 //! OLE objects (OLE2FRAME: a picture, a spreadsheet or a document embedded in the drawing)
-//! survive a DWG save. CADCraft doesn't model them and keeps them as read; the DWG bridge reads
+//! survive a DWG save. Iridium CAD doesn't model them and keeps them as read; the DWG bridge reads
 //! them from our DXF into acadrust's own entity and writes them to DWG with their frame and the
 //! embedded object's bytes, so a drawing saved as DWG and reopened still has them.
 
@@ -95,7 +95,7 @@ fn dwg_keeps_ole_objects() {
     assert_eq!(got.len(), 1, "{got:?}");
     assert_kept(&got[0]);
 
-    // Reopened in CADCraft it is in model space again, and a second DWG save keeps it too.
+    // Reopened in Iridium CAD it is in model space again, and a second DWG save keeps it too.
     let again = cadcraft_io::read(&dwg, "x.dwg").unwrap();
     assert_eq!(ole(&again), 1);
     let dwg = cadcraft_io::write(&again, "x.dwg").unwrap();

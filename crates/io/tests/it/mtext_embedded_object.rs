@@ -7,7 +7,7 @@ use cadcraft_doc::{Common, Drawing, EntityKind, MText, Space};
 use cadcraft_geom::Vec3;
 use cadcraft_io::{read_dxf, write_dxf};
 
-/// An MTEXT at (30, 17) with `rotation`, written by CADCraft, then given an embedded object
+/// An MTEXT at (30, 17) with `rotation`, written by Iridium CAD, then given an embedded object
 /// as AutoCAD writes it: direction `dir` in 10/20/30 and the insertion point in 11/21/31.
 fn with_embedded_object(rotation: f64, dir: (f64, f64)) -> String {
     let mut d = Drawing::new_metric();

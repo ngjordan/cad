@@ -109,7 +109,7 @@ pub(crate) fn text_style_flags() -> Vec<Case> {
 
 pub(crate) fn text_style_fonts() -> Vec<Case> {
     // Names only; no font files are read or required.
-    [("CADCraft Stroke", ""), ("SyntheticSans.ttf", ""), ("synthetic.shx", "synthetic-big.shx")]
+    [("Iridium CAD Stroke", ""), ("SyntheticSans.ttf", ""), ("synthetic.shx", "synthetic-big.shx")]
         .map(|(font, big_font)| {
             style_case(
                 &format!("style/font={font}/big={big_font}"),

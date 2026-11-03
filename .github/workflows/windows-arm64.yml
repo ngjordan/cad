@@ -29,6 +29,6 @@ jobs:
     uses: storytold/craft-common-actions/.github/workflows/windows-arm64.yml@main
     with:
       app-name: cadcraft
-      app-dir: CADCraft
-      install-relative-path: Programs/ArtCraft/CADCraft
+      app-dir: Iridium CAD
+      install-relative-path: Programs/ArtCraft/Iridium CAD
       install-scope: perUser

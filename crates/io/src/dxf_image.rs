@@ -1,7 +1,7 @@
 //! Raster images in DXF (DXF Reference: IMAGE entity; IMAGEDEF, IMAGEDEF_REACTOR and
 //! RASTERVARIABLES objects). An IMAGE entity holds the placement, clip boundary and display
 //! settings; it points (group 340) to an IMAGEDEF object holding the file path, which the
-//! `ACAD_IMAGE_DICT` dictionary names. CADCraft keeps this data so images survive save and
+//! `ACAD_IMAGE_DICT` dictionary names. Iridium CAD keeps this data so images survive save and
 //! reopen; the pixels themselves are not loaded.
 
 use std::collections::{HashMap, HashSet};

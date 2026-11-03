@@ -11,7 +11,7 @@
 //! - rotation (`50`): relative to the line direction, or absolute (`74` bit 1);
 //! - font, width factor, oblique angle and mirroring from the text style (`340`).
 //!
-//! Shape elements (`74` bit 4) need SHX shape files, which CADCraft does not read: they draw
+//! Shape elements (`74` bit 4) need SHX shape files, which Iridium CAD does not read: they draw
 //! nothing and leave their gap empty.
 
 use cadcraft_doc::{Drawing, Linetype};

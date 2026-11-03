@@ -627,7 +627,7 @@ fn measure_counts_coincident_vertices_and_runs_ellipses_by_parameter() {
         s.execute("measure", &json!({"handle": pl, "length": 3, "from": [7, 0]})).unwrap();
         assert!(pts(&s).iter().any(|p| near(*p, 17.0, 0.0)), "{cmd}: {:?}", pts(&s));
     }
-    // AutoCAD's points. CADCraft measures along a tessellation (1e-4 of the major axis), so its
+    // AutoCAD's points. Iridium CAD measures along a tessellation (1e-4 of the major axis), so its
     // points sit within 2e-4 of the axis of AutoCAD's; the other end is 4 to 200 units away.
     type Ellipse = ([f64; 2], [f64; 2], f64, f64, f64);
     let cases: [((Ellipse, f64, [f64; 2]), &[[f64; 2]]); 2] = [

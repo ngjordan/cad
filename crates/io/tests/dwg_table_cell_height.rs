@@ -71,7 +71,7 @@ fn table_cell_heights_keep_inheritance_through_dxf() {
 use acadrust::entities::table::{CellContent, CellStyle, CellStylePropertyFlags};
 
 /// Write the drawing as a DWG, edit its first cell through acadrust (`edit`), write it again as a
-/// DWG (or, with `as_dxf`, as a DXF by acadrust's writer) and read it with CADCraft. Returns the first cell's
+/// DWG (or, with `as_dxf`, as a DXF by acadrust's writer) and read it with Iridium CAD. Returns the first cell's
 /// text height override.
 fn first_cell_height(as_dxf: bool, edit: impl FnOnce(&mut acadrust::entities::table::TableCell)) -> Option<f64> {
     let bytes = cadcraft_io::write(&drawing(), "height.dwg").unwrap();
@@ -116,7 +116,7 @@ fn a_cell_style_with_the_text_height_flag_keeps_its_height() {
 #[test]
 fn content_with_format_override_bit_128_keeps_its_own_height() {
     // acadrust writes the content's height as group 144 and the style's as 140; they differ here
-    // so the result shows which one CADCraft honoured.
+    // so the result shows which one Iridium CAD honoured.
     let h = first_cell_height(false, |c| {
         c.style = Some(styled(0.5, CellStylePropertyFlags::NONE));
         if c.contents.is_empty() {

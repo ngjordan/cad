@@ -1,5 +1,5 @@
 //! Dimension edits survive DXF: the oblique angle as group 52 (relative to the dimension line,
-//! DXF Reference), jogs, breaks and inspection frames as CADCraft xdata. Damaged xdata is
+//! DXF Reference), jogs, breaks and inspection frames as Iridium CAD xdata. Damaged xdata is
 //! skipped.
 
 use cadcraft_doc::{Common, DimBreak, DimKind, DimMarks, Dimension, Drawing, EntityKind, Inspection, JoggedRadius, Space};

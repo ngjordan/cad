@@ -1,4 +1,4 @@
-//! #1651: the issue's repro through the commands. Every dimension CADCraft reports as
+//! #1651: the issue's repro through the commands. Every dimension Iridium CAD reports as
 //! associated (the diameter, radius and angular ones, as well as the linear control) is saved
 //! with a DIMASSOC object whose references name its geometry.
 
@@ -105,7 +105,7 @@ fn the_issue_repro_saves_every_associated_dimension_with_dimassoc() {
         let d = s.doc().unwrap();
         for h in dims {
             match d.entity(h).map(|e| &e.kind) {
-                Some(EntityKind::Dimension(dm)) => assert!(!dm.assoc.is_empty(), "{} is associative in CADCraft", h.hex()),
+                Some(EntityKind::Dimension(dm)) => assert!(!dm.assoc.is_empty(), "{} is associative in Iridium CAD", h.hex()),
                 _ => panic!("{} is not a dimension", h.hex()),
             }
         }

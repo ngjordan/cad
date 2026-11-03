@@ -66,7 +66,7 @@ fn annotative(tags: &[Tag]) -> bool {
     list.iter().filter(|t| t.code == 1070).nth(1).is_some_and(|t| t.i64() != 0)
 }
 
-/// A text style's font: CADCraft's own font name from `CADCRAFT` xdata (`1000 FONT`, name)
+/// A text style's font: Iridium CAD's own font name from `CADCRAFT` xdata (`1000 FONT`, name)
 /// while the font file is still the `txt` or Windows font written for other readers; the TrueType
 /// family of the style's `ACAD` xdata (`1000` typeface) when it has no font file (how AutoCAD
 /// stores TrueType styles); otherwise the file.
@@ -233,7 +233,7 @@ pub(super) fn tables(tags: &[Tag], d: &mut Drawing, rx: &mut Rx) {
                 let field = |key: &str| {
                     x.iter().position(|t| t.code == 1000 && t.str() == key).and_then(|i| x.get(i + 1)).filter(|t| t.code == 1000).map(Tag::str)
                 };
-                // 70 bit 1: a paper space view; its layout is CADCraft xdata.
+                // 70 bit 1: a paper space view; its layout is Iridium CAD xdata.
                 let layout = (t.i(70).unwrap_or(0) & 1 != 0).then(|| field("LAYOUT").unwrap_or_default());
                 let twist = t.f(50).filter(|a| a.is_finite()).map_or(0.0, |a| a.rem_euclid(360.0).to_radians());
                 let v = NamedView { name: name.clone(), center, height: h, width: w, layer_state: field("LAYERSTATE"), twist, layout };

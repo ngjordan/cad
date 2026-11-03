@@ -1,5 +1,5 @@
 //! Opening a file that isn't a drawing (SVG, read into entities): the drawing gets no file name,
-//! so QSAVE asks for one instead of writing CADCraft's SVG export over the original.
+//! so QSAVE asks for one instead of writing Iridium CAD's SVG export over the original.
 
 use cadcraft_engine::Session;
 use cadcraft_engine::cmd::file::{IoHooks, set_io};

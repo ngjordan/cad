@@ -27,7 +27,7 @@ pub(in crate::cmd) enum Kind {
     TextStyles,
     ZeroLength,
     EmptyText,
-    /// An object type CADCraft does not have: nothing to purge.
+    /// An object type Iridium CAD does not have: nothing to purge.
     Absent,
     All,
 }

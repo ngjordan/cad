@@ -1,5 +1,5 @@
 //! The DXF reader drops the paper-space viewport the writer adds (marked `1000 PAPERVIEW` in
-//! CADCraft xdata) but keeps a real viewport whose frozen or recoloured layer is named PAPERVIEW.
+//! Iridium CAD xdata) but keeps a real viewport whose frozen or recoloured layer is named PAPERVIEW.
 
 use cadcraft_color::Color;
 use cadcraft_doc::*;

@@ -2,7 +2,7 @@
 
 > **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-13 · **Change:** minor (zoom and pan regenerate in the background) · **Target:** Autodesk AutoCAD 2027 (Mac and Windows)
 
-The hardware AutoCAD uses and how CADCraft compares, per platform. Work items:
+The hardware AutoCAD uses and how Iridium CAD compares, per platform. Work items:
 [gaps.md](gaps.md#hardware).
 
 **Headline (estimated): hardware ≈ 45%.** 2D GPU drawing, HiDPI and trackpads are covered on
@@ -14,7 +14,7 @@ Measured from the source on 2026-10-10 (`crates/ui-egui/src/gpu.rs`, `canvas.rs`
 `apps/cadcraft/src/graphics.rs`, `apps/cadcraft-web`); AutoCAD's side from Autodesk's system
 requirements and graphics-performance documentation. Nothing was benchmarked in this pass.
 
-| Feature | AutoCAD 2027 | CADCraft macOS | CADCraft Windows | CADCraft Linux / FreeBSD | CADCraft web |
+| Feature | AutoCAD 2027 | Iridium CAD macOS | Iridium CAD Windows | Iridium CAD Linux / FreeBSD | Iridium CAD web |
 |---|---|---|---|---|---|
 | GPU canvas for 2D | yes (hardware acceleration, GPU smoothing, high-quality geometry) | wgpu on Metal | wgpu on DirectX 12 by default (`WGPU_BACKEND` overrides; GL avoided after AMD crashes, #31) | wgpu on Vulkan (or GL) | WebGPU, WebGL2 fallback |
 | CPU fallback | software mode | yes (`tiny-skia` rasteriser) | yes | yes | — |

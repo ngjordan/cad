@@ -1,6 +1,6 @@
 //! The corpus harness: every DXF and DWG file of a folder is opened, saved as DXF and as DWG,
 //! reopened and compared with the drawing first opened; the findings go to a Markdown and a JSON
-//! report. A file that fails, or even makes CADCraft panic, is a reported failure: each stage runs
+//! report. A file that fails, or even makes Iridium CAD panic, is a reported failure: each stage runs
 //! under `catch_unwind` here, as a last resort of the harness only.
 
 use std::collections::BTreeMap;
@@ -522,9 +522,9 @@ impl CorpusReport {
         let lossless = routes.iter().filter(|r| r.lossless()).count();
         let crashes = self.files.iter().filter(|f| f.open_error.as_deref().is_some_and(|e| e.starts_with("CRASH"))).count()
             + routes.iter().filter(|r| [&r.save_error, &r.reopen_error].iter().any(|e| e.as_deref().is_some_and(|e| e.contains("CRASH")))).count();
-        s.push_str("# CADCraft round-trip report\n\n");
+        s.push_str("# Iridium CAD round-trip report\n\n");
         s.push_str(&format!("- Corpus: `{}`\n", self.corpus));
-        s.push_str(&format!("- Generated: {} by CADCraft {}\n", self.generated, self.cadcraft_version));
+        s.push_str(&format!("- Generated: {} by Iridium CAD {}\n", self.generated, self.cadcraft_version));
         s.push_str(&format!("- Tolerance for numbers: {:e} absolute + {:e} relative\n", self.abs_tol, self.rel_tol));
         s.push_str(&format!(
             "- Files: {} ({opened} opened, {} failed to open); round trips: {} ({save_failed} failed to save, {reopen_failed} failed to reopen, {lossless} without any difference); crashes: {crashes}\n",

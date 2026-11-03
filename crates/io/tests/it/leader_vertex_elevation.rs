@@ -66,7 +66,7 @@ fn dwg_preserves_leader_vertex_elevations() -> TestResult {
 fn missing_z_defaults_only_the_corresponding_vertex() -> TestResult {
     let vertices = [Vec3::new(1.0, 2.0, 4.0), Vec3::new(5.0, 6.0, 7.0), Vec3::new(9.0, 10.0, -3.0)];
     // All eight presence patterns include wholly 2D input and omitted first/middle/last Zs.
-    // Author the groups directly, independently of CADCraft's entity writer.
+    // Author the groups directly, independently of Iridium CAD's entity writer.
     for z_mask in 0..8 {
         let mut tags = vec![
             Tag::s(0, "SECTION"),

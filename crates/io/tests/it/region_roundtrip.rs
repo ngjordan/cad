@@ -1,6 +1,6 @@
 //! Regions survive DXF save and reopen (#510). REGION's own data is ACIS, which no public
 //! specification covers, so a region is written as closed polylines (one per loop) that every
-//! DXF reader shows; `CADCRAFT` xdata on the first lets CADCraft read the region back whole.
+//! DXF reader shows; `CADCRAFT` xdata on the first lets Iridium CAD read the region back whole.
 //! Foreign REGIONs stay unknown objects as before; hostile xdata doesn't panic.
 
 use cadcraft_doc::{Common, Drawing, EntityKind, HatchLoop, Region, Space};

@@ -310,7 +310,7 @@ fn default_gradient() -> Gradient {
 }
 
 /// A hatch's gradient fill: the native groups when present (another program may have edited
-/// them), otherwise CADCraft's `GRADIENT` xdata (kept by R2000 files and DWG conversions).
+/// them), otherwise Iridium CAD's `GRADIENT` xdata (kept by R2000 files and DWG conversions).
 fn gradient(tags: &[Tag]) -> Option<Gradient> {
     if tags.iter().any(|x| x.code == 450) { native_gradient(tags) } else { xdata_gradient(tags) }
 }

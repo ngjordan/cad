@@ -69,7 +69,7 @@ fn verify_asks_for_each_name_and_absent_types_take_their_tokens() {
     assert!(s.running.is_none(), "{}", s.prompt_text());
     let d = s.doc().unwrap();
     assert!(d.block("U1").is_none() && d.block("U2").is_some(), "{:?}", s.log);
-    // A type CADCraft does not have still reads its name and verify answers, then reports.
+    // A type Iridium CAD does not have still reads its name and verify answers, then reports.
     let n = s.log.len();
     s.script("-PURGE MA * N\nLINE 0,0 5,0\n\n").unwrap();
     assert!(s.running.is_none(), "{}", s.prompt_text());

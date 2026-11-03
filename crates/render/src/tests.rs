@@ -306,7 +306,7 @@ fn missing_font_falls_back_to_stroke() {
 
 #[test]
 fn backwards_and_upside_down_mirror_text() {
-    let mut d = text_doc("CADCraft Stroke", "ABC");
+    let mut d = text_doc("Iridium CAD Stroke", "ABC");
     let normal = build(&d, &Space::Model, &Options::default()).bounds;
     assert!(normal.min.x >= -1e-9 && normal.min.y >= -1e-9);
     d.text_styles.iter_mut().for_each(|s| s.backwards = true);

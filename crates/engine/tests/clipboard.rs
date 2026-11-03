@@ -311,7 +311,7 @@ fn clipboard_travels_as_text() {
     assert!(written.block("DOOR").is_some() && written.layer("HINGE").is_some());
     assert_eq!(written.header.point("INSBASE"), Some(Vec3::new(10.0, 0.0, 0.0)));
 
-    // Another CADCraft (here: a fresh session) pastes it, with its layers and blocks.
+    // Another Iridium CAD (here: a fresh session) pastes it, with its layers and blocks.
     let mut t = Session::empty();
     t.open_drawing(drawing_b(), "B", None);
     assert!(!clipboard::load_system_text(&mut t, "just some words"));

@@ -1,4 +1,4 @@
-//! Saving a drawing with entities of types CADCraft doesn't model (read from another program's
+//! Saving a drawing with entities of types Iridium CAD doesn't model (read from another program's
 //! file) as DWG says which ones the file doesn't keep, instead of dropping them silently. DXF
 //! writes them back as read: nothing to report.
 

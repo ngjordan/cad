@@ -1,6 +1,6 @@
 [package]
 name = "cadcraft-engine"
-description = "CADCraft engine: sessions, commands, the command line and prompts, snaps, selection, undo"
+description = "Iridium CAD engine: sessions, commands, the command line and prompts, snaps, selection, undo"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

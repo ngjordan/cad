@@ -1,6 +1,6 @@
 # cadcraft-cli
 
-`cadcraft-cli` is headless CADCraft: it reads, converts and exports drawings, runs scripts and
+`cadcraft-cli` is headless Iridium CAD: it reads, converts and exports drawings, runs scripts and
 commands, prints the command catalog and serves MCP. It follows
 [RFC-0012: Command-line conventions](https://github.com/storytold/craft-contrib/pull/18).
 

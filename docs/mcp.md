@@ -1,6 +1,6 @@
-# CADCraft and AI agents (MCP)
+# Iridium CAD and AI agents (MCP)
 
-CADCraft speaks the [Model Context Protocol](https://modelcontextprotocol.io) over stdio.
+Iridium CAD speaks the [Model Context Protocol](https://modelcontextprotocol.io) over stdio.
 
 ## Start it
 
@@ -15,7 +15,7 @@ cadcraft-cli mcp --connect 127.0.0.1:7979
 
 An MCP client usually starts its servers when it starts, often before the app is open. With
 `--lazy` the bridge starts anyway and reaches the app at the first tool call; until the app answers,
-each call fails with a message saying how to open it. `--launch` also opens CADCraft (macOS) with
+each call fails with a message saying how to open it. `--launch` also opens Iridium CAD (macOS) with
 that control port at a call that finds nothing, and waits for it:
 
 ```json

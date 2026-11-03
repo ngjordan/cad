@@ -387,7 +387,7 @@ fn read_census_reports_entities_the_reader_left_out() {
     assert!(compare_census(&census_of(&d), &d, &Options::default()).is_empty());
 }
 
-/// The round trips of a synthetic drawing through CADCraft's own DXF and DWG writers: whatever
+/// The round trips of a synthetic drawing through Iridium CAD's own DXF and DWG writers: whatever
 /// they lose shows in the comparison. Plain geometry, layers, xdata and unmodelled objects must
 /// come back from DXF.
 #[cfg(not(target_arch = "wasm32"))]
@@ -450,7 +450,7 @@ fn report_renders_as_markdown_and_json() {
         files: vec![check_bytes(&dxf, "synthetic/a.dxf", &opts), check_bytes(b"AC1032 broken", "dwg/broken.dwg", &opts)],
     };
     let md = report.to_markdown();
-    assert!(md.starts_with("# CADCraft round-trip report"), "{md}");
+    assert!(md.starts_with("# Iridium CAD round-trip report"), "{md}");
     assert!(md.contains("| `synthetic/a.dxf` | DXF AC1032 |"), "{md}");
     assert!(md.contains("dxf → dxf") && md.contains("dxf → dwg"), "{md}");
     assert!(md.contains("| `dwg/broken.dwg` | DWG AC1032 |") && md.contains("**failed**"), "{md}");
@@ -511,7 +511,7 @@ fn corpus_round_trip_report() {
 
 /// A type the DWG writer can't write is reported as lost on save, per type: in the route's
 /// `not_written`, on the lost entity rows, in the Markdown and as a strict failure. A type it
-/// writes (OLE2FRAME, kept by CADCraft without modelling it) is none of these.
+/// writes (OLE2FRAME, kept by Iridium CAD without modelling it) is none of these.
 #[cfg(not(target_arch = "wasm32"))]
 #[test]
 fn types_the_dwg_writer_cannot_write_are_reported_lost() {

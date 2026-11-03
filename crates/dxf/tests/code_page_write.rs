@@ -34,7 +34,7 @@ fn text_is_written_in_the_code_page() {
         ("ANSI_932", "表図面 é", b"\x95\x5C\x90\x7D\x96\xCA \\U+00E9"),
         ("DOS850", "Größe €", b"Gr\x94\xE1e \\U+20AC"),
         ("ANSI_1252", "😀", b"\\U+D83D\\U+DE00"),
-        // A code page CADCraft doesn't know: everything non-ASCII is escaped.
+        // A code page Iridium CAD doesn't know: everything non-ASCII is escaped.
         ("ANSI_1361", "Ação", b"A\\U+00E7\\U+00E3o"),
     ];
     for (cp, text, raw) in cases {

@@ -1,6 +1,6 @@
-//! Dynamic blocks made in another program, read from the data CADCraft keeps for them.
+//! Dynamic blocks made in another program, read from the data Iridium CAD keeps for them.
 //!
-//! A dynamic block's behaviour lives in objects CADCraft does not write itself and keeps as
+//! A dynamic block's behaviour lives in objects Iridium CAD does not write itself and keeps as
 //! [`Foreign`](crate::foreign::Foreign) data: the block's BLOCK_RECORD has an extension dictionary
 //! whose `ACAD_ENHANCEDBLOCK` entry is an evaluation graph (`ACAD_EVALUATION_GRAPH`), and the
 //! graph lists the block's *parameters* (a distance, a point, visibility states, a lookup…) and

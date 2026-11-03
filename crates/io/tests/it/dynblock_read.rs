@@ -101,7 +101,7 @@ fn with_scale_action() -> String {
         .replacen("0 BLOCKLOOKUPPARAMETER\n", &format!("{action}0 BLOCKLOOKUPPARAMETER\n"), 1)
 }
 
-/// A scale action goes through CADCraft's own DWG save (the bridge DXF, then acadrust) whole:
+/// A scale action goes through Iridium CAD's own DWG save (the bridge DXF, then acadrust) whole:
 /// the DWG holds it with its connections, and it reads back as the same action. AutoCAD refused
 /// such DWGs while acadrust left out the byte after its connections (cadcraft-dwg's
 /// `scale_actions_keep_the_byte_autocad_reads_after_their_connections` covers the byte).

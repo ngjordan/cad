@@ -72,7 +72,7 @@ fn split(axis: SplitAxis, size: SplitSize, first: Node<Panel>, second: Node<Pane
     Node::Split { axis, size, first: Box::new(first), second: Box::new(second) }
 }
 
-/// The saved panel arrangement: craft-ui's workspace over CADCraft's panels.
+/// The saved panel arrangement: craft-ui's workspace over Iridium CAD's panels.
 pub type Workspace = craft_ui::docking::Workspace<Panel>;
 
 /// The panel layout's shape version, saved beside it. Layouts saved without it, or with an

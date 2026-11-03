@@ -1,6 +1,6 @@
 //! #1058: a layout whose page setup is in millimetres (plot paper units 1) has millimetre paper
 //! units even when the drawing's MEASUREMENT is 0, as drawings from AutoCAD often are.
-//! CADCraft read MEASUREMENT only, took the paper as inches and plotted everything 25.4 times too
+//! Iridium CAD read MEASUREMENT only, took the paper as inches and plotted everything 25.4 times too
 //! large, off the page.
 
 use cadcraft_doc::{Common, Drawing, EntityKind, Layout, LwPolyline, PageSetup, Space};
@@ -60,7 +60,7 @@ fn plot_paper_units_round_trip_through_dxf() {
     assert!(page.paper_mm);
     assert_eq!(cadcraft_render::sheet(&back, "SHEET").unwrap().unit_mm, 1.0);
     // A metric drawing's layouts stay in millimetres even from files that say 72 = 0 (what
-    // earlier CADCraft versions wrote for every layout).
+    // earlier Iridium CAD versions wrote for every layout).
     let mut metric = Drawing::new_metric();
     metric.header.set_i64("MEASUREMENT", 1);
     let written = write_dxf(&metric);

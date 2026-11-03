@@ -1,5 +1,5 @@
 //! #1813: AutoCAD always writes an `AcDbVariableDictionary` in the named object dictionary;
-//! ezdxf, and CADCraft's own DXF writer, do not. Vectric Aspire 10.5 reads an AC1018 DWG without
+//! ezdxf, and Iridium CAD's own DXF writer, do not. Vectric Aspire 10.5 reads an AC1018 DWG without
 //! it as empty ("No data was imported..."), though it reads the same drawing as DXF (and as an
 //! AC1032 DWG) fine. The DWG bridge adds the dictionary AutoCAD writes, with its usual variables,
 //! when the DXF has none.
@@ -48,7 +48,7 @@ fn variable_dictionary(doc: &acadrust::CadDocument) -> Option<Vec<(String, Strin
 }
 
 /// Read a DWG back with acadrust's reader, so the assertions inspect the file as another
-/// application would rather than through CADCraft's own importer.
+/// application would rather than through Iridium CAD's own importer.
 fn read_dwg(dwg: &[u8]) -> acadrust::CadDocument {
     acadrust::DwgReader::from_stream(Cursor::new(dwg)).read().expect("read the DWG back")
 }
@@ -59,9 +59,9 @@ fn value<'a>(vars: &'a [(String, String)], name: &str) -> Option<&'a str> {
     vars.iter().find(|(n, _)| n.eq_ignore_ascii_case(name)).map(|(_, v)| v.as_str())
 }
 
-/// #1813's regression: a DXF written without an `AcDbVariableDictionary` (as ezdxf and CADCraft
+/// #1813's regression: a DXF written without an `AcDbVariableDictionary` (as ezdxf and Iridium CAD
 /// write them) must gain AutoCAD's dictionary when exported as an AC1018 DWG, so readers that
-/// require it see the drawing's contents; the added objects must not break CADCraft's own read.
+/// require it see the drawing's contents; the added objects must not break Iridium CAD's own read.
 #[test]
 fn an_ac1018_dwg_gets_the_variable_dictionary_autocad_always_writes() {
     let d = rectangle();
@@ -81,8 +81,8 @@ fn an_ac1018_dwg_gets_the_variable_dictionary_autocad_always_writes() {
     }
     assert!(value(&vars, "LAYEREVAL").is_some() && value(&vars, "LAYERNOTIFY").is_some(), "{vars:?}");
 
-    // The added objects don't disturb CADCraft's own read of the file: the rectangle is there.
-    let back = cadcraft_io::read(&dwg, "rect.dwg").expect("CADCraft reads its own 2004 DWG");
+    // The added objects don't disturb Iridium CAD's own read of the file: the rectangle is there.
+    let back = cadcraft_io::read(&dwg, "rect.dwg").expect("Iridium CAD reads its own 2004 DWG");
     assert_eq!(back.model.len(), 1);
 }
 

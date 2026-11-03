@@ -1,4 +1,4 @@
-# CADCraft — egui 0.37 migration plan
+# Iridium CAD — egui 0.37 migration plan
 
 Current reconciliation (2026-10-25): the local tree now incorporates main `e86d895ba1086a7efc2a83048348f89098282d08`. Managed run `egui037-cad-maine86-ci-20261025-0825` passed all seven CI stages: 2,515 passing test executions, zero failures and one ignored across 103 summaries. Independent review verified preservation of both parents and dependency pins; the compare-export regression now verifies document-epoch advancement. Earlier validation counts below describe prior candidates. Native/browser GUI, platform and paired performance checks remain open. Publication requires explicit approval; human review and human merge are required.
 
@@ -31,13 +31,13 @@ screenshot command forces paint itself. Callback arrival has no implicit wake, s
 live request owns the viewport waker. Record known issuance UI bounds and a geometry
 epoch, reject/retry any intervening resize/DPI/zoom/surface change even if it changes
 back, and derive pixel scale from returned dimensions only under an unchanged epoch.
-Default limits are 4 requests, 128 MiB/image and 256 MiB aggregate; CADCraft's explicit
+Default limits are 4 requests, 128 MiB/image and 256 MiB aggregate; Iridium CAD's explicit
 64 MiB limits remain stricter. Count reserved in-flight and completed images together.
 
 
 ## 1. Decision in one page
 
-CADCraft's committed dependency state does not currently build as written:
+Iridium CAD's committed dependency state does not currently build as written:
 `Cargo.toml:52-57` asks for egui/eframe/egui-wgpu/egui_kittest 0.37 while `craft-ui`
 is pinned to `5c874d51…`, whose egui dependency is 0.36.2. The lock therefore resolves
 two incompatible egui families, and `DockArea::show` receives a 0.37 `Ui` from a
@@ -58,7 +58,7 @@ Target state:
    revision** that is current `main` (`49190884…`) plus only the egui-API hunks ported
    from PR #199's `8614e4a…`. The PR head `b68de8c…` and audit tree `ec8840a…` are
    stale unsafe trees and are never merged or checked out as the target.
-4. CADCraft source changes limited to: the real compile-error classes
+4. Iridium CAD source changes limited to: the real compile-error classes
    (`UserData`/`Event::Screenshot`, `MouseWheel.source`, private `FontsView.fonts`), the
    deprecations `clippy -D warnings` rejects, panel-id/`PanelState` migration, the strict
    kittest names/glyphs needed for a green first compatibility PR, and the deliberate
@@ -88,8 +88,8 @@ Target state:
 
 | Role | Revision | Notes |
 |---|---|---|
-| Assigned CADCraft checkout | `1977a493c7d8340249185126744c5143f096dc86` | `HEAD`; branch `codex/egui-037-plan-20261022`; tracked tree clean; this plan is currently untracked |
-| Last coherent 0.36.2 CADCraft | `a08fd7c1d1d7c16f40dc31c25f815370c136a1d4` | Parent of the Dependabot bump that moved direct UI deps to 0.37 |
+| Assigned Iridium CAD checkout | `1977a493c7d8340249185126744c5143f096dc86` | `HEAD`; branch `codex/egui-037-plan-20261022`; tracked tree clean; this plan is currently untracked |
+| Last coherent 0.36.2 Iridium CAD | `a08fd7c1d1d7c16f40dc31c25f815370c136a1d4` | Parent of the Dependabot bump that moved direct UI deps to 0.37 |
 | craft-libs `main` inspected | `49190884278f16c9a9f5823d7698a8ffb5deb062` | Baseline for the S1 rebase |
 | craft-libs PR #199 API commit | `8614e4a04fae516fba16c22b31ff1008cb6be10b` | Source of the port hunks only |
 | craft-libs PR #199 head | `b68de8c5f4f1c060904d211a7b1320aa0f7bce78` | Stale tree; never a target |
@@ -131,7 +131,7 @@ lacks the chrono rule and the contributor-credit section. `AGENTS.md` governs.
 * No root `[patch.crates-io]`, no `vendor/` and no **external/local path patch** in
   this repository. Internal workspace members are path dependencies by design.
 * Read-only `cargo tree -d --locked --offline` shows the 0.36 family reachable only
-  through `craft-ui`, and the 0.37 family through CADCraft/eframe/egui-wgpu/kittest.
+  through `craft-ui`, and the 0.37 family through Iridium CAD/eframe/egui-wgpu/kittest.
   This is graph evidence, not a build.
 * The candidate fork's own `a4f9a17f/Cargo.toml:178-179` still has
   `[patch.crates-io] winit = { …, branch = "craft/0.30.13-lang" }`. Consumers' patches
@@ -241,7 +241,7 @@ Verified against native `crates/eframe/src/native/epi_integration.rs:338-365` an
   branch on web (`app_runner.rs:284`). It must not assume that a UI pass follows.
 * `Context::run_ui` re-runs its closure for each pass requested by
   `Context::request_discard` (default `max_passes = 2`). `Context::root_ui` panics while
-  the root `Ui` is borrowed (#8535); CADCraft keeps the handed-in `&mut Ui`.
+  the root `Ui` is borrowed (#8535); Iridium CAD keeps the handed-in `&mut Ui`.
 * Screenshots are callback based: `ViewportCommand::Screenshot(ScreenshotCallback)` /
   `Context::request_screenshot` (#8489); the callback receives only
   `Arc<ColorImage>`, runs at most once, and does **not** request a repaint.
@@ -305,7 +305,7 @@ Verified against native `crates/eframe/src/native/epi_integration.rs:338-365` an
 * Accessibility metadata is built with `egui::WidgetInfo` in `icons.rs:965-989`,
   `craft_ui` buttons, `egui::accesskit_node_builder` for tab roles, and control-channel
   role strings (`control.rs:113-180`). There is no explicit UI language in AccessKit.
-* There are 27 `TextEdit`, 18 `DragValue`, 32 `ComboBox` and 8 `Slider` sites. CADCraft
+* There are 27 `TextEdit`, 18 `DragValue`, 32 `ComboBox` and 8 `Slider` sites. Iridium CAD
   currently has no password field and no custom `IMEOutput` producer: its editors use
   the built-in `egui::TextEdit` (27 sites), including the MTEXT editor and dialog/layer
   rename fields.
@@ -340,7 +340,7 @@ the craft-ui type mismatches dominate. Re-count on the migration tip.
 
 | # | Anchor | Symptom | Replacement and semantics |
 |---|---|---|---|
-| C1 | `lib.rs:688-706` (`issue_screenshots`), `:707-740` (`collect_screenshots`) | `egui::UserData` gone; `Event::Screenshot` gone | Use `ctx.request_screenshot(move |image: Arc<ColorImage>| …)` (or `ViewportCommand::Screenshot(ScreenshotCallback::new(...))`). Keep the token, path, reply and deadline in CADCraft; the callback hands `(token, image)` to the request's completion slot. Call `ctx.request_repaint()` from the frame tick after completion, not from a callback holding a strong `Context` (§6.5). |
+| C1 | `lib.rs:688-706` (`issue_screenshots`), `:707-740` (`collect_screenshots`) | `egui::UserData` gone; `Event::Screenshot` gone | Use `ctx.request_screenshot(move |image: Arc<ColorImage>| …)` (or `ViewportCommand::Screenshot(ScreenshotCallback::new(...))`). Keep the token, path, reply and deadline in Iridium CAD; the callback hands `(token, image)` to the request's completion slot. Call `ctx.request_repaint()` from the frame tick after completion, not from a callback holding a strong `Context` (§6.5). |
 | C2 | `animation.rs:78` pattern; `animation.rs:145,197`, `canvas.rs:2806`, **and tests `animation_effects.rs:102,133`** initializers | `MouseWheel` gained `source: MouseWheelSource` | Add `source: _` to the pattern (or `..`); construct test events with `MouseWheelSource::Unknown` (the platform value on X11/Wayland/Windows/web) or `Wheel`/`Trackpad` where the test is about macOS momentum. Prefer a local test helper so a future field does not break every constructor. |
 | C3 | `i18n/tests.rs:407,423,442,557,607,803,912,1017,1125,1168` | `FontsView.fonts` is private | Replace `view.fonts.font(&family).characters()` with the public `view.characters(&family)` or `view.has_glyph(&FontId, c)`. Keep the test intent: the family's actual character map, not a fallback glyph. |
 | C4 | `icons.rs:965-989` (`describe_control`), all `WidgetType::Button` | `WidgetType` is a deprecated alias of `accesskit::Role` | Use `egui::Role::Button`; `craft-ui` uses `Role::CheckBox`. Assert the role in a semantic test. |
@@ -350,26 +350,26 @@ the craft-ui type mismatches dominate. Re-count on the migration tip.
 | C8 | `egui::Panel::top/left/right/bottom("…")` (`chrome.rs:69,180,300`, `palettes.rs:330,346`, `menus.rs:573`) | 0.37 panel constructors take `impl AsIdSalt`; `From<&str> for Id` is gone; the panel id becomes `parent_ui.scope_id().with_salt(...)` (`panel.rs:974-976`) instead of 0.36's `Id::new("…")` | Keep the literal names `cc_title_toolbar`, `cc_menubar`, `cc_status`, `cc_file_tabs`, `cc_toolsets_strip`, `cc_palettes`; do not hard-code ids in tests. The first compatibility PR includes the additive `PanelState` key migration in §7. |
 | C9 | `UiBuilder::id` inside `craft-ui` | Deprecated | `scope_id`; handled in craft-libs S1, not here. |
 
-No other 0.37 removals appear in CADCraft source: no `AsId` removal, no
+No other 0.37 removals appear in Iridium CAD source: no `AsId` removal, no
 `WidgetType::TextEdit`, no `global_theme_preference_switch`, no `show_inside`,
 no `ImeEvent` matching, no `ScrollArea::id_source`.
 
-## 5. Runtime and semantic changes CADCraft must decide
+## 5. Runtime and semantic changes Iridium CAD must decide
 
-| Area | 0.37 change (primary source) | CADCraft decision |
+| Area | 0.37 change (primary source) | Iridium CAD decision |
 |---|---|---|
 | Layout/frame | `Context::run_ui` multi-pass; **native and web call `App::logic` per pass**; hidden root runs `run_logic` only; completed `run_ui` reports pass index 0 | Use `current_pass_index() == 0` for frame-once work; move input to `App::ui`; never use `visible()` as a phase (§6). |
 | Screenshot | callback-based (#8489) | Bounded, cancelable per-request completion slot; weak callback; capture-time binding; deadline; one file/reply (§6.5). |
 | Clipboard | `eframe` gains optional `clipboard` (#8392) | Add `"clipboard"` to the desktop `eframe` features. On web, use the browser path; verify paste/copy in a real browser. |
 | Fonts | `default_fonts` no longer default (#8583); eframe `system_fonts` default (#8512) | Enable `default_fonts` and `monochrome_emoji_fonts` in **S2**; keep `system_fonts` off and set `NativeOptions::system_font_fallback = false`. |
 | Glyphs | kittest panics on a missing glyph by default (#8601); U+22EE absent from both 0.36.2 and 0.37 bundled fonts | Enable the monochrome emoji face; run a strict glyph sweep in **S2**; replace uncovered UI symbols with code-drawn art/text; never set a global `MissingGlyphPolicy::Tofu` for the suite. |
-| TextEdit | clicking another widget collapses the selection before the button runs (#8763; unmerged #8764) | Assert the **exact selected range** is formatted by the MTEXT Bold/Italic/Underline/Overline toolbar and any dialog action; pointer and keyboard paths. CADCraft's MTEXT toolbar is drawn before the `TextEdit` and uses its own `st.sel`, which may make it immune; prove it, do not assume it. If a regression is real, preserve the range in CadCraft or adopt the fork fix; do not patch by disabling selection. |
+| TextEdit | clicking another widget collapses the selection before the button runs (#8763; unmerged #8764) | Assert the **exact selected range** is formatted by the MTEXT Bold/Italic/Underline/Overline toolbar and any dialog action; pointer and keyboard paths. Iridium CAD's MTEXT toolbar is drawn before the `TextEdit` and uses its own `st.sel`, which may make it immune; prove it, do not assume it. If a regression is real, preserve the range in CadCraft or adopt the fork fix; do not patch by disabling selection. |
 | Menus | arrow-key navigation within open menus (#8548), popup sizing passes | Re-run `menubar_hover`/`context_menu(s)`; add keyboard traversal. |
 | Accessibility | `WidgetType`→`Role`, unnamed inputs fail kittest (#8555/#8589/#8611), `label_inputs_by`/`name_inputs`/`accessible_language` | Name every input reached by tests in S2; add the systematic unnamed-widget audit; put the UI language on the AccessKit root via fork E17 in S4. |
 | Clipboard/PRIMARY | 0.37 supports X11/Wayland PRIMARY (#8428); Wayland clipboard #8657/E4; **W15P is new** | Require winit W15P + egui E4/P2b in the final pins; test the native matrix; do not default to a PRIMARY-only fallback (§9). |
 | Web | `DroppedFile::web_file` opt-in (#8669) | eframe enables it on wasm; assert the feature is in the **wasm** graph and add `cargo check -p cadcraft-web`. |
 | Scroll/animations | kinetic scrolling (#8662/#8663), repaint-burst fix (#8595), style sizing (#8617/#8445) | Re-run animation on/off tests; apply wheel/zoom once and reuse the resulting view for later passes (§6); measure idle frames; keep explicit spacing overrides. |
-| Hidden window | pinned eframe runs `PassMode::LogicOnly` for an overdue root; **#8748 is closed and unmerged**; no deferred viewports in CADCraft | Keep control/LISP/autosave/screenshot deadlines alive on logic ticks; handle input only in a known UI pass. Do not claim #8748 behavior. A fork that later adopts an overdue full pass must pin that exact revision and re-run the hidden tests. |
+| Hidden window | pinned eframe runs `PassMode::LogicOnly` for an overdue root; **#8748 is closed and unmerged**; no deferred viewports in Iridium CAD | Keep control/LISP/autosave/screenshot deadlines alive on logic ticks; handle input only in a known UI pass. Do not claim #8748 behavior. A fork that later adopts an overdue full pass must pin that exact revision and re-run the hidden tests. |
 
 ## 6. Root `Ui`, multi-pass and logic-only semantics
 
@@ -544,7 +544,7 @@ not encode PNGs, write files, run commands, or hold a lock while waking.
 `collect_screenshots` drains the slot results on every logic call, checks the token
 and request/session binding, and replies with `save_screenshot(&image, path)`. Binding:
 
-* CADCraft has ROOT only: bind to an explicit CadApp session/document generation.
+* Iridium CAD has ROOT only: bind to an explicit CadApp session/document generation.
   The callback supplies pixels only; viewport identity is request-owned, not callback
   metadata. Reject generation changes/close and never reuse an old result for a new document;
 * At issuance refresh expected geometry from the target UI content rect and ppp,
@@ -566,10 +566,10 @@ and request/session binding, and replies with `save_screenshot(&image, path)`. B
   `web_time::Instant` on web, never stale InputState::time; do not leave an infinite
   web deadline.
 
-CADCraft adopts the shared craft-ui CL-2 completion-slot API (the eleven existing craft-ui creative consumers'
+Iridium CAD adopts the shared craft-ui CL-2 completion-slot API (the eleven existing craft-ui creative consumers'
 approach; DeckCraft, FigCraft and ArtCraft Native keep local adapters).
 Request records, paths, PNG serialization, timeouts and the reply schema stay in
-CADCraft. If the provisional CL-2 API is unavailable, S3 is blocked rather than
+Iridium CAD. If the provisional CL-2 API is unavailable, S3 is blocked rather than
 growing a second divergent helper.
 
 Regression assertions:
@@ -614,7 +614,7 @@ real window.
   no `Area` is created from `logic`.
 * `spacemouse_one_poll_per_frame` and `web_drop_once`: counters across a multi-pass
   frame and a hidden tick.
-* `hidden_child_only_if_adopted`: CADCraft has no deferred viewports, so assert that
+* `hidden_child_only_if_adopted`: Iridium CAD has no deferred viewports, so assert that
   (no `show_viewport_deferred` call) and record #8748 as not applicable. If a later
   fork pin adopts an overdue full pass, add a hidden-parent/deferred-child
   open/update/close test with overdue redraw and unknown visibility before claiming it.
@@ -635,7 +635,7 @@ real window.
   `AsIdSalt` move; tests and `ui.elements` refer to behaviour around them.
 * **Panel `PanelState` migration (first compatibility PR).** 0.36 keyed a panel's
   `PanelState` by `Id::new("cc_x")`; 0.37 keys it by
-  `parent_ui.scope_id().with_salt(IdSalt::new("cc_x"))` (`panel.rs:974-976`). CADCraft
+  `parent_ui.scope_id().with_salt(IdSalt::new("cc_x"))` (`panel.rs:974-976`). Iridium CAD
   currently sets `persist_egui_memory=false` and its top-level panels are
   `exact_size(...)`/non-resizable, so no `PanelState` is currently file-persisted. The
   first compatibility PR nevertheless owns the saved-key migration and performs it
@@ -650,7 +650,7 @@ real window.
   to `Id::unique` with the same string. A mismatch leaves a drag active after a
   workspace replacement; `docking_workflows.rs` already tests host cancel.
 * `DockArea::direction` is an **explicit opt-in visual policy** from craft-libs
-  §7.7/CL-3. CADCraft passes `DockDirection::LeftToRight` by default and
+  §7.7/CL-3. Iridium CAD passes `DockDirection::LeftToRight` by default and
   `RightToLeft` only in S5b if chrome mirroring is implemented. Never reverse saved
   tab order to simulate RTL. Preserve serialized split first/second, axes, ratios,
   floating rectangles and logical tab order; painting, hit tests, drag insertion,
@@ -665,7 +665,7 @@ real window.
 * Narrow-window behavior remains: toolbar overflow (`chrome.rs:96-120`) keeps every
   command reachable; `chrome_geometry.rs` must keep passing at 1×/2×.
 * There are no secondary native viewports (`show_viewport_deferred`/immediate viewport
-  use), so fork E1 (`ViewportHooks`) is unused. “Viewport” in CADCraft code
+  use), so fork E1 (`ViewportHooks`) is unused. “Viewport” in Iridium CAD code
   (`canvas.rs`, `vpscale.rs`, `render/lib.rs`) means a paper-space layout viewport.
 
 ## 8. Fonts, glyphs, language, RTL and accessibility
@@ -677,7 +677,7 @@ real window.
   `emoji-icon-font`, previously unconditional). This is a visible glyph change and
   therefore part of the compatibility PR, not a later “no behaviour change” stage.
 * `⇧` (U+21E7) is only in Hack (Monospace), while `Button::shortcut_text` uses the
-  Button text style (Proportional body in CADCraft). Decide in S2: draw the macOS
+  Button text style (Proportional body in Iridium CAD). Decide in S2: draw the macOS
   modifier symbols in code (the WCS chevron already is, `canvas.rs:2558`), keep `⇧`
   only in monospaced contexts, or use text on macOS. Do not silently enable tofu.
 * Split the coverage test by source, because bundled fonts cannot cover every catalog:
@@ -692,7 +692,7 @@ real window.
 * Keep `theme::install_fonts`' caps (`MAX_UI_FONT_BYTES`) and file reads unchanged.
   Do not adopt the 0.37 `GlyphRasterizer`/`FontProvider` APIs; set
   `NativeOptions::system_font_fallback = false` explicitly and do not enable eframe's
-  `system_fonts` feature. This keeps CADCraft's capped app-controlled chain
+  `system_fonts` feature. This keeps Iridium CAD's capped app-controlled chain
   authoritative and avoids the #8512 system-font discovery cost.
 * Keep `FontsView` access test-only through `view.characters(...)`/`view.has_glyph`.
 
@@ -702,10 +702,10 @@ real window.
   `ctx.set_language(Some(language.to_owned()))` when the resolved language changes
   (fork E17). This places the BCP 47 tag on the AccessKit root; the web runner's
   speech/hidden-input language uses it through E18.
-* Do not adopt `craft-i18n`; CADCraft owns its TSV catalog and `with_language`.
+* Do not adopt `craft-i18n`; Iridium CAD owns its TSV catalog and `with_language`.
 * Arabic: keep Arabic **text** rendering (bidi + shaping, E5/E12/E13) and verify
   `ar.tsv` screens. `Style::right_to_left` (E9) mirrors egui menus, scroll bars,
-  checkboxes, combo boxes and popups, but not CADCraft's custom chrome or docking.
+  checkboxes, combo boxes and popups, but not Iridium CAD's custom chrome or docking.
   S4 keeps `right_to_left = false` (Arabic UI stays LTR with correctly shaped text,
   documented in `docs/localization-parity.md`). S5b may enable it only with app-owned
   chrome mirroring and craft-ui `DockArea::direction`; until then do not claim an RTL UI.
@@ -729,7 +729,7 @@ real window.
   `ui.text_edit_singleline(&mut st.filter)` (`aliasdlg.rs:164-165`) after a separate
   `ui.label("Filter")` with no `labelled_by`/placeholder. Name it in S2.
 * Use `Response::labelled_by(label_response.id)` or
-  `ui.label_inputs_by(label.id, |ui| …)` for rows whose label CADCraft draws;
+  `ui.label_inputs_by(label.id, |ui| …)` for rows whose label Iridium CAD draws;
   `hint_text` is acceptable for placeholder-labelled search fields, not numeric entry.
 * Keep `icons::describe_control` labels/tab roles; migrate `WidgetType` to
   `Role::Button` and assert `get_by_role`/`get_by_label` for a toolbar button, a toolset
@@ -746,7 +746,7 @@ real window.
 ### 8.4 Pinned licensed font fixtures
 
 Use the fixtures pinned by the egui plan §10.6; fetch them into the task evidence
-directory, never commit them into CADCraft, and retain adjacent licences. CADCraft’s
+directory, never commit them into Iridium CAD, and retain adjacent licences. Iridium CAD’s
 own policy remains: optional central `craft-fonts` via `CRAFT_FONTS_DIR`, no font
 binaries in this repository, no new `ATTRIBUTION.md` row for test-only external files.
 
@@ -770,8 +770,8 @@ licences enter the evidence manifest; no script may silently skip for a missing 
 ## 9. Clipboard, PRIMARY, IME and keyboard
 
 * Add `"clipboard"` to the desktop `eframe` features and assert
-  `cargo tree -i arboard` reaches `egui-winit`. Regression: Copy in CADCraft, paste
-  into another app; copy text elsewhere, paste into CADCraft (the DXF-text mirror
+  `cargo tree -i arboard` reaches `egui-winit`. Regression: Copy in Iridium CAD, paste
+  into another app; copy text elsewhere, paste into Iridium CAD (the DXF-text mirror
   remains in `clipboard.rs`). The feature-graph assertion is the detector; a kittest
   copy/paste assertion cannot prove the OS clipboard because kittest does not run
   eframe's OS clipboard.
@@ -785,11 +785,11 @@ licences enter the evidence manifest; no script may silently skip for a missing 
 * PRIMARY acceptance (native, on wlroots/Hyprland, KWin, Mutter, plus X11):
   pointer- and keyboard-triggered ownership (including keyboard-only focus), serial freshness, owner/seat changes, empty/absent offers,
   self-paste (marker MIME, no deadlock), canceled/slow transfers, unchanged selection
-  not reclaimed, password selection never offered. CADCraft defaults to XWayland when
+  not reclaimed, password selection never offered. Iridium CAD defaults to XWayland when
   `DISPLAY` is set (`main.rs:301-306`); `CADCRAFT_WAYLAND=1` is the native Wayland
   exposure. A PRIMARY-only fallback is allowed only as a **measured** fallback with
   explicit owner acceptance, not as the default limitation.
-* Middle-click: `Event::MiddleClickPaste { pos, text }` exists in 0.37. CADCraft's
+* Middle-click: `Event::MiddleClickPaste { pos, text }` exists in 0.37. Iridium CAD's
   command line is custom-painted, not a `TextEdit`, so decide in S5a: handle it only
   when the pointer is in the command-line bar rect (stored state), insert at the buffer
   end, and never start a command or duplicate a `Paste`; otherwise document the gap.
@@ -802,11 +802,11 @@ licences enter the evidence manifest; no script may silently skip for a missing 
   a Wayland adapter sending it on text/selection/IME-owner change; clear on password,
   focus loss, no IME, unavailable context and reset. Keep the final IME descriptor and
   payload together across passes. It is transient and excluded from serialized debug/
-  persistence output. CADCraft has no custom `IMEOutput` producer (all editors use
+  persistence output. Iridium CAD has no custom `IMEOutput` producer (all editors use
   built-in `TextEdit`; the MTEXT editor and rename fields inherit it), so no app
   model adapter is required unless one is added later. The suite inventory's custom
   producers (DesignCraft/FigCraft/WordCraft/VectorCraft/EffectCraft/FilmCraft/
-  DeckCraft/PhotoCraft) do not apply here: CADCraft's custom-painted command line
+  DeckCraft/PhotoCraft) do not apply here: Iridium CAD's custom-painted command line
   receives IME commits as `Event::Text` and produces no `IMEOutput`. If a custom
   producer is added,
   it must supply logical model text and convert its own cursor coordinates to UTF-8
@@ -829,19 +829,19 @@ licences enter the evidence manifest; no script may silently skip for a missing 
 
 ## 10. GPU, wgpu, stencil and Windows
 
-* CADCraft uses `egui-wgpu` paint callbacks, not a custom renderer; the callback trait
+* Iridium CAD uses `egui-wgpu` paint callbacks, not a custom renderer; the callback trait
   is unchanged. Keep `gpu::install` error/device-lost handlers and the stencil check.
 * The canvas draws at `info.screen_size_px` and relies on egui's scissor for clipping
   (`gpu.rs:731-780`). Fork E2+E3 fits an oversized surface to
   `max_texture_dimension_2d` and returns configure/render errors instead of panicking;
-  CADCraft consumes it through eframe. Add a fork `surface_fit` unit test; a real
+  Iridium CAD consumes it through eframe. Add a fork `surface_fit` unit test; a real
   oversized window cannot be produced in the available environment, so record it as
   an unresolved hardware gate.
 * Windows: `graphics::configure` forces DX12 + FXC and excludes GL. Upstream #8736
   reports FXC compile cost for 0.37's predictable-filter shader (~57 ms vs 14 ms,
-  about +40 ms startup). Measure CADCraft start-to-first-`ping` on the Windows VM
+  about +40 ms startup). Measure Iridium CAD start-to-first-`ping` on the Windows VM
   (fresh processes) and compare 0.36/stock 0.37/fork; report renderer construction
-  separately from first frame. Do not hide a regression by changing CADCraft's FXC
+  separately from first frame. Do not hide a regression by changing Iridium CAD's FXC
   choice, and do not report compile duration as UI performance.
 * Keep `NativeOptions.stencil_buffer = 8` (`main.rs:188,277`). The fork's surface fit
   must preserve the matching stencil texture size. `gpu_viewport_stencil.rs` stays.
@@ -893,7 +893,7 @@ winit = { git = "https://github.com/storytold/winit", rev = "<storytold/winit fi
 
 Trim any crate not in the graph; an unused `[patch]` entry is a Cargo **warning**, not
 a build error, but it is still removed. `egui_extras` is only a dev-dependency of
-`craft-ui` and is not in CADCraft's graph. No `branch` and no `path` may appear for a
+`craft-ui` and is not in Iridium CAD's graph. No `branch` and no `path` may appear for a
 published pin; the audit's local path patches are evidence only. The final fork/tag
 must also replace the fork's own root `[patch] winit = { branch = ... }` with the
 reviewed winit rev, or document an immutable equivalent.
@@ -922,33 +922,33 @@ hunks from `8614e4a` (plus the relevant README change from `1764bca`):
 
 Preserve the current docking-permission and print-name hardening. Run
 `cargo test -p craft-ui --all-features`, the workspace tests, strict clippy and the
-all-feature wasm check; merge; publish an immutable commit; then pin CADCraft to it.
-`craft-docpath` is unchanged between `82a24b0` and `49190884`, so both CADCraft
+all-feature wasm check; merge; publish an immutable commit; then pin Iridium CAD to it.
+`craft-docpath` is unchanged between `82a24b0` and `49190884`, so both Iridium CAD
 craft-libs dependencies can use the same new revision.
 
 ### 11.3 Language work #198
 
 Consume #198 through the final fork/winit pins (E5/E12-E21, W17-W27, plus E21b/W27);
-do not add a `craft-i18n` dependency or adopt its UI model. CADCraft keeps its TSV
+do not add a `craft-i18n` dependency or adopt its UI model. Iridium CAD keeps its TSV
 catalog and `with_language`, and uses only `Context::set_language` and
 `Style::right_to_left` from the fork. Any app-side #198 adoption is separate.
 
-### 11.4 Fork patch disposition for CADCraft
+### 11.4 Fork patch disposition for Iridium CAD
 
 Provenance: `egui/PATCHES.md` on the candidate and commits `0.37.0..a4f9a17f`. The
-final pin must carry the whole reviewed series; the table records what CADCraft
+final pin must carry the whole reviewed series; the table records what Iridium CAD
 exercises and what would catch removal.
 
-| Patch | What it does | CADCraft use | Keep / remove condition | Test |
+| Patch | What it does | Iridium CAD use | Keep / remove condition | Test |
 |---|---|---|---|---|
 | E1 | eframe `ViewportHooks` | Not used (no secondary windows) | Keep for craft-tablet; remove if upstream adds it | fork unit test |
-| E2+E3 | fit oversized wgpu surface; setup errors | via eframe wgpu | Keep while emilk/egui#8361 open | fork `surface_fit`; CADCraft GPU gate unresolved |
+| E2+E3 | fit oversized wgpu surface; setup errors | via eframe wgpu | Keep while emilk/egui#8361 open | fork `surface_fit`; Iridium CAD GPU gate unresolved |
 | E4 | Wayland clipboard via winit | `CADCRAFT_WAYLAND=1` | Keep while #8657 draft; **requires W15 and W15P PRIMARY** | regular + PRIMARY native matrix |
 | E5/E12/E13 | bidi shaping/order/marks/caret, graphemes | Arabic UI/text | Keep while #8577 open | fork text tests; Arabic UI label/MTEXT |
 | E6 | IME focus not interrupted | Text fields | Keep | kittest IME commit |
 | E7 | Windows VK letter keys | Non-Latin shortcuts | Keep; needs W25 | Windows VM |
 | E8 | TextEdit glyph overshoot | Thai/Vietnamese/Arabic input | Keep | tall-glyph TextEdit |
-| E9 | `Style::right_to_left` chrome | §8.2 decision | Keep; activation staged | fork RTL chrome; CADCraft opt-in only |
+| E9 | `Style::right_to_left` chrome | §8.2 decision | Keep; activation staged | fork RTL chrome; Iridium CAD opt-in only |
 | E10 | web key/lang | Browser keys | Keep | browser/manual |
 | E11 | vello_cpu single-thread raster | Not used | Keep | fork |
 | E14/E15/E16 | fallback baseline, line breaker, cursor affinity | CJK/Indic editing | Keep | fork; CJK screens |
@@ -965,7 +965,7 @@ verified in the same consumer graph and the table is updated.
 
 ### 11.5 winit
 
-CADCraft needs the winit fork because E4/E19/E21/E21b call APIs in W15/W15P/W25/W26/
+Iridium CAD needs the winit fork because E4/E19/E21/E21b call APIs in W15/W15P/W25/W26/
 W27 not in crates.io 0.30.13. Patch winit to the **final reviewed rev**, not a branch;
 keep `winit` 0.30.13-compatible `dpi`. `apps/cadcraft/Cargo.toml:29` keeps its direct
 winit dependency for `EventLoopBuilderExtX11`; the patch makes it and eframe's winit one
@@ -978,10 +978,10 @@ matrix. W16 (pinch/rotation) remains outside this cut.
 
 ### 11.6 Vendors and lockfile checks (native and wasm)
 
-* CADCraft has no vendor directory and no external path patch. Nothing is deleted.
+* Iridium CAD has no vendor directory and no external path patch. Nothing is deleted.
 * craft-libs' `vendor/krilla`, `vendor/hayro*` are PDF-only and unrelated; leave them.
 * pdfcraft's vendored `egui-wgpu`/winit are another repository's responsibility; do not
-  remove them here or copy their patches into CADCraft.
+  remove them here or copy their patches into Iridium CAD.
 * After regeneration, assert on both target feature sets:
   * native: `cargo tree -d`, `cargo tree -i egui`, `cargo tree -i winit`,
     `cargo tree -i arboard`, `cargo metadata --format-version 1`;
@@ -1031,23 +1031,23 @@ storytold/winit final rev (bounded W15/W15P, W17-W27 lifecycle)
 * **S1 craft-libs** — fresh branch from `49190884`; apply only the `8614e4a` API
   hunks; preserve docking-permission/printing hardening; add CL-2 capture slot and
   CL-3 opt-in direction API; tests/clippy/wasm; merge; publish a final rev.
-* **S2 CADCraft compatibility** — final pins; `clipboard`, `default_fonts`,
+* **S2 Iridium CAD compatibility** — final pins; `clipboard`, `default_fonts`,
   `monochrome_emoji_fonts`; app `rust-version`; C1-C8 mechanical migrations; panel
   `PanelState` migration; accessible names and glyph sweep; lockfile regeneration;
   shared CL-2F callback migration including basic drain/timeout/reply handling and
   native **and wasm** graph assertions. It is atomic and must compile and pass
   `cargo xtask ci` (and `cargo test -p cadcraft-ui-egui --all-targets`). It is **not**
   a “no behaviour change” stage: the emoji font, accessible names and panel keys change.
-* **S3 CADCraft lifecycle** — `frame_tick` split, opening spinner move, host/web frame
+* **S3 Iridium CAD lifecycle** — `frame_tick` split, opening spinner move, host/web frame
   token, once-per-frame wheel application, shared capture lifecycle stress, dropped-file fix,
   bounded counters, tests and mutation probes.
-* **S4 CADCraft text/accessibility/language** — broader glyph coverage via pinned
+* **S4 Iridium CAD text/accessibility/language** — broader glyph coverage via pinned
   fixtures, `Context::set_language`, AccessKit language, Arabic shaping checks, docs
   row for RTL status.
-* **S5a CADCraft clipboard/PRIMARY (required for parity)** — middle-click decision and
+* **S5a Iridium CAD clipboard/PRIMARY (required for parity)** — middle-click decision and
   the native Wayland/X11 PRIMARY matrix against W15P/E4/P2b. A measured fallback is
   recorded only if native evidence proves the design cannot meet a required platform.
-* **S5b CADCraft RTL activation (optional)** — `DockArea::direction`,
+* **S5b Iridium CAD RTL activation (optional)** — `DockArea::direction`,
   `Style::right_to_left` and app-owned chrome mirroring; otherwise document the gap.
 * **S6 evidence and docs** — performance report, screenshots, before/after matrices,
   docs revision history, remaining gates.
@@ -1083,7 +1083,7 @@ No partial rollback to 0.36 is promised after S2 until the stack is reverted as 
 | Multi-pass frame side effects | one non-idempotent counter/LISP slice/control execution per frame with a popup open | §6.5 |
 | Hidden logic | control replies, autosave deadlines and screenshot timeouts while minimized/unknown visibility; dropped file opens once | §6.5 |
 | Fresh queues | a control request queued between passes is answered without waiting for the next frame | §6.5 |
-| Hidden child (conditional) | if a later fork pin adopts an overdue full pass, parent occluded/overdue plus child open/update/close; CADCraft currently has no child viewports, so record N/A rather than claim #8748 | §6.5, §14.5 |
+| Hidden child (conditional) | if a later fork pin adopts an overdue full pass, parent occluded/overdue plus child open/update/close; Iridium CAD currently has no child viewports, so record N/A rather than claim #8748 | §6.5, §14.5 |
 | Screenshot correlation | two tokens/two paths; timeout/cancel/admission/geometry mismatch | §6.4 |
 | Command/undo | create → undo → redo → entity count | engine + UI control test |
 | Save/reopen | `examples/apartment.dxf` opened, edited, saved to temp, reopened; entity count and file bytes | `apps/cadcraft`/CLI |
@@ -1156,7 +1156,7 @@ real evidence is produced.
 
 ### 14.1 Environment and identities
 
-Record for every run: exact CADCraft SHA, `Cargo.lock` SHA256, feature set,
+Record for every run: exact Iridium CAD SHA, `Cargo.lock` SHA256, feature set,
 `CRAFT_FONTS_DIR` (or absent), fixture (`examples/apartment.dxf`, synthetic counts),
 OS/kernel, Rust version, GPU or software renderer/driver, display scale, viewport size,
 build profile (`release`), and whether the canvas is GPU or `?cpu`. On Linux record
@@ -1214,12 +1214,12 @@ record cold vs warm separately.
 7. **Save/reopen**: open `examples/apartment.dxf`, edit, save to temp, reopen; wall
    time and `drawMs`.
 8. **#8731 text layout/tessellation**: 120 ASCII labels + 120 rounded-rect controls
-   adapted to CADCraft's chrome; measure tessellation CPU/instruction cost per frame on
+   adapted to Iridium CAD's chrome; measure tessellation CPU/instruction cost per frame on
    B0/Cs/C0; test mixed/color rows and keep color-emoji/wrap semantics.
 9. **#8736 Windows startup**: fresh process, poll the control port until `ping`
    succeeds; renderer construction separate from first frame; ≥20 fresh processes on
    B0/Cs/C0. Record the absolute +ms for FXC.
-10. **#8512 fonts**: measure CADCraft startup with `system_font_fallback=false` and
+10. **#8512 fonts**: measure Iridium CAD startup with `system_font_fallback=false` and
     record that no system-font discovery is performed; compare a stock-eframe default
     only as a separate row. Do not enable `system_fonts` to “fix” a number.
 
@@ -1231,7 +1231,7 @@ Predefine and freeze before candidate measurement:
 * investigate **>5% peak-memory** increase and any new idle busy-loop/audio underrun;
 * for sub-millisecond measurements require the relative increase to exceed **0.05 ms**
   or corroborate with stable instruction/allocation counts;
-* app-specific gates may be stricter, never looser. CADCraft engine operations
+* app-specific gates may be stricter, never looser. Iridium CAD engine operations
   ≤ +5% median and UI `frameMs`/`cpuMs` p95 ≤ +10% are the floor. Startup uses the same
   median/p95 rule; **no “+100 ms” allowance** hides the ~+40 ms FXC cost. If +40 ms is
   accepted, it is a documented tradeoff with owner review, not a threshold change.
@@ -1245,14 +1245,14 @@ Predefine and freeze before candidate measurement:
 
 * #8731: plain-text tessellation ≈+60% in 0.37, color-glyph branch in
   `Tessellator::tessellate_text`; measure operation 8 on B0/Cs/C0; a row-level fast path
-  is a fork decision, not a CADCraft workaround.
+  is a fork decision, not a Iridium CAD workaround.
 * #8736: `egui-wgpu` 0.37 `wrap_texel_coord` makes the DX12/FXC pipeline ~4× slower to
-  compile, ~+40 ms startup; CADCraft defaults to FXC. Measure operation 9; do not
+  compile, ~+40 ms startup; Iridium CAD defaults to FXC. Measure operation 9; do not
   change the FXC choice to hide it. Clamp-only is not a valid Repeat/MirroredRepeat fix.
-* #8512: system-font startup cost; CADCraft disables the provider, so record absence of
+* #8512: system-font startup cost; Iridium CAD disables the provider, so record absence of
   that cost rather than adding it.
 * #8595: repaint-burst fix may reduce idle CPU; measure operation 2.
-* #8528: cross-viewport galley cache; CADCraft has one viewport, not applicable.
+* #8528: cross-viewport galley cache; Iridium CAD has one viewport, not applicable.
 * #8763/unmerged #8764: selection loss before a clicked widget. Test the MTEXT toolbar
   and dialog actions with pointer and keyboard; the fork owns any selected fix, and an
   app workaround must preserve the range and undo semantics with a removal condition.
@@ -1299,7 +1299,7 @@ Blocking before calling the migration complete:
    layout and real-GPU behavior unqualified; macOS hardware unavailable.
 9. **Fonts**: monochrome emoji changes `⌘`; the `⇧` decision may change macOS labels;
    pinned fixtures are external and must keep their licences. `can_show` gating remains.
-10. **RTL**: `Style::right_to_left` alone does not mirror CADCraft chrome; use craft-ui
+10. **RTL**: `Style::right_to_left` alone does not mirror Iridium CAD chrome; use craft-ui
     `DockArea::direction` only with app-owned mirroring; do not claim an RTL UI earlier.
 11. **Screenshot on web**: `now_ms` is 0 on wasm; the new slot deadline must use a web
     clock, and a browser screenshot remains a separate gate.
@@ -1395,7 +1395,7 @@ cargo run -p cadcraft-cli -- perf examples/apartment.dxf
 ```
 
 Use the craft-windows clone helper for the Windows stage, a fresh target/evidence
-directory, `guest-exec.py`/build equivalents appropriate to CADCraft, and the existing
+directory, `guest-exec.py`/build equivalents appropriate to Iridium CAD, and the existing
 `task.py`/`vm.py` sequence. Do not reuse the baseline's built binary as new-source
 evidence, and do not run these commands in this planning task.
 
@@ -1432,7 +1432,7 @@ resolved without widening the migration contract:
   previous surface survived and a later admission could bind to stale geometry.
 * **MTEXT Diameter is painted, not shaped.** U+2300 is absent from egui's bundled
   Proportional/Monospace/emoji faces and from the web font set. The toolbar button
-  now paints CADCraft's own circle-and-slash glyph and carries the semantic name
+  now paints Iridium CAD's own circle-and-slash glyph and carries the semantic name
   "Diameter"; the document text still uses U+2300, which the drafting font covers.
 * **Affected controls are named.** The MTEXT height `DragValue` gets the AccessKit
   name "Text height" (its tooltip alone is not a name), and QuickCalc's conversion

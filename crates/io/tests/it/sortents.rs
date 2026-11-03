@@ -1,5 +1,5 @@
 //! Draw order from DXF files (#439): a SORTENTSTABLE reorders its space by sort handle, and the
-//! order CADCraft writes (the order of the entity records) reads back unchanged.
+//! order Iridium CAD writes (the order of the entity records) reads back unchanged.
 
 use cadcraft_doc::*;
 
@@ -104,7 +104,7 @@ fn the_block_draw_order_survives_dxf_and_dwg() {
     assert_eq!(block_kinds(&dwg), ["wipeout", "circle", "hline", "vline"], "DWG");
 }
 
-/// The table itself (not CADCraft's reordered records) goes through the DWG bridge (#2410).
+/// The table itself (not Iridium CAD's reordered records) goes through the DWG bridge (#2410).
 #[test]
 fn a_partial_block_table_survives_the_dwg_bridge() {
     let dwg = cadcraft_dwg::dxf_to_dwg(block_dxf().as_bytes()).unwrap();

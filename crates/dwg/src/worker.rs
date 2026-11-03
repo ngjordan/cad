@@ -246,7 +246,7 @@ fn write_reply(out: &mut impl Write, reply: Reply) -> std::io::Result<()> {
 
 /// What a request asks for, or why it can't be served.
 fn handle(mut b: &[u8]) -> Reply {
-    let bad = || "the DWG worker got a request it can't read (a different CADCraft version?)".to_string();
+    let bad = || "the DWG worker got a request it can't read (a different Iridium CAD version?)".to_string();
     if take(&mut b, 1).and_then(<[u8]>::first) != Some(&PROTOCOL) {
         return Err(bad());
     }

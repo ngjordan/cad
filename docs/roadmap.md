@@ -1,4 +1,4 @@
-# CADCraft roadmap detail
+# Iridium CAD roadmap detail
 
 > **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-12 · **Change:** minor (Block Editor for static blocks: "Use blocks" evidence updated) · **Target:** Autodesk AutoCAD 2027
 
@@ -26,7 +26,7 @@ Items 2–5 and 7 are the [alpha gate](#alpha-gate) rows.
 
 ## Alpha gate
 
-The core workflows a typical AutoCAD professional does every day. CADCraft is **pre-alpha** because four of the five fail the gate; the failing rows are
+The core workflows a typical AutoCAD professional does every day. Iridium CAD is **pre-alpha** because four of the five fail the gate; the failing rows are
 the alpha checklist. Main platform: macOS.
 
 | Core workflow | Works end to end? | Evidence | Hours to pass |

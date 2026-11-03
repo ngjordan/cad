@@ -55,7 +55,7 @@ if (-not $haveCert -and -not $haveAzure) {
 }
 
 $script:SignTool = Find-SignTool
-$common = @('sign', '/v', '/fd', 'SHA256', '/td', 'SHA256', '/d', 'CADCraft', '/du', 'https://github.com/storytold/cadcraft')
+$common = @('sign', '/v', '/fd', 'SHA256', '/td', 'SHA256', '/d', 'Iridium CAD', '/du', 'https://github.com/storytold/cadcraft')
 $tmp = Join-Path ([IO.Path]::GetTempPath()) "cadcraft-sign-$PID"
 New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 

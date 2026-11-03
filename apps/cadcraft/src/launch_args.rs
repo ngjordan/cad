@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use cadcraft_mcp::args::{blank_env_is_unset, name_env_vars};
 use clap::{Command, CommandFactory, FromArgMatches, Parser};
 
-/// Opens CADCraft with the given files
+/// Opens Iridium CAD with the given files
 #[derive(Parser)]
 #[command(name = "cadcraft", version = cadcraft_engine::build_version(), after_help = crate::env::help())]
 pub(crate) struct LaunchArgs {

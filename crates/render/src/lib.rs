@@ -1,4 +1,4 @@
-//! CADCraft rendering.
+//! Iridium CAD rendering.
 //!
 //! [`build`] turns a drawing space into a [`DisplayList`]: world-space polylines, filled
 //! triangles and points, each tagged with its top-level entity handle and resolved colour.

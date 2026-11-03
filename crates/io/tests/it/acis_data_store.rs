@@ -1,6 +1,6 @@
 //! The ACIS geometry of 3D solids and regions survives a save. From AutoCAD 2013 on those entities
 //! don't carry it themselves: it lives in the file's data store section (ACDSDATA), one record per
-//! entity bound by a 320 handle. CADCraft doesn't model solids, so it keeps the section as read and
+//! entity bound by a 320 handle. Iridium CAD doesn't model solids, so it keeps the section as read and
 //! writes it back (and the DWG bridge reads it), without the records of deleted entities.
 
 use cadcraft_doc::EntityKind;
@@ -97,7 +97,7 @@ fn dwg_keeps_the_solids_geometry() {
     let mut got = asm_data(&back);
     got.sort();
     assert_eq!(got, vec![("2A".to_string(), SAB_HEX.to_string()), ("2B".to_string(), SAB_HEX.to_string())]);
-    // And reopening it in CADCraft keeps them for the next save.
+    // And reopening it in Iridium CAD keeps them for the next save.
     let again = cadcraft_io::read(&dwg, "x.dwg").unwrap();
     assert_eq!(again.foreign.data_store_entities().len(), 2);
 }

@@ -273,7 +273,7 @@ mod tests {
     #[test]
     fn split_frame_layout_file_loads_as_the_dock_default_with_its_other_settings() {
         use cadcraft_ui_egui::docking::default_workspace;
-        // Written as CADCraft 0.7 writes it: craft-ui's v1 layout with no docking version, a
+        // Written as Iridium CAD 0.7 writes it: craft-ui's v1 layout with no docking version, a
         // floating window as one `{panels, active, rect}` group, Tool Sets closed.
         let file = r#"{"version":1,"workspace":{
             "docking":{

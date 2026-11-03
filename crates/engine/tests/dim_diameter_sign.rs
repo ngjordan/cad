@@ -1,7 +1,7 @@
 //! #1645: a diameter dimension's text in its `*D` block, and in the MTEXT EXPLODE leaves, holds
-//! the diameter sign as `%%c`, as CADCraft's own TEXT and MTEXT keep it. The decoded ⌀ (U+2300)
+//! the diameter sign as `%%c`, as Iridium CAD's own TEXT and MTEXT keep it. The decoded ⌀ (U+2300)
 //! is in no SHX font, so other programs plotted the dimension in an SHX style ("romans.shx")
-//! without its sign. CADCraft still draws and reads the sign.
+//! without its sign. Iridium CAD still draws and reads the sign.
 
 use cadcraft_engine::Session;
 use cadcraft_engine::doc::{EntityKind, Handle};
@@ -50,7 +50,7 @@ fn the_dimension_block_writes_the_sign_as_a_code() {
     assert!(matches!(dm.kind, cadcraft_engine::doc::DimKind::Diameter));
     let texts = dblock_texts(&cadcraft_io::write_dxf(d));
     assert_eq!(texts, vec!["%%c60".to_string()], "the *D block's MTEXT");
-    // Read back, CADCraft still shows the sign.
+    // Read back, Iridium CAD still shows the sign.
     let read = cadcraft_io::read_dxf(cadcraft_io::write_dxf(d).as_bytes()).unwrap();
     let dm = read.model.iter().find_map(|e| if let EntityKind::Dimension(dm) = &e.kind { Some(dm.clone()) } else { None }).unwrap();
     let st = read.dim_styles.iter().find(|x| x.name.eq_ignore_ascii_case(&dm.style)).cloned().unwrap_or_default();

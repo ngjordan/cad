@@ -1,6 +1,6 @@
 [package]
 name = "cadcraft"
-description = "CADCraft desktop app"
+description = "Iridium CAD desktop app"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

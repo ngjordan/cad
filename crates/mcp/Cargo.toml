@@ -1,6 +1,6 @@
 [package]
 name = "cadcraft-mcp"
-description = "CADCraft MCP server: JSON-RPC 2.0 over stdio, driving a running app or a headless session"
+description = "Iridium CAD MCP server: JSON-RPC 2.0 over stdio, driving a running app or a headless session"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

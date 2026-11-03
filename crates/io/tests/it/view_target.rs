@@ -80,7 +80,7 @@ fn a_viewport_looks_at_its_target_plus_its_centre() {
     assert_eq!(view_center(&with_viewport(["10", "5"], ["0", "0", "0"])), Vec2::new(10.0, 5.0));
 }
 
-/// CADCraft draws every viewport as a plan view (the view direction, 16/26/36, isn't applied). A
+/// Iridium CAD draws every viewport as a plan view (the view direction, 16/26/36, isn't applied). A
 /// viewport looking along another direction is centred on what it looks at, its target, as
 /// AutoCAD's view of it is; its centre is in that view's own axes, so only the target is exact.
 #[test]
@@ -89,7 +89,7 @@ fn a_viewport_looking_along_another_direction_centres_on_its_target() {
     assert_eq!(c, Vec2::new(500.0, -200.0));
 }
 
-/// Saved and reopened, the viewport still looks at the same place: CADCraft writes the whole
+/// Saved and reopened, the viewport still looks at the same place: Iridium CAD writes the whole
 /// location as the centre with a target of 0.
 #[test]
 fn the_view_survives_a_save_and_reopen() {

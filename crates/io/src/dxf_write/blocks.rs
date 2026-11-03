@@ -212,10 +212,10 @@ pub(super) fn arrow_block_entities(kind: cadcraft_render::Arrowhead) -> Vec<Enti
     out
 }
 
-/// Whether the entities of the block `name` are the arrowhead block CADCraft writes for that
+/// Whether the entities of the block `name` are the arrowhead block Iridium CAD writes for that
 /// standard arrow name ([`arrow_block_entities`]): the same lines and solids with the same
 /// properties (layer 0, ByBlock). Any other content (AutoCAD's own `_Dot`, a user's
-/// redefinition, an older CADCraft's geometry) is the file's.
+/// redefinition, an older Iridium CAD's geometry) is the file's.
 pub(crate) fn is_generated_arrow(name: &str, entities: &[&Entity]) -> bool {
     let Some((_, kind)) = dxf_ext::arrow_block_name(name) else { return false };
     let ours = arrow_block_entities(kind);

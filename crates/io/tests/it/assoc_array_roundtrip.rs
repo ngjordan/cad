@@ -65,7 +65,7 @@ fn drawing() -> Drawing {
 fn array_parameters_survive_a_dxf_round_trip() {
     let d = drawing();
     let text = write_dxf(&d).replace("\r\n", "\n");
-    // Kept as CADCraft xdata; the items are ordinary block references.
+    // Kept as Iridium CAD xdata; the items are ordinary block references.
     assert!(text.contains("\n1001\nCADCRAFT\n1000\nARRAY\n1002\n{\n"), "array xdata missing");
     let back = read_dxf(text.as_bytes()).unwrap();
     let arr = back.block("*U2").unwrap();

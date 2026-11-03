@@ -2,28 +2,28 @@
 <!-- AppStream metadata (software centres, Flathub). Template: package.sh and the Flatpak
      manifest substitute @VERSION@ and @DATE@ from Cargo.toml and the build date. -->
 <component type="desktop-application">
-  <id>ai.storyteller.cadcraft</id>
+  <id>ph.iridium.cad</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT OR Apache-2.0</project_license>
-  <name>CADCraft</name>
+  <name>Iridium CAD</name>
   <summary>Draft, dimension and plot 2D drawings</summary>
   <developer id="ai.storyteller">
     <name>Learning Machines LLC</name>
   </developer>
   <description>
     <p>
-      CADCraft is an open-source computer-aided design and drafting application with a familiar
+      Iridium CAD is an open-source computer-aided design and drafting application with a familiar
       command line, object snaps, layers, dimensions, hatches and blocks. It opens and saves DXF
       and DWG drawings, exports SVG and PNG, and can be driven by AI agents over MCP.
     </p>
   </description>
-  <launchable type="desktop-id">ai.storyteller.cadcraft.desktop</launchable>
-  <icon type="stock">ai.storyteller.cadcraft</icon>
+  <launchable type="desktop-id">ph.iridium.cad.desktop</launchable>
+  <icon type="stock">ph.iridium.cad</icon>
   <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
   <url type="homepage">https://getartcraft.com/apps/cadcraft</url>
   <url type="bugtracker">https://github.com/storytold/cadcraft/issues</url>
   <url type="help">https://github.com/storytold/cadcraft</url>
-  <url type="contact">https://discord.gg/artcraft</url>
+  <url type="contact">https://iridium.ph</url>
   <categories>
     <category>Graphics</category>
     <category>Engineering</category>
@@ -41,8 +41,8 @@
     </screenshot>
   </screenshots>
   <branding>
-    <color type="primary" scheme_preference="light">#9ee3f2</color>
-    <color type="primary" scheme_preference="dark">#0b6f88</color>
+    <color type="primary" scheme_preference="light">#0B6E4F</color>
+    <color type="primary" scheme_preference="dark">#0B6E4F</color>
   </branding>
   <requires>
     <display_length compare="ge">760</display_length>

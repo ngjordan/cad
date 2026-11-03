@@ -1,6 +1,6 @@
-//! CADCraft's own standard libraries: linetypes and hatch patterns.
+//! Iridium CAD's own standard libraries: linetypes and hatch patterns.
 //!
-//! These definitions were written for CADCraft (CC0 / public domain as part of this codebase).
+//! These definitions were written for Iridium CAD (CC0 / public domain as part of this codebase).
 //! The names follow the industry-common names users expect (DASHED, CENTER, ANSI31…); the
 //! dash and spacing values are our own.
 

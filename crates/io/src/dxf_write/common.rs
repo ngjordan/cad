@@ -196,11 +196,11 @@ fn attrib_flags(a: &Attrib) -> i64 {
 /// from DWG as is (it recomputes it only for DXF): writing the alignment point there drew centred
 /// and right-aligned text from the wrong end in AutoCAD (#1050).
 ///
-/// The stored point is kept when it is close to where CADCraft's font puts the baseline start:
+/// The stored point is kept when it is close to where Iridium CAD's font puts the baseline start:
 /// then it is AutoCAD's own (exact for its fonts). It is replaced when it is clearly stale: the
 /// alignment point itself (text made here) or a text whose length changed since. Close means
 /// along the baseline within a tenth of the text's width plus half its height (AutoCAD's fonts,
-/// or the ones CADCraft substitutes for them, differ most in width, and most on short texts) and
+/// or the ones Iridium CAD substitutes for them, differ most in width, and most on short texts) and
 /// across it within a fifth of its height: Left Middle and Left Bottom text made here, whose
 /// alignment point is only half or a third of a height from the baseline start, must not pass
 /// for AutoCAD's.

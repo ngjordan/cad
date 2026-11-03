@@ -1,6 +1,6 @@
 {
   "id": "cadcraft",
-  "name": "CADCraft",
+  "name": "Iridium CAD",
   "upgradeCode": "119D7D76-0167-4A9E-8F37-09DA0235F68E",
   "sources": [
     "cadcraft.wxs"
@@ -30,24 +30,24 @@
     [
       "-1",
       "Software\\Classes\\.dxf\\OpenWithProgids",
-      "CADCraft.Drawing",
+      "Iridium CAD.Drawing",
       ""
     ],
     [
       "-1",
       "Software\\Classes\\.dwg\\OpenWithProgids",
-      "CADCraft.Drawing",
+      "Iridium CAD.Drawing",
       ""
     ],
     [
       "-1",
-      "Software\\Classes\\CADCraft.Drawing\\shell\\open\\command",
+      "Software\\Classes\\Iridium CAD.Drawing\\shell\\open\\command",
       "",
       "\"[#CadcraftExe]\" \"%1\""
     ],
     [
       "-1",
-      "Software\\Learning Machines LLC\\CADCraft",
+      "Software\\Learning Machines LLC\\Iridium CAD",
       "DesktopShortcut",
       "1"
     ]

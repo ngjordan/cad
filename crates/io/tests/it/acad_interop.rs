@@ -1,4 +1,4 @@
-//! What AutoCAD reads from CADCraft's DWG and DXF as it is, without recomputing it: justified
+//! What AutoCAD reads from Iridium CAD's DWG and DXF as it is, without recomputing it: justified
 //! text's insertion point (#1050), DIMPOST (#1053), the current dimension style and its header
 //! variables (#1051), the colours of a dimension's `*D` block (#1052) and the stored measurement
 //! of a rotated linear dimension (#1054) and of angular dimensions.
@@ -177,9 +177,9 @@ fn text_starts(dxf: &str) -> Vec<(String, cadcraft_geom::Vec2)> {
     out
 }
 
-/// Justified TEXT made in CADCraft (insertion point = alignment point) is written with its
+/// Justified TEXT made in Iridium CAD (insertion point = alignment point) is written with its
 /// baseline start in group 10, for every justification and rotated too: placed baseline-left at
-/// the written group 10, each text covers what CADCraft draws for the justified one. Left Middle
+/// the written group 10, each text covers what Iridium CAD draws for the justified one. Left Middle
 /// and Left Bottom were kept at the alignment point, half or a third of a height off, because
 /// that point passed for AutoCAD's own (test by @lee-cyrille-maskell, from their fix for #1050).
 #[test]
@@ -277,7 +277,7 @@ fn an_angular_dimension_stores_its_angle_in_radians() {
 }
 
 /// A justified text read from AutoCAD keeps AutoCAD's insertion point (exact for its own fonts)
-/// when it is near CADCraft's; only a stale one (the alignment point, or a text that has since
+/// when it is near Iridium CAD's; only a stale one (the alignment point, or a text that has since
 /// changed length) is replaced.
 #[test]
 fn an_insertion_point_from_autocad_is_kept() {
@@ -286,7 +286,7 @@ fn an_insertion_point_from_autocad_is_kept() {
     let ours = 100.0 - cadcraft_fonts::line_width("MIDDLE CENTER", 5.0, 1.0) / 2.0;
     let mut k = text("MIDDLE CENTER", at, HAlign::Center, VAlign::Middle);
     if let EntityKind::Text(t) = &mut k {
-        // AutoCAD's font is a little narrower than CADCraft's.
+        // AutoCAD's font is a little narrower than Iridium CAD's.
         t.insert = Vec3::new(ours + 2.5, 47.5, 0.0);
     }
     d.add(&Space::Model, Common::default(), k).unwrap();
