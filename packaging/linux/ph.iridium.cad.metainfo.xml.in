@@ -8,7 +8,7 @@
   <name>Iridium CAD</name>
   <summary>Draft, dimension and plot 2D drawings</summary>
   <developer id="ai.storyteller">
-    <name>Learning Machines LLC</name>
+    <name>Iridium Technologies, Inc.</name>
   </developer>
   <description>
     <p>
@@ -20,9 +20,9 @@
   <launchable type="desktop-id">ph.iridium.cad.desktop</launchable>
   <icon type="stock">ph.iridium.cad</icon>
   <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
-  <url type="homepage">https://getartcraft.com/apps/cadcraft</url>
-  <url type="bugtracker">https://github.com/storytold/cadcraft/issues</url>
-  <url type="help">https://github.com/storytold/cadcraft</url>
+  <url type="homepage">https://iridium.ph</url>
+  <url type="bugtracker">https://github.com/ngjordan/iridium-cad/issues</url>
+  <url type="help">https://github.com/ngjordan/iridium-cad</url>
   <url type="contact">https://iridium.ph</url>
   <categories>
     <category>Graphics</category>

@@ -16,7 +16,7 @@ There is no server-side code. Upload the folder's contents anywhere that serves 
 
 All URLs in `index.html` are relative (`public_url = "./"` in `apps/cadcraft-web/Trunk.toml`),
 so the site works at a domain root (`https://example.com/`), under a prefix
-(`https://example.com/tools/cadcraft/`) and from a CDN bucket. The asset names carry a content
+(`https://iridium.ph/`) and from a CDN bucket. The asset names carry a content
 hash, so they can be cached forever. Only `index.html` needs revalidation.
 
 ## Required server settings
@@ -66,7 +66,7 @@ host's existing eframe persistence; clearing site data removes the saved layout.
 
 ```html
 <iframe
-  src="https://example.com/cadcraft/"
+  src="https://iridium.ph/"
   title="Iridium CAD image editor"
   style="width: 100%; height: 720px; border: 0;"
   allow="fullscreen; clipboard-read; clipboard-write"
@@ -96,6 +96,6 @@ Iridium CAD renders with wgpu. It uses **WebGPU** when the browser has it and fa
 | `?webgl` | Force the WebGL2 backend (useful when a WebGPU driver misbehaves) |
 | `?cpu` | Force the CPU canvas path (slowest, most compatible) |
 
-For example: `<iframe src="https://example.com/cadcraft/?webgl" ...>`.
+For example: `<iframe src="https://iridium.ph/?webgl" ...>`.
 
 A browser with neither WebGPU nor WebGL2 gets a message in place of the app.
