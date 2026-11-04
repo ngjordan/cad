@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Build and package Iridium CAD for FreeBSD:
 #
-#   $DIST/cadcraft-<version>-freebsd-<arch>.tar.gz   a /usr/local-style tree (<arch> is x86_64, or
+#   $DIST/iridium-cad-<version>-freebsd-<arch>.tar.gz   a /usr/local-style tree (<arch> is x86_64, or
 #       aarch64 when CARGO_BUILD_TARGET=aarch64-unknown-freebsd):
-#       cadcraft-<version>-freebsd-<arch>/{bin, man/man1, share/applications, share/icons,
+#       iridium-cad-<version>-freebsd-<arch>/{bin, man/man1, share/applications, share/icons,
 #       share/mime, share/metainfo, share/doc/cadcraft, share/{bash-completion,zsh,fish}}
 #
 # Install by copying the tree's contents into /usr/local, e.g.
@@ -56,7 +56,7 @@ HOST_ARCH="$(release_arch "$(uname -m)" 2>/dev/null)" || HOST_ARCH="$(uname -m)"
 if [[ -n "${CARGO_BUILD_TARGET:-}" ]] && [[ "$(uname -s)" != FreeBSD ]]; then
   HOST_ARCH="$(uname -s) $HOST_ARCH"
 fi
-BASENAME="cadcraft-$VERSION-freebsd-$ARCH"
+BASENAME="iridium-cad-$VERSION-freebsd-$ARCH"
 
 echo "==> Iridium CAD $VERSION for FreeBSD $ARCH"
 

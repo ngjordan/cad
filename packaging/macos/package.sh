@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build, sign and (optionally) notarize the macOS release artifacts:
 #
-#   $DIST/cadcraft-<version>-macos-<arch>.dmg          Iridium CAD.app on a drag-to-Applications DMG
+#   $DIST/iridium-cad-<version>-macos-<arch>.dmg          Iridium CAD.app on a drag-to-Applications DMG
 #   $DIST/cadcraft-cli-<version>-macos-<arch>.zip      the headless CLI
 #
 # Usage: packaging/macos/package.sh [--arch universal|aarch64|x86_64] [--skip-build]
@@ -40,7 +40,7 @@ IDENTITY="${MACOS_SIGN_IDENTITY:--}"
 SHORT_VERSION="${VERSION%%-*}"
 WORK="$CARGO_TARGET_DIR/macos-package"
 APP="$WORK/Iridium CAD.app"
-DMG="$DIST/cadcraft-$VERSION-macos-$ARCH.dmg"
+DMG="$DIST/iridium-cad-$VERSION-macos-$ARCH.dmg"
 CLI_ZIP="$DIST/cadcraft-cli-$VERSION-macos-$ARCH.zip"
 
 NOTARIZE=0

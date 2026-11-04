@@ -32,7 +32,7 @@ case "$ARCH" in
   *) echo "unsupported architecture $ARCH" >&2; exit 2 ;;
 esac
 
-BASENAME="cadcraft-$VERSION-linux-$ARCH"
+BASENAME="iridium-cad-$VERSION-linux-$ARCH"
 OUT_OCI="$DIST/$BASENAME-oci"
 
 echo "==> Building Flatpak OCI layout for $BASENAME"

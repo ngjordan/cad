@@ -4,8 +4,8 @@
 
 .DESCRIPTION
   Produces, in $env:DIST (default: dist/release):
-    cadcraft-<version>-windows-<arch>.msi            per-machine installer (WiX v5)
-    cadcraft-<version>-windows-<arch>-portable.zip   cadcraft.exe + cadcraft-cli.exe
+    iridium-cad-<version>-windows-<arch>.msi            per-machine installer (WiX v5)
+    iridium-cad-<version>-windows-<arch>-portable.zip   cadcraft.exe + cadcraft-cli.exe
 
   The binaries link the C runtime statically (+crt-static), so neither the MSI nor the portable
   zip needs the Visual C++ redistributable. Signing is delegated to sign.ps1 (skipped with a
@@ -108,7 +108,7 @@ if ($env:CRAFT_FONTS_DIR) {
 # ---- end font notices for the MSI --------------------------------------------------------------
 
 # ---- MSI ---------------------------------------------------------------------------------------
-$Msi = Join-Path $Dist "cadcraft-$Version-windows-$Arch.msi"
+$Msi = Join-Path $Dist "iridium-cad-$Version-windows-$Arch.msi"
 Invoke-Native 'wix build' {
   wix build (Join-Path $PSScriptRoot 'cadcraft.wxs') -arch $Arch -ext WixToolset.UI.wixext `
     -d "Version=$MsiVersion" -d "BinDir=$Stage" -d "IconPath=$(Join-Path $Root 'assets\app-icon\iridium-cad.ico')" `
@@ -122,7 +122,7 @@ Remove-Item -Force -ErrorAction SilentlyContinue ([IO.Path]::ChangeExtension($Ms
 & (Join-Path $PSScriptRoot 'sign.ps1') $Msi
 
 # ---- portable zip ------------------------------------------------------------------------------
-$Portable = Join-Path $TargetDir "windows-package\cadcraft-$Version-windows-$Arch-portable"
+$Portable = Join-Path $TargetDir "windows-package\iridium-cad-$Version-windows-$Arch-portable"
 Remove-Item -Recurse -Force $Portable -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path $Portable | Out-Null
 Copy-Item (Join-Path $Stage '*.exe') $Portable
@@ -136,7 +136,7 @@ if ($env:CRAFT_FONTS_DIR) {
     Copy-Item $ofl.FullName (Join-Path $Portable "OFL-$($ofl.Directory.Name).txt")
   }
 }
-$Zip = Join-Path $Dist "cadcraft-$Version-windows-$Arch-portable.zip"
+$Zip = Join-Path $Dist "iridium-cad-$Version-windows-$Arch-portable.zip"
 Remove-Item -Force $Zip -ErrorAction SilentlyContinue
 Compress-Archive -Path $Portable -DestinationPath $Zip
 

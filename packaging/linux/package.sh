@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Build and package Iridium CAD for Linux (<arch> is x86_64 or aarch64, or riscv64 when cross-compiling):
 #
-#   $DIST/cadcraft-<version>-linux-<arch>.AppImage  any distro with glibc >= the build host's
-#   $DIST/cadcraft-<version>-linux-<arch>.AppImage.zsync  delta updates (needs zsyncmake)
-#   $DIST/cadcraft-<version>-linux-<arch>.deb       Debian, Ubuntu, Mint, Pop!_OS, ...
-#   $DIST/cadcraft-<version>-linux-<arch>.rpm       Fedora, openSUSE, RHEL, ...
-#   $DIST/cadcraft-<version>-linux-<arch>.tar.gz    plain FHS-style tree (bin/, share/)
+#   $DIST/iridium-cad-<version>-linux-<arch>.AppImage  any distro with glibc >= the build host's
+#   $DIST/iridium-cad-<version>-linux-<arch>.AppImage.zsync  delta updates (needs zsyncmake)
+#   $DIST/iridium-cad-<version>-linux-<arch>.deb       Debian, Ubuntu, Mint, Pop!_OS, ...
+#   $DIST/iridium-cad-<version>-linux-<arch>.rpm       Fedora, openSUSE, RHEL, ...
+#   $DIST/iridium-cad-<version>-linux-<arch>.tar.gz    plain FHS-style tree (bin/, share/)
 #
 # Usage: packaging/linux/package.sh [--skip-build] [--formats "appimage deb rpm tar"]
 #
@@ -40,7 +40,7 @@ case "$ARCH" in
   *) echo "unsupported architecture $ARCH" >&2; exit 2 ;;
 esac
 export CADCRAFT_MAINTAINER="${CADCRAFT_MAINTAINER:-Iridium CAD maintainers <maintainers@iridium.ph>}"
-BASENAME="cadcraft-$VERSION-linux-$ARCH"
+BASENAME="iridium-cad-$VERSION-linux-$ARCH"
 
 echo "==> Iridium CAD $VERSION for Linux $ARCH ($FORMATS)"
 
