@@ -2,8 +2,8 @@
 //! form, -LINETYPE at the command line, HATCH with a pattern file, HATCH.PATTERNS. The files are
 //! tiny synthetic ones written here, with our own names.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{EntityKind, Hatch};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{EntityKind, Hatch};
 use serde_json::json;
 
 #[path = "support/temp_dir.rs"]

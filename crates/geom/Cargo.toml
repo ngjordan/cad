@@ -1,6 +1,6 @@
 [package]
-name = "cadcraft-geom"
-description = "Iridium CAD geometry: f64 vectors, curves, arcs, splines, intersections, offsets, snaps"
+name = "iridium-cad-geom"
+description = "Cad geometry: f64 vectors, curves, arcs, splines, intersections, offsets, snaps"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

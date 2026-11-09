@@ -12,9 +12,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-use cadcraft_doc::{Block, Circle, Drawing, Entity, EntityKind, Handle, Space};
-use cadcraft_geom::Vec3;
-use cadcraft_io::Version;
+use iridium_cad_doc::{Block, Circle, Drawing, Entity, EntityKind, Handle, Space};
+use iridium_cad_geom::Vec3;
+use iridium_cad_io::Version;
 
 use super::super::{
     cases::{self, Case, complex},

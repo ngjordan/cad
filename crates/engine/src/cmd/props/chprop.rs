@@ -17,8 +17,8 @@
 
 use std::collections::HashSet;
 
-use cadcraft_color::Color;
-use cadcraft_doc::{Entity, Handle, Lineweight};
+use iridium_cad_color::Color;
+use iridium_cad_doc::{Entity, Handle, Lineweight};
 use serde_json::{Value, json};
 
 use super::super::curves::{KW, is_locked};

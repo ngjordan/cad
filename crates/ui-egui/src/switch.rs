@@ -1,4 +1,4 @@
-//! Boolean environment switches (`CADCRAFT_VSYNC`, `CADCRAFT_WAYLAND`, ...): one parser, so every
+//! Boolean environment switches (`IRIDIUM_CAD_VSYNC`, `IRIDIUM_CAD_WAYLAND`, ...): one parser, so every
 //! variable accepts the same spellings.
 
 /// `1/on/true/yes` or `0/off/false/no`, case- and space-insensitive. Blank or unset is `Default`;

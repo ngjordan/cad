@@ -2,17 +2,17 @@
 
 ## Reporting a vulnerability
 
-Please report it privately through [GitHub's private reporting](https://github.com/storytold/cadcraft/security/advisories/new), not in a public issue or pull request. Say which version you ran, on which platform, and how to reproduce it. A small sample file helps, as long as it holds nothing private.
+Please report it privately through [GitHub's private reporting](https://github.com/ngjordan/iridium-cad/security/advisories/new), not in a public issue or pull request. Say which version you ran, on which platform, and how to reproduce it. A small sample file helps, as long as it holds nothing private.
 
 Maintainers read reports as they arrive, but there is no fixed response time yet.
 
 ## Supported versions
 
-Only the latest release gets security fixes. Iridium CAD is pre-alpha and moves quickly, so please check that a problem still exists there before reporting it.
+Only the latest release gets security fixes. Cad is pre-alpha and moves quickly, so please check that a problem still exists there before reporting it.
 
 ## What counts
 
-Iridium CAD treats these as untrusted, and a way past these defences is a vulnerability:
+Cad treats these as untrusted, and a way past these defences is a vulnerability:
 
 - **Drawing files.** Opening a DXF, DWG or other file must not run code, write outside the paths the user chose, or crash the app. Panics are bugs too, but memory exhaustion or a decoder abort on a crafted file is the more serious case.
 - **AutoLISP in a drawing's folder.** A drawing must not run code that the user didn't choose to load.

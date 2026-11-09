@@ -1,9 +1,9 @@
 //! The ACIS geometry of 3D solids and regions survives a save. From AutoCAD 2013 on those entities
 //! don't carry it themselves: it lives in the file's data store section (ACDSDATA), one record per
-//! entity bound by a 320 handle. Iridium CAD doesn't model solids, so it keeps the section as read and
+//! entity bound by a 320 handle. Cad doesn't model solids, so it keeps the section as read and
 //! writes it back (and the DWG bridge reads it), without the records of deleted entities.
 
-use cadcraft_doc::EntityKind;
+use iridium_cad_doc::EntityKind;
 
 /// Stand-in modeler data, carried as opaque bytes: the binary ACIS magic, some bytes, and the
 /// end-of-data marker DWG readers delimit each body with.
@@ -63,20 +63,21 @@ fn asm_data(text: &str) -> Vec<(String, String)> {
 
 #[test]
 fn dxf_keeps_the_data_store_and_drops_records_of_deleted_entities() {
-    let mut d = cadcraft_io::read_dxf(dxf().as_bytes()).unwrap();
+    let mut d = iridium_cad_io::read_dxf(dxf().as_bytes()).unwrap();
     assert_eq!(d.foreign.data_store_entities().len(), 2);
-    let out = String::from_utf8(cadcraft_io::write(&d, "x.dxf").unwrap()).unwrap();
+    let out = String::from_utf8(iridium_cad_io::write(&d, "x.dxf").unwrap()).unwrap();
     assert_eq!(asm_data(&out), vec![("2A".to_string(), SAB_HEX.to_string()), ("2B".to_string(), SAB_HEX.to_string())]);
 
     // Deleting a solid drops its record; the other stays.
     let h = d.model.iter().find(|e| e.handle.hex() == "2B").map(|e| e.handle).unwrap();
     d.remove_entity(h).unwrap();
-    let out = String::from_utf8(cadcraft_io::write(&d, "x.dxf").unwrap()).unwrap();
+    let out = String::from_utf8(iridium_cad_io::write(&d, "x.dxf").unwrap()).unwrap();
     assert_eq!(asm_data(&out), vec![("2A".to_string(), SAB_HEX.to_string())]);
 
     // An R2000 file has no data store (its solids would carry SAT text instead).
     let r2000 = String::from_utf8(
-        cadcraft_io::write_with(&d, "x.dxf", &cadcraft_io::SaveOptions { version: Some(cadcraft_io::Version::R2000), binary: false }).unwrap(),
+        iridium_cad_io::write_with(&d, "x.dxf", &iridium_cad_io::SaveOptions { version: Some(iridium_cad_io::Version::R2000), binary: false })
+            .unwrap(),
     )
     .unwrap();
     assert!(!r2000.contains("ACDSDATA"));
@@ -84,21 +85,21 @@ fn dxf_keeps_the_data_store_and_drops_records_of_deleted_entities() {
     // No solid left: no section.
     let h = d.model.iter().find(|e| matches!(e.kind, EntityKind::Unknown(_))).map(|e| e.handle).unwrap();
     d.remove_entity(h).unwrap();
-    let out = String::from_utf8(cadcraft_io::write(&d, "x.dxf").unwrap()).unwrap();
+    let out = String::from_utf8(iridium_cad_io::write(&d, "x.dxf").unwrap()).unwrap();
     assert!(!out.contains("ACDSDATA"));
 }
 
 #[test]
 fn dwg_keeps_the_solids_geometry() {
-    let d = cadcraft_io::read_dxf(dxf().as_bytes()).unwrap();
-    let dwg = cadcraft_io::write(&d, "x.dwg").unwrap();
+    let d = iridium_cad_io::read_dxf(dxf().as_bytes()).unwrap();
+    let dwg = iridium_cad_io::write(&d, "x.dwg").unwrap();
     // The DWG read back (as the bridge's DXF) binds the same bytes to both solids.
-    let back = String::from_utf8(cadcraft_dwg::dwg_to_dxf(&dwg).unwrap()).unwrap();
+    let back = String::from_utf8(iridium_cad_dwg::dwg_to_dxf(&dwg).unwrap()).unwrap();
     let mut got = asm_data(&back);
     got.sort();
     assert_eq!(got, vec![("2A".to_string(), SAB_HEX.to_string()), ("2B".to_string(), SAB_HEX.to_string())]);
-    // And reopening it in Iridium CAD keeps them for the next save.
-    let again = cadcraft_io::read(&dwg, "x.dwg").unwrap();
+    // And reopening it in Cad keeps them for the next save.
+    let again = iridium_cad_io::read(&dwg, "x.dwg").unwrap();
     assert_eq!(again.foreign.data_store_entities().len(), 2);
 }
 
@@ -111,23 +112,23 @@ fn sat_text_solids_are_left_out_of_dxf_2013_and_later() {
         0\nREGION\n5\n2B\n100\nAcDbEntity\n8\n0\n100\nAcDbModelerGeometry\n70\n1\n1\n400 1 1 0\n1\n16 ZWCAD\n3\nEnd-of-ACIS-data\n\
         0\n3DSOLID\n5\n2C\n100\nAcDbEntity\n8\n0\n100\nAcDbModelerGeometry\n70\n1\n1\n400 1 1 0\n3\nEnd-of-ACIS-data\n\
         0\nLINE\n5\n2D\n8\n0\n10\n0\n20\n0\n11\n1\n21\n1\n0\nENDSEC\n0\nEOF\n";
-    let d = cadcraft_io::read_dxf(sat.as_bytes()).unwrap();
-    let count = |v: cadcraft_io::Version, ty: &str| {
-        let out = cadcraft_io::write_with(&d, "x.dxf", &cadcraft_io::SaveOptions { version: Some(v), binary: false }).unwrap();
+    let d = iridium_cad_io::read_dxf(sat.as_bytes()).unwrap();
+    let count = |v: iridium_cad_io::Version, ty: &str| {
+        let out = iridium_cad_io::write_with(&d, "x.dxf", &iridium_cad_io::SaveOptions { version: Some(v), binary: false }).unwrap();
         let t = String::from_utf8(out).unwrap().replace("\r\n", "\n");
         t.matches(&format!("\n0\n{ty}\n")).count() + t.matches(&format!("\n  0\n{ty}\n")).count()
     };
-    assert_eq!(cadcraft_doc::foreign::sat_text_dropped(&d), [("3DSOLID".to_string(), 1), ("REGION".to_string(), 1)].into());
-    for v in [cadcraft_io::Version::R2000, cadcraft_io::Version::R2010] {
+    assert_eq!(iridium_cad_doc::foreign::sat_text_dropped(&d), [("3DSOLID".to_string(), 1), ("REGION".to_string(), 1)].into());
+    for v in [iridium_cad_io::Version::R2000, iridium_cad_io::Version::R2010] {
         assert_eq!((count(v, "REGION"), count(v, "3DSOLID")), (1, 1), "{v:?} keeps them");
     }
-    for v in [cadcraft_io::Version::R2013, cadcraft_io::Version::R2018] {
+    for v in [iridium_cad_io::Version::R2013, iridium_cad_io::Version::R2018] {
         assert_eq!((count(v, "REGION"), count(v, "3DSOLID")), (0, 0), "{v:?} leaves them out");
         assert_eq!(count(v, "LINE"), 1, "{v:?} keeps the rest");
     }
     // Solids with a data store record keep their geometry in 2013 and later.
-    let stored = cadcraft_io::read_dxf(dxf().as_bytes()).unwrap();
-    assert!(cadcraft_doc::foreign::sat_text_dropped(&stored).is_empty());
+    let stored = iridium_cad_io::read_dxf(dxf().as_bytes()).unwrap();
+    assert!(iridium_cad_doc::foreign::sat_text_dropped(&stored).is_empty());
 }
 
 /// A DWG keeps SAT-text solids at any version (its writer handles them), and a DXF's note leaves
@@ -137,32 +138,33 @@ fn sat_text_solids_stay_in_dwg_2018_and_xref_contents_are_not_counted() {
     let sat = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n\
         0\nREGION\n5\n2B\n100\nAcDbEntity\n8\n0\n100\nAcDbModelerGeometry\n70\n1\n1\n400 1 1 0\n3\nEnd-of-ACIS-data\n\
         0\nLINE\n5\n2D\n8\n0\n10\n0\n20\n0\n11\n1\n21\n1\n0\nENDSEC\n0\nEOF\n";
-    let d = cadcraft_io::read_dxf(sat.as_bytes()).unwrap();
-    let opts = cadcraft_io::SaveOptions { version: Some(cadcraft_io::Version::R2018), binary: false };
-    let dwg = cadcraft_io::write_with(&d, "x.dwg", &opts).unwrap();
-    let back = cadcraft_io::read(&dwg, "x.dwg").unwrap();
-    let unknown = |d: &cadcraft_doc::Drawing| d.model.iter().filter(|e| matches!(&e.kind, EntityKind::Unknown(u) if u.dxf_type == "REGION")).count();
+    let d = iridium_cad_io::read_dxf(sat.as_bytes()).unwrap();
+    let opts = iridium_cad_io::SaveOptions { version: Some(iridium_cad_io::Version::R2018), binary: false };
+    let dwg = iridium_cad_io::write_with(&d, "x.dwg", &opts).unwrap();
+    let back = iridium_cad_io::read(&dwg, "x.dwg").unwrap();
+    let unknown =
+        |d: &iridium_cad_doc::Drawing| d.model.iter().filter(|e| matches!(&e.kind, EntityKind::Unknown(u) if u.dxf_type == "REGION")).count();
     assert_eq!(unknown(&back), 1, "the DWG 2018 keeps the region");
 
     // Xref blocks (and `xref|` ones) hold no entities in the file: not reported as left out.
     let mut x = d.clone();
     let region = d.model.iter().find(|e| matches!(&e.kind, EntityKind::Unknown(_))).cloned().unwrap();
-    let mut host = cadcraft_doc::Block::new("REF");
+    let mut host = iridium_cad_doc::Block::new("REF");
     host.xref_path = Some("other.dwg".into());
     host.entities.push((*region).clone());
     x.blocks.insert("REF".into(), std::sync::Arc::new(host));
-    let mut dep = cadcraft_doc::Block::new("REF|PART");
+    let mut dep = iridium_cad_doc::Block::new("REF|PART");
     dep.entities.push((*region).clone());
     x.blocks.insert("REF|PART".into(), std::sync::Arc::new(dep));
-    assert_eq!(cadcraft_doc::foreign::sat_text_dropped(&x), [("REGION".to_string(), 1)].into(), "only the model-space region");
+    assert_eq!(iridium_cad_doc::foreign::sat_text_dropped(&x), [("REGION".to_string(), 1)].into(), "only the model-space region");
 }
 
 /// Only groups 1 and 3 of the modeler geometry subclass are SAT text, and only a record holding
 /// the entity's ASM_Data keeps its geometry in the data store (#2334).
 #[test]
 fn sat_text_is_told_by_its_subclass_and_a_geometry_record() {
-    use cadcraft_doc::foreign::{Foreign, sat_text_acis};
-    use cadcraft_doc::{Handle, RawTag, Unknown};
+    use iridium_cad_doc::foreign::{Foreign, sat_text_acis};
+    use iridium_cad_doc::{Handle, RawTag, Unknown};
     let tag = |code: i32, value: &str| RawTag { code, value: value.into() };
     let solid = |tags: Vec<RawTag>| Unknown { dxf_type: "3DSOLID".into(), tags };
     let none = std::collections::BTreeSet::new();
@@ -190,8 +192,8 @@ fn sat_text_is_told_by_its_subclass_and_a_geometry_record() {
 /// stored (#2334).
 #[test]
 fn a_data_store_record_stores_only_its_first_entity() {
-    use cadcraft_doc::foreign::Foreign;
-    use cadcraft_doc::{Handle, RawTag};
+    use iridium_cad_doc::foreign::Foreign;
+    use iridium_cad_doc::{Handle, RawTag};
     let tag = |code: i32, value: &str| RawTag { code, value: value.into() };
     let store = Foreign { data_store: vec![tag(0, "ACDSRECORD"), tag(320, "2B"), tag(320, "2C"), tag(2, "ASM_Data")], ..Foreign::default() };
     assert_eq!(store.data_store_entities(), [Handle(0x2B)].into());
@@ -204,16 +206,16 @@ fn a_data_store_record_stores_only_its_first_entity() {
 fn a_dwg_keeps_a_sat_text_region_only_before_2013() {
     let sat = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n\
         0\nREGION\n5\n2B\n100\nAcDbEntity\n8\n0\n100\nAcDbModelerGeometry\n70\n1\n1\n400 1 1 0\n3\nEnd-of-ACIS-data\n0\nENDSEC\n0\nEOF\n";
-    let d = cadcraft_io::read_dxf(sat.as_bytes()).unwrap();
-    let holds_sat = |v: cadcraft_io::Version| {
-        let dwg = cadcraft_io::write_with(&d, "x.dwg", &cadcraft_io::SaveOptions { version: Some(v), binary: false }).unwrap();
-        let back = cadcraft_io::read(&dwg, "x.dwg").unwrap();
+    let d = iridium_cad_io::read_dxf(sat.as_bytes()).unwrap();
+    let holds_sat = |v: iridium_cad_io::Version| {
+        let dwg = iridium_cad_io::write_with(&d, "x.dwg", &iridium_cad_io::SaveOptions { version: Some(v), binary: false }).unwrap();
+        let back = iridium_cad_io::read(&dwg, "x.dwg").unwrap();
         let region = back.model.iter().find_map(|e| match &e.kind {
             EntityKind::Unknown(u) if u.dxf_type == "REGION" => Some(u.clone()),
             _ => None,
         });
-        region.is_some_and(|u| cadcraft_doc::foreign::has_sat_text(&u.tags))
+        region.is_some_and(|u| iridium_cad_doc::foreign::has_sat_text(&u.tags))
     };
-    assert!(holds_sat(cadcraft_io::Version::R2010), "2010 keeps the SAT text");
-    assert!(!holds_sat(cadcraft_io::Version::R2018), "2018 comes back without it");
+    assert!(holds_sat(iridium_cad_io::Version::R2010), "2010 keeps the SAT text");
+    assert!(!holds_sat(iridium_cad_io::Version::R2018), "2018 comes back without it");
 }

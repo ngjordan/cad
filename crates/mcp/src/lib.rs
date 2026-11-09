@@ -1,4 +1,4 @@
-//! Iridium CAD MCP server.
+//! Cad MCP server.
 //!
 //! JSON-RPC 2.0 over stdio (newline-delimited), implementing the MCP lifecycle, tools and
 //! resources. Tools map onto the app's control-channel methods, served either by a headless

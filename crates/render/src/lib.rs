@@ -1,4 +1,4 @@
-//! Iridium CAD rendering.
+//! Cad rendering.
 //!
 //! [`build`] turns a drawing space into a [`DisplayList`]: world-space polylines, filled
 //! triangles and points, each tagged with its top-level entity handle and resolved colour.
@@ -25,9 +25,9 @@ mod tolerance;
 pub mod units;
 mod wide;
 
-use cadcraft_color::{Color, Rgb};
-use cadcraft_doc::{Drawing, Entity, EntityKind, Handle, Lineweight, Prim, Space};
-use cadcraft_geom::{Bounds2, Mat3, Polyline, Vec2};
+use iridium_cad_color::{Color, Rgb};
+use iridium_cad_doc::{Drawing, Entity, EntityKind, Handle, Lineweight, Prim, Space};
+use iridium_cad_geom::{Bounds2, Mat3, Polyline, Vec2};
 use pen::Pen;
 
 pub use dim::{ArrowGeom, Arrowhead, DimGeometry, DimText, LineRole, arrowhead, dimension_geometry, dimension_geometry_with, format_linear_value};
@@ -213,7 +213,7 @@ impl Builder<'_> {
         });
     }
     /// Shaped text: strokes as polylines; TrueType glyphs filled (TEXTFILL) or outlined.
-    fn shaped(&mut self, ctx: &Ctx, color: Ink, lw: f32, sh: &cadcraft_fonts::Shaped) {
+    fn shaped(&mut self, ctx: &Ctx, color: Ink, lw: f32, sh: &iridium_cad_fonts::Shaped) {
         for s in &sh.strokes {
             self.polyline(ctx, color, lw, s);
         }
@@ -244,7 +244,7 @@ impl Builder<'_> {
                     && let (Ok(prim), Ok(verts)) = (u32::try_from(at), u32::try_from(len))
                 {
                     let xf = &ctx.xf;
-                    let glyph = cadcraft_fonts::TextGlyph { origin: xf.apply(t.origin), x: xf.apply_vec(t.x), y: xf.apply_vec(t.y), ..t.clone() };
+                    let glyph = iridium_cad_fonts::TextGlyph { origin: xf.apply(t.origin), x: xf.apply_vec(t.x), y: xf.apply_vec(t.y), ..t.clone() };
                     let bounds = self.list.prims.get(at).map(|p| Bounds2::from_points(self.list.points(p).iter().copied())).unwrap_or(Bounds2::EMPTY);
                     self.list.texts.push(PlotText { prim, verts, bounds, glyph });
                 }

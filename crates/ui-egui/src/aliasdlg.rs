@@ -52,10 +52,10 @@ fn current(app: &mut CadApp) -> (BTreeMap<String, String>, Option<String>) {
 /// it does when typed. Aliases that are also command names never reach their command and are left out.
 fn built_in() -> BTreeMap<String, String> {
     let mut m = BTreeMap::new();
-    for c in cadcraft_engine::command_specs() {
+    for c in iridium_cad_engine::command_specs() {
         for a in c.aliases {
             let a = a.to_ascii_lowercase();
-            if cadcraft_engine::find_command(&a).is_none() {
+            if iridium_cad_engine::find_command(&a).is_none() {
                 m.entry(a).or_insert_with(|| c.id.to_string());
             }
         }
@@ -82,11 +82,11 @@ fn check(form: &Form, user: &BTreeMap<String, String>) -> Result<(String, String
     if form.alias.trim().is_empty() {
         return Err(crate::tl!("Type an alias name.").into());
     }
-    let name = cadcraft_engine::cmd::file::alias_name(&form.alias)?;
+    let name = iridium_cad_engine::cmd::file::alias_name(&form.alias)?;
     if form.command.trim().trim_start_matches('*').trim().is_empty() {
         return Err(crate::tl!("Choose the command the alias starts.").into());
     }
-    let Some(id) = cadcraft_engine::cmd::file::command_id(&form.command) else {
+    let Some(id) = iridium_cad_engine::cmd::file::command_id(&form.command) else {
         return Err(crate::tf!("{command} is an unknown command.", command = form.command.trim().to_ascii_uppercase()));
     };
     let renamed_from = form.editing.as_ref().filter(|old| **old != name);
@@ -94,8 +94,8 @@ fn check(form: &Form, user: &BTreeMap<String, String>) -> Result<(String, String
         return Err(crate::tf!("{alias} is already defined; select it and use Edit.", alias = name.to_ascii_uppercase()));
     }
     let after = user.len().saturating_add(usize::from(!user.contains_key(&name))).saturating_sub(usize::from(renamed_from.is_some()));
-    if after > cadcraft_engine::cmd::file::MAX_ALIASES {
-        return Err(crate::tf!("More than {n} aliases.", n = cadcraft_engine::cmd::file::MAX_ALIASES));
+    if after > iridium_cad_engine::cmd::file::MAX_ALIASES {
+        return Err(crate::tf!("More than {n} aliases.", n = iridium_cad_engine::cmd::file::MAX_ALIASES));
     }
     Ok((name, id))
 }
@@ -236,9 +236,9 @@ pub fn dialog(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
                 });
                 // A few commands starting with what was typed, to pick from.
                 let typed = form.command.trim().trim_start_matches('*').to_ascii_lowercase();
-                if !typed.is_empty() && cadcraft_engine::find_command(&typed).is_none() {
+                if !typed.is_empty() && iridium_cad_engine::find_command(&typed).is_none() {
                     ui.horizontal_wrapped(|ui| {
-                        for c in cadcraft_engine::command_specs().iter().filter(|c| c.id.starts_with(&typed)).take(8) {
+                        for c in iridium_cad_engine::command_specs().iter().filter(|c| c.id.starts_with(&typed)).take(8) {
                             if ui.small_button(c.id.to_ascii_uppercase()).clicked() {
                                 form.command = c.id.to_ascii_uppercase();
                             }

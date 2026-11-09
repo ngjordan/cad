@@ -9,7 +9,7 @@
 
 use std::borrow::Cow;
 
-use cadcraft_geom::Mat3;
+use iridium_cad_geom::Mat3;
 
 use crate::{Drawing, Entity, Handle, Space};
 

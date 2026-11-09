@@ -4,9 +4,9 @@
 
 use std::io::Cursor;
 
-use cadcraft_doc::{Common, Drawing, EntityKind, Layout, Line, Space};
-use cadcraft_geom::Vec3;
-use cadcraft_io::{SaveOptions, Version, read, write_with};
+use iridium_cad_doc::{Common, Drawing, EntityKind, Layout, Line, Space};
+use iridium_cad_geom::Vec3;
+use iridium_cad_io::{SaveOptions, Version, read, write_with};
 
 fn three_sheets() -> Drawing {
     let mut d = Drawing::new_metric();

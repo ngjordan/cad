@@ -5,7 +5,7 @@
 //! shadow built-in tables of the same name. Editing a built-in table stores an edited copy in
 //! the drawing.
 
-use cadcraft_doc::{Drawing, PlotStyle, PlotStyleKind, PlotStyleTable};
+use iridium_cad_doc::{Drawing, PlotStyle, PlotStyleKind, PlotStyleTable};
 use serde_json::{Value, json};
 
 use super::super::targets;
@@ -32,11 +32,11 @@ pub fn specs() -> Vec<CommandSpec> {
 /// every named table the drawing can use.
 fn named_styles(d: &Drawing) -> Vec<String> {
     let mut used: Vec<PlotStyleTable> =
-        d.layouts.iter().filter_map(|l| cadcraft_doc::plot_style_table(d, &l.page.plot_style_table)).filter(|t| !t.is_color_dependent()).collect();
+        d.layouts.iter().filter_map(|l| iridium_cad_doc::plot_style_table(d, &l.page.plot_style_table)).filter(|t| !t.is_color_dependent()).collect();
     if used.is_empty() {
-        used = cadcraft_doc::plot_style_table_names(d)
+        used = iridium_cad_doc::plot_style_table_names(d)
             .iter()
-            .filter_map(|n| cadcraft_doc::plot_style_table(d, n))
+            .filter_map(|n| iridium_cad_doc::plot_style_table(d, n))
             .filter(|t| !t.is_color_dependent())
             .collect();
     }
@@ -112,7 +112,7 @@ fn table_name(cmd: &str, p: &Value) -> Result<String> {
 
 /// The table `name` as the drawing sees it.
 fn find_table(cmd: &str, d: &Drawing, name: &str) -> Result<PlotStyleTable> {
-    cadcraft_doc::plot_style_table(d, name).ok_or_else(|| bad(cmd, format!("no plot style table `{name}`")))
+    iridium_cad_doc::plot_style_table(d, name).ok_or_else(|| bad(cmd, format!("no plot style table `{name}`")))
 }
 
 /// Store `t` in the drawing, replacing a table of the same name.
@@ -138,7 +138,7 @@ fn edit_style(cmd: &str, st: &mut PlotStyle, v: &Value) -> Result<()> {
         st.color = match c {
             None => None,
             Some(h) => {
-                Some(cadcraft_color::Rgb::parse_hex(h.trim_start_matches('#')).ok_or_else(|| bad(cmd, "`color` must be \"#rrggbb\" or null"))?)
+                Some(iridium_cad_color::Rgb::parse_hex(h.trim_start_matches('#')).ok_or_else(|| bad(cmd, "`color` must be \"#rrggbb\" or null"))?)
             }
         };
     }
@@ -193,9 +193,9 @@ fn run_stylesmanager(s: &mut Session, p: &Value) -> Result<Value> {
     match action.as_str() {
         "list" => {
             let d = s.doc()?;
-            let tables: Vec<Value> = cadcraft_doc::plot_style_table_names(d)
+            let tables: Vec<Value> = iridium_cad_doc::plot_style_table_names(d)
                 .iter()
-                .filter_map(|n| cadcraft_doc::plot_style_table(d, n))
+                .filter_map(|n| iridium_cad_doc::plot_style_table(d, n))
                 .map(|t| table_summary(d, &t))
                 .collect();
             Ok(json!({ "tables": tables }))
@@ -255,7 +255,7 @@ fn run_stylesmanager(s: &mut Session, p: &Value) -> Result<Value> {
                 if t.is_color_dependent() {
                     return Err(bad(cmd, "a colour-dependent table always has 255 styles"));
                 }
-                if rm.trim().eq_ignore_ascii_case(cadcraft_doc::NORMAL_STYLE) {
+                if rm.trim().eq_ignore_ascii_case(iridium_cad_doc::NORMAL_STYLE) {
                     return Err(bad(cmd, "the Normal style can't be removed"));
                 }
                 let before = t.styles.len();
@@ -270,7 +270,7 @@ fn run_stylesmanager(s: &mut Session, p: &Value) -> Result<Value> {
                 let idx = match t.styles.iter().position(|x| x.name.eq_ignore_ascii_case(sname)) {
                     Some(i) => i,
                     None if t.kind == PlotStyleKind::Named => {
-                        if t.styles.len() >= cadcraft_doc::MAX_NAMED_STYLES {
+                        if t.styles.len() >= iridium_cad_doc::MAX_NAMED_STYLES {
                             return Err(bad(cmd, "the table has too many styles"));
                         }
                         t.styles.push(PlotStyle::object(&sname.chars().take(255).collect::<String>()));
@@ -304,7 +304,7 @@ fn run_stylesmanager(s: &mut Session, p: &Value) -> Result<Value> {
                     #[cfg(not(target_arch = "wasm32"))]
                     {
                         let meta = std::fs::metadata(_path).map_err(|e| bad(cmd, format!("{_path}: {e}")))?;
-                        if meta.len() > cadcraft_doc::MAX_TABLE_FILE as u64 {
+                        if meta.len() > iridium_cad_doc::MAX_TABLE_FILE as u64 {
                             return Err(bad(cmd, format!("{_path}: the plot style table file is too large")));
                         }
                         std::fs::read_to_string(_path).map_err(|e| bad(cmd, format!("{_path}: {e}")))?

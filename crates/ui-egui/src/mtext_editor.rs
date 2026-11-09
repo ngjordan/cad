@@ -2,13 +2,13 @@
 //! the text's location and width with a formatting toolbar (font, height, bold, italic,
 //! underline, overline, colour, alignment, lists, tabs) and a ruler for the paragraph's indents
 //! and tab stops. The text and its formats live in the engine's
-//! [`cadcraft_engine::mtext_edit::Formatted`]; this file only draws and forwards edits.
+//! [`iridium_cad_engine::mtext_edit::Formatted`]; this file only draws and forwards edits.
 
 use std::sync::Arc;
 
-use cadcraft_engine::mtext_edit::{CharFmt, Flag, Formatted, ListStyle, MTextColor, ParaAlign, TabKind};
 use egui::text::{CCursor, CCursorRange, LayoutJob};
 use egui::{Align2, Color32, FontId, Rect, RichText, Sense, Shape, Stroke, TextFormat, pos2, vec2};
+use iridium_cad_engine::mtext_edit::{CharFmt, Flag, Formatted, ListStyle, MTextColor, ParaAlign, TabKind};
 
 use crate::CadApp;
 use crate::theme::Tokens;
@@ -26,7 +26,7 @@ const SNAP: f64 = 0.25;
 /// Keep the actual diameter character in editable text even without optional fonts.
 /// This original circle-and-slash rasterizer is a last fallback, after installed fonts.
 pub(crate) fn install_diameter_glyph(ctx: &egui::Context) {
-    ctx.add_glyph_rasterizer(egui::GlyphRasterizer::new("cadcraft::diameter", |request| {
+    ctx.add_glyph_rasterizer(egui::GlyphRasterizer::new("iridium_cad::diameter", |request| {
         if request.cluster != "⌀" || !request.font_size_px.is_finite() || !(1.0..=1024.0).contains(&request.font_size_px) {
             return None;
         }
@@ -85,8 +85,8 @@ fn edit_id() -> egui::Id {
 /// The ACI index or true colour as a screen colour.
 fn color32(c: MTextColor) -> Color32 {
     let rgb = match c {
-        MTextColor::Aci(v) => cadcraft_color::aci_rgb(u8::try_from(v).unwrap_or(7)),
-        MTextColor::Rgb(v) => cadcraft_color::Rgb((v >> 16) as u8, (v >> 8) as u8, v as u8),
+        MTextColor::Aci(v) => iridium_cad_color::aci_rgb(u8::try_from(v).unwrap_or(7)),
+        MTextColor::Rgb(v) => iridium_cad_color::Rgb((v >> 16) as u8, (v >> 8) as u8, v as u8),
     };
     Color32::from_rgb(rgb.0, rgb.1, rgb.2)
 }
@@ -118,7 +118,7 @@ pub fn show(app: &mut CadApp, ctx: &egui::Context) {
     let code = usize::from(mt.attach.clamp(1, 9) - 1);
     let (col, row) = ((code % 3) as f64, (code / 3) as f64);
     let ww = f64::from(width) / scale;
-    let corner = cadcraft_geom::Vec2::new(mt.insert.x - col * ww / 2.0, mt.insert.y + row * base_h * 2.0);
+    let corner = iridium_cad_geom::Vec2::new(mt.insert.x - col * ww / 2.0, mt.insert.y + row * base_h * 2.0);
     let at = app.canvas.xf.map_or(rect.center(), |x| x.to_screen(corner));
     let max_x = (rect.right() - width - 8.0).max(rect.left());
     let pos = pos2(at.x.clamp(rect.left(), max_x), at.y.clamp(rect.top() + st.top, (rect.bottom() - 120.0).max(rect.top() + st.top)));
@@ -159,10 +159,10 @@ pub fn show(app: &mut CadApp, ctx: &egui::Context) {
             ctx.data_mut(|d| d.remove::<State>(state_id()));
             // The editor holds the whole contents: one input, then Enter ends MTEXT's text entry.
             if !st.fmt.is_empty() {
-                let _ = app.session.input(cadcraft_engine::Input::Text(st.fmt.to_contents()));
+                let _ = app.session.input(iridium_cad_engine::Input::Text(st.fmt.to_contents()));
             }
             if app.session.running.as_ref().is_some_and(|r| r.id == "mtext") {
-                let _ = app.session.input(cadcraft_engine::Input::Enter);
+                let _ = app.session.input(iridium_cad_engine::Input::Enter);
             }
         }
         Done::Cancel => {
@@ -564,7 +564,7 @@ fn text_box(ui: &mut egui::Ui, st: &mut State, base_h: f64, px: f32, width: f32,
         .desired_rows(5)
         .margin(egui::Margin::symmetric(4, 4))
         .lock_focus(true)
-        .char_limit(cadcraft_engine::mtext_edit::MAX_CHARS)
+        .char_limit(iridium_cad_engine::mtext_edit::MAX_CHARS)
         .layouter(&mut layouter)
         .show(ui);
     out.response.response.clone().accessible_name(crate::tl!("Text"));
@@ -593,10 +593,10 @@ fn text_box(ui: &mut egui::Ui, st: &mut State, base_h: f64, px: f32, width: f32,
 #[cfg(test)]
 mod tests {
     use super::*;
-    use cadcraft_engine::Session;
     use egui::accesskit::Role;
     use egui_kittest::Harness;
     use egui_kittest::kittest::{NodeT, Queryable};
+    use iridium_cad_engine::Session;
 
     use crate::Services;
 
@@ -697,8 +697,8 @@ mod tests {
         assert!(ctx.data_mut(|d| d.get_temp::<State>(state_id())).is_none());
         app.start("mtext");
         assert!(app.session.editing_mtext().is_none(), "no box yet");
-        app.session.input(cadcraft_engine::Input::Point(cadcraft_geom::Vec2::new(1.0, 1.0))).unwrap();
-        app.session.input(cadcraft_engine::Input::Point(cadcraft_geom::Vec2::new(6.0, 0.0))).unwrap();
+        app.session.input(iridium_cad_engine::Input::Point(iridium_cad_geom::Vec2::new(1.0, 1.0))).unwrap();
+        app.session.input(iridium_cad_engine::Input::Point(iridium_cad_geom::Vec2::new(6.0, 0.0))).unwrap();
         let m = app.session.editing_mtext().expect("box known");
         assert!((m.width - 5.0).abs() < 1e-9, "{}", m.width);
         frame(&mut app);
@@ -706,10 +706,10 @@ mod tests {
         st.fmt.set_text("hello", &CharFmt::default());
         st.fmt.toggle(0..5, Flag::Bold);
         let contents = st.fmt.to_contents();
-        app.session.input(cadcraft_engine::Input::Text(contents.clone())).unwrap();
-        app.session.input(cadcraft_engine::Input::Enter).unwrap();
+        app.session.input(iridium_cad_engine::Input::Text(contents.clone())).unwrap();
+        app.session.input(iridium_cad_engine::Input::Enter).unwrap();
         let d = app.session.doc().unwrap();
-        let found = d.model.iter().any(|e| matches!(&e.kind, cadcraft_engine::doc::EntityKind::MText(m) if m.contents == contents));
+        let found = d.model.iter().any(|e| matches!(&e.kind, iridium_cad_engine::doc::EntityKind::MText(m) if m.contents == contents));
         assert!(found, "{contents}");
     }
 }

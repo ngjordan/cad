@@ -1,16 +1,16 @@
-# Customizing and automating Iridium CAD
+# Customizing and automating Cad
 
-What you can use today to automate Iridium CAD or bring over add-ons written for other CAD programs,
+What you can use today to automate Cad or bring over add-ons written for other CAD programs,
 and what is not there yet.
 
-| You have | In Iridium CAD | More |
+| You have | In Cad | More |
 |---|---|---|
 | LISP routines (`.lsp`) | Run with APPLOAD or `(load "name")`. The core language, `command`, entity lists, selection sets, `get…` input and `c:` commands work. | [autolisp.md](autolisp.md) |
 | Startup LISP (`acad.lsp`, `acaddoc.lsp`) | Loaded from the support folder at startup and for each drawing. | [autolisp.md](autolisp.md#at-startup) |
-| Scripts (`.scr`) | SCRIPT (Tools > Run Script...), `cadcraft-cli run --script-file`, and script text over MCP and the control channel. | below |
+| Scripts (`.scr`) | SCRIPT (Tools > Run Script...), `iridium-cad-cli run --script-file`, and script text over MCP and the control channel. | below |
 | Command aliases (`.pgp`) | ALIASEDIT `{file}` loads an alias file for the session; REINIT reads it again. | below |
 | Compiled plug-ins (C++, .NET) | Not supported. A plug-in API is planned, for plug-ins written in Rust and compiled to WebAssembly. | [gaps.md](gaps.md) (E4) |
-| Programs that drive the CAD program from outside | The JSON control channel, the MCP server and `cadcraft-cli`. Any language that can open a TCP socket or start a process can use them. | below |
+| Programs that drive the CAD program from outside | The JSON control channel, the MCP server and `iridium-cad-cli`. Any language that can open a TCP socket or start a process can use them. | below |
 
 ## LISP routines
 
@@ -29,7 +29,7 @@ A `.scr` file is what you would type at the command line, one line at a time. Ru
 in the app, or headless:
 
 ```sh
-cadcraft-cli run drawing.dxf --script-file setup.scr --save out.dxf
+iridium-cad-cli run drawing.dxf --script-file setup.scr --save out.dxf
 ```
 
 ## Command aliases
@@ -38,12 +38,12 @@ ALIASEDIT reads a `.pgp` alias file (`ALIAS, *COMMAND` lines) and adds its alias
 the session. Lines that would start external programs are skipped. From a script or the control
 channel: `aliasedit {"file": "/path/to/aliases.pgp"}`.
 
-## Driving Iridium CAD from another program
+## Driving Cad from another program
 
-Every command has a JSON form that runs without dialogs. `cadcraft-cli commands [FILTER]` prints
+Every command has a JSON form that runs without dialogs. `iridium-cad-cli commands [FILTER]` prints
 the catalog: each command's id and its parameters.
 
-- **Headless batch jobs:** `cadcraft-cli run FILE --cmd 'id {json}' --save OUT --export OUT.png`.
+- **Headless batch jobs:** `iridium-cad-cli run FILE --cmd 'id {json}' --save OUT --export OUT.png`.
   A `--cmd` parameter value of exactly `{last}` is replaced with the last object handle an earlier
   `--cmd` in the same run returned, so `viewport.set {"handle":"{last}","scale":1}` can follow
   `mview`. Every other value is passed unchanged.
@@ -54,4 +54,4 @@ the catalog: each command's id and its parameters.
   printf '%s\n' '{"id":1,"method":"cmdline.input","params":{"text":"circle 0,0 5"}}' | nc -w 2 127.0.0.1 7979
   ```
 
-- **AI agents:** `cadcraft-cli mcp`, headless or connected to the app. See [mcp.md](mcp.md).
+- **AI agents:** `iridium-cad-cli mcp`, headless or connected to the app. See [mcp.md](mcp.md).

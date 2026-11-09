@@ -1,11 +1,11 @@
 //! Fast drafting: every click on the canvas places a point, however fast it comes (#815).
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{Drawing, EntityKind, Space};
-use cadcraft_engine::geom::Vec2;
-use cadcraft_ui_egui::{CadApp, Services};
 use egui::{Event, Modifiers, PointerButton, Pos2, vec2};
 use egui_kittest::Harness;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{Drawing, EntityKind, Space};
+use iridium_cad_engine::geom::Vec2;
+use iridium_cad_ui_egui::{CadApp, Services};
 use serde_json::json;
 
 fn harness() -> Harness<'static, CadApp> {

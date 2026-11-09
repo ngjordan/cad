@@ -1,6 +1,6 @@
 [package]
-name = "cadcraft-color"
-description = "Iridium CAD colour: AutoCAD Color Index palette, true colour, ByLayer/ByBlock"
+name = "iridium-cad-color"
+description = "Cad colour: AutoCAD Color Index palette, true colour, ByLayer/ByBlock"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

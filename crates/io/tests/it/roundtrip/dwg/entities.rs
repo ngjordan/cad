@@ -2,9 +2,9 @@
 //! must not disable unrelated TEXT or Common tests. Pending cases assert the original model,
 //! never today's lossy output. Only confirmed failures receive an explicit ignore reason.
 
-use cadcraft_color::{Color, Rgb};
-use cadcraft_doc::{Common, EntityKind, Transparency};
-use cadcraft_io::Version;
+use iridium_cad_color::{Color, Rgb};
+use iridium_cad_doc::{Common, EntityKind, Transparency};
+use iridium_cad_io::Version;
 
 use super::super::cases;
 use super::{check, check_version};

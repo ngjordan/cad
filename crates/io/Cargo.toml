@@ -1,6 +1,6 @@
 [package]
-name = "cadcraft-io"
-description = "Iridium CAD file formats: DXF read/write mapping, SVG, PNG and PDF export"
+name = "iridium-cad-io"
+description = "Cad file formats: DXF read/write mapping, SVG, PNG and PDF export"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -9,13 +9,13 @@ license.workspace = true
 workspace = true
 
 [dependencies]
-cadcraft-geom = { workspace = true }
-cadcraft-color = { workspace = true }
-cadcraft-doc = { workspace = true }
-cadcraft-dxf = { workspace = true }
-cadcraft-dwg = { workspace = true }
-cadcraft-render = { workspace = true }
-cadcraft-fonts = { workspace = true }
+iridium-cad-geom = { workspace = true }
+iridium-cad-color = { workspace = true }
+iridium-cad-doc = { workspace = true }
+iridium-cad-dxf = { workspace = true }
+iridium-cad-dwg = { workspace = true }
+iridium-cad-render = { workspace = true }
+iridium-cad-fonts = { workspace = true }
 thiserror = { workspace = true }
 serde_json = { workspace = true }
 serde = { workspace = true }
@@ -24,7 +24,7 @@ craft-pdf = { workspace = true, features = ["write"] }
 quick-xml = { workspace = true }
 
 [dev-dependencies]
-# Reads Iridium CAD's DWG output as written (tests only; the same version as cadcraft-dwg's).
+# Reads Cad's DWG output as written (tests only; the same version as iridium-cad-dwg's).
 acadrust = "0.6.6"
 tiny-skia = { workspace = true }
 # Reads plotted PDFs back.

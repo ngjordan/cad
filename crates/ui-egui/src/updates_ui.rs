@@ -53,7 +53,7 @@ pub fn tick(app: &mut CadApp, ctx: &egui::Context) {
     }
     rt.updater.tick(ctx);
     let outcome = match rt.updater.status() {
-        Status::UpToDate => Some(crate::tl!("Iridium CAD is up to date.")),
+        Status::UpToDate => Some(crate::tl!("Cad is up to date.")),
         Status::Failed(_) => Some(crate::tl!("Could not check for updates.")),
         Status::Idle | Status::Checking => None,
     };

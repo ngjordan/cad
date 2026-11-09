@@ -1,14 +1,14 @@
 //! The External References palette (#525): XREF opens it; its rows and buttons act through the
 //! engine's -XREF commands.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::cmd::file::{IoHooks, set_io};
-use cadcraft_engine::doc::geom::Vec3;
-use cadcraft_engine::doc::{Drawing, Entity, EntityKind, Handle, Layer, Line, XrefStatus};
-use cadcraft_ui_egui::{CadApp, Services, docking::Panel};
 use egui::vec2;
 use egui_kittest::Harness;
 use egui_kittest::kittest::Queryable;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::cmd::file::{IoHooks, set_io};
+use iridium_cad_engine::doc::geom::Vec3;
+use iridium_cad_engine::doc::{Drawing, Entity, EntityKind, Handle, Layer, Line, XrefStatus};
+use iridium_cad_ui_egui::{CadApp, Services, docking::Panel};
 use serde_json::json;
 
 #[path = "support/temp_dir.rs"]

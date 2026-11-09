@@ -1,8 +1,8 @@
-# Target-app parity: Iridium CAD vs AutoCAD 2027
+# Target-app parity: Cad vs AutoCAD 2027
 
 > **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-24 · **Change:** minor (COMPAREEXPORT; numbers not re-measured) · **Target:** Autodesk AutoCAD 2027
 
-The authoritative assessment of how close Iridium CAD is to AutoCAD, and how much Opus 5.5 work
+The authoritative assessment of how close Cad is to AutoCAD, and how much Opus 5.5 work
 remains. [ROADMAP.md](../ROADMAP.md) summarises it, [gaps.md](gaps.md) lists every shortfall,
 and the deep checklists are [geometry-parity.md](geometry-parity.md),
 [ui-parity.md](ui-parity.md), [file-format-parity.md](file-format-parity.md),
@@ -54,7 +54,7 @@ mainstream and essentials numbers use multiplicative discounts.
   the running AutoCAD 2027 for Mac) against the command registry.
 - **Behaviour reference:** `plan/autocad/01-observed-ui.md` and local reference screenshots (black
   box, never committed); Autodesk's public command reference.
-- **Iridium CAD:** the source on `main` at bd2412f (2026-10-10/11), read by four agents in
+- **Cad:** the source on `main` at bd2412f (2026-10-10/11), read by four agents in
   parallel: command-by-command option audits (prompts that print "not available yet"), the
   geometry kernel, DXF/DWG paths, interaction code. Plus the 88 GitHub issues and 47 open PRs.
   Disk was nearly full, so nothing was built or run: `cargo xtask parity` was reproduced by a
@@ -94,8 +94,8 @@ area here; it is counted once, as the file-exchange discount.
 | Exchanging files with AutoCAD users | ×0.80 | saves drop unmodelled entities, images, layer states, multileader styles, true colours and more (#79, #201, #204, #208, #209, #213, #223); never checked in AutoCAD; a 10 MB DWG failed (#57) |
 
 **Mainstream practitioner ≈ 45.3% × 0.90 × 0.85 × 0.80 ≈ 28%** (estimated). It is lower than
-ready for real work (≈ 38%) for Iridium CAD, unlike most apps: the full number credits additively
-what Iridium CAD does well beyond 2D drafting (platforms 75%, performance 60%, hardware 45%), while
+ready for real work (≈ 38%) for Cad, unlike most apps: the full number credits additively
+what Cad does well beyond 2D drafting (platforms 75%, performance 60%, hardware 45%), while
 here the three blockers a working drafter hits every day multiply.
 
 **User evidence** (GitHub issues, PRs and comments, excluding maintainers, counted 2026-10-10):
@@ -182,7 +182,7 @@ file compatibility dominate.
 
 ## Remaining effort and how it was calibrated
 
-**Calibration.** The Claude Code transcripts of the session that built Iridium CAD show its whole
+**Calibration.** The Claude Code transcripts of the session that built Cad show its whole
 first version (about 51,000 lines, 290 commands, 47% menu breadth) took **about 11.5 Opus 5.5
 agent-hours**: 6.9 hours of the lead agent (2026-10-07 02:16–09:08 UTC) plus about 4.6 hours of
 eight sub-agents, some in parallel. (Git commit dates were rewritten earlier than that session

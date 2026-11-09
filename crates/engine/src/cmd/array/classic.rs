@@ -14,8 +14,8 @@
 //!   object selected last turns about the centre (a polyline's first vertex, an arc's centre), or
 //!   as the Base point does.
 
-use cadcraft_doc::Handle;
-use cadcraft_geom::{Mat3, Vec2};
+use iridium_cad_doc::Handle;
+use iridium_cad_geom::{Mat3, Vec2};
 use serde_json::{Value, json};
 
 use super::super::machines::{SelOutcome, SelectPhase, number};

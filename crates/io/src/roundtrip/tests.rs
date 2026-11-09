@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-use cadcraft_color::Color;
-use cadcraft_doc::foreign::{ForeignExtra, ForeignObject};
-use cadcraft_doc::*;
-use cadcraft_geom::{PolyVertex, Vec2, Vec3};
+use iridium_cad_color::Color;
+use iridium_cad_doc::foreign::{ForeignExtra, ForeignObject};
+use iridium_cad_doc::*;
+use iridium_cad_geom::{PolyVertex, Vec2, Vec3};
 
 use super::*;
 
@@ -105,7 +105,7 @@ fn geometry_is_compared_by_handle_within_the_tolerance() {
 fn angles_a_whole_turn_apart_are_the_same() {
     let mut a = drawing();
     let h = a
-        .add(&Space::Model, Common::default(), EntityKind::Arc(cadcraft_doc::Arc { center: Vec3::ZERO, radius: 2.0, start: -0.5, end: 1.0 }))
+        .add(&Space::Model, Common::default(), EntityKind::Arc(iridium_cad_doc::Arc { center: Vec3::ZERO, radius: 2.0, start: -0.5, end: 1.0 }))
         .unwrap();
     let mut b = a.clone();
     b.modify_entity(h, |e| {
@@ -387,7 +387,7 @@ fn read_census_reports_entities_the_reader_left_out() {
     assert!(compare_census(&census_of(&d), &d, &Options::default()).is_empty());
 }
 
-/// The round trips of a synthetic drawing through Iridium CAD's own DXF and DWG writers: whatever
+/// The round trips of a synthetic drawing through Cad's own DXF and DWG writers: whatever
 /// they lose shows in the comparison. Plain geometry, layers, xdata and unmodelled objects must
 /// come back from DXF.
 #[cfg(not(target_arch = "wasm32"))]
@@ -444,13 +444,13 @@ fn report_renders_as_markdown_and_json() {
     let report = CorpusReport {
         corpus: "corpus".into(),
         generated: "2026-10-21 09:30 UTC".into(),
-        cadcraft_version: "0".into(),
+        iridium_cad_version: "0".into(),
         abs_tol: 1e-6,
         rel_tol: 1e-9,
         files: vec![check_bytes(&dxf, "synthetic/a.dxf", &opts), check_bytes(b"AC1032 broken", "dwg/broken.dwg", &opts)],
     };
     let md = report.to_markdown();
-    assert!(md.starts_with("# Iridium CAD round-trip report"), "{md}");
+    assert!(md.starts_with("# Cad round-trip report"), "{md}");
     assert!(md.contains("| `synthetic/a.dxf` | DXF AC1032 |"), "{md}");
     assert!(md.contains("dxf → dxf") && md.contains("dxf → dwg"), "{md}");
     assert!(md.contains("| `dwg/broken.dwg` | DWG AC1032 |") && md.contains("**failed**"), "{md}");
@@ -472,7 +472,7 @@ fn a_folder_it_cannot_read_is_reported_not_skipped() {
 #[test]
 fn corpus_files_walks_folders_and_skips_the_report() {
     use corpus::corpus_files;
-    let dir = std::env::temp_dir().join(format!("cadcraft-corpus-walk-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("iridium-cad-corpus-walk-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     for p in ["dxf/a.DXF", "dwg/b.dwg", "dwg/sub/c.dwg", "notes.txt", "report/a.roundtrip.dxf", ".git/x.dxf"] {
         let path = dir.join(p);
@@ -485,25 +485,25 @@ fn corpus_files_walks_folders_and_skips_the_report() {
     let _ = std::fs::remove_dir_all(&dir);
 }
 
-/// The real-file corpus: set `CADCRAFT_CORPUS_DIR` to a folder of DXF/DWG files (a checkout of
-/// `storytold/cadcraft-corpus`) to open, save and reopen each one and write `report.md` and
-/// `report.json` to `CADCRAFT_CORPUS_REPORT` (default: the corpus folder's `report`). Skipped
+/// The real-file corpus: set `IRIDIUM_CAD_CORPUS_DIR` to a folder of DXF/DWG files (a checkout of
+/// `ngjordan/iridium-cad-corpus`) to open, save and reopen each one and write `report.md` and
+/// `report.json` to `IRIDIUM_CAD_CORPUS_REPORT` (default: the corpus folder's `report`). Skipped
 /// when the variable is unset, so CI passes without the corpus. It reports, it doesn't fail on
-/// differences; set `CADCRAFT_CORPUS_STRICT=1` to fail when a file doesn't open, save or reopen,
+/// differences; set `IRIDIUM_CAD_CORPUS_STRICT=1` to fail when a file doesn't open, save or reopen,
 /// or when a writer leaves records out of a saved file ([`corpus::CorpusReport::strict_failures`]).
 #[cfg(not(target_arch = "wasm32"))]
 #[test]
 fn corpus_round_trip_report() {
-    let Some(dir) = std::env::var_os("CADCRAFT_CORPUS_DIR").map(std::path::PathBuf::from) else {
-        eprintln!("CADCRAFT_CORPUS_DIR is not set: corpus round trip skipped");
+    let Some(dir) = std::env::var_os("IRIDIUM_CAD_CORPUS_DIR").map(std::path::PathBuf::from) else {
+        eprintln!("IRIDIUM_CAD_CORPUS_DIR is not set: corpus round trip skipped");
         return;
     };
-    let out = std::env::var_os("CADCRAFT_CORPUS_REPORT").map_or_else(|| dir.join("report"), std::path::PathBuf::from);
+    let out = std::env::var_os("IRIDIUM_CAD_CORPUS_REPORT").map_or_else(|| dir.join("report"), std::path::PathBuf::from);
     let files = corpus::corpus_files(&dir, std::slice::from_ref(&out));
     let report = corpus::run(&dir, &files, &corpus::CorpusOptions::default(), &mut |i, n, rel| eprintln!("[{}/{n}] {rel}", i + 1));
     let (md, json) = report.write(&out).unwrap();
     eprintln!("corpus report: {} and {}", md.display(), json.display());
-    if std::env::var("CADCRAFT_CORPUS_STRICT").is_ok_and(|v| v == "1") {
+    if std::env::var("IRIDIUM_CAD_CORPUS_STRICT").is_ok_and(|v| v == "1") {
         let failed = report.strict_failures();
         assert!(failed.is_empty(), "corpus failures:\n{}", failed.join("\n"));
     }
@@ -511,7 +511,7 @@ fn corpus_round_trip_report() {
 
 /// A type the DWG writer can't write is reported as lost on save, per type: in the route's
 /// `not_written`, on the lost entity rows, in the Markdown and as a strict failure. A type it
-/// writes (OLE2FRAME, kept by Iridium CAD without modelling it) is none of these.
+/// writes (OLE2FRAME, kept by Cad without modelling it) is none of these.
 #[cfg(not(target_arch = "wasm32"))]
 #[test]
 fn types_the_dwg_writer_cannot_write_are_reported_lost() {

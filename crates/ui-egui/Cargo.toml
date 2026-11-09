@@ -1,6 +1,6 @@
 [package]
-name = "cadcraft-ui-egui"
-description = "Iridium CAD user interface (egui): the swappable front end"
+name = "iridium-cad-ui-egui"
+description = "Cad user interface (egui): the swappable front end"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -11,12 +11,12 @@ workspace = true
 
 [dependencies]
 craft-ui = { workspace = true }
-cadcraft-geom = { workspace = true }
-cadcraft-color = { workspace = true }
-cadcraft-doc = { workspace = true }
-cadcraft-render = { workspace = true }
-cadcraft-engine = { workspace = true }
-cadcraft-fonts = { workspace = true }
+iridium-cad-geom = { workspace = true }
+iridium-cad-color = { workspace = true }
+iridium-cad-doc = { workspace = true }
+iridium-cad-render = { workspace = true }
+iridium-cad-engine = { workspace = true }
+iridium-cad-fonts = { workspace = true }
 craft-window = { workspace = true }
 egui = { workspace = true }
 # GPU canvas paint callback (same egui-wgpu/wgpu eframe uses with its "wgpu" feature).

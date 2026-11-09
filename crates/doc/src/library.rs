@@ -1,6 +1,6 @@
-//! Iridium CAD's own standard libraries: linetypes and hatch patterns.
+//! Cad's own standard libraries: linetypes and hatch patterns.
 //!
-//! These definitions were written for Iridium CAD (CC0 / public domain as part of this codebase).
+//! These definitions were written for Cad (CC0 / public domain as part of this codebase).
 //! The names follow the industry-common names users expect (DASHED, CENTER, ANSI31…); the
 //! dash and spacing values are our own.
 
@@ -40,7 +40,7 @@ pub fn standard_linetypes() -> Vec<Linetype> {
                     text: Some("o".into()),
                     style: Some("Standard".into()),
                     scale: 0.1,
-                    offset: cadcraft_geom::Vec2::new(-0.035, -0.035),
+                    offset: iridium_cad_geom::Vec2::new(-0.035, -0.035),
                     ..DashElement::dash(-0.1)
                 },
                 DashElement::dash(-0.1),

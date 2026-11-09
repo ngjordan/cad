@@ -1,14 +1,14 @@
 //! Independent bridge expectations, not an independent DWG codec. Writer checks inspect native
-//! objects without Iridium CAD's reader; reader fixtures originate in native objects without our
+//! objects without Cad's reader; reader fixtures originate in native objects without our
 //! DXF writer. acadrust still supplies the binary codec in both directions, so these tests do
 //! not establish interoperability with another DWG implementation. All fixtures are synthetic.
 
 use super::super::cases;
 use acadrust::types::Vector3;
 use acadrust::{CadDocument, DwgReader, DwgWriter, DxfVersion, EntityType};
-use cadcraft_doc::{Circle, Common, EntityKind, Line, Text};
-use cadcraft_geom::Vec3;
-use cadcraft_io::{SaveOptions, Version, read, write_with};
+use iridium_cad_doc::{Circle, Common, EntityKind, Line, Text};
+use iridium_cad_geom::Vec3;
+use iridium_cad_io::{SaveOptions, Version, read, write_with};
 use std::io::Cursor;
 
 #[test]

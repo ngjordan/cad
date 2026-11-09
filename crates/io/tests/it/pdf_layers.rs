@@ -2,11 +2,11 @@
 //! optional content groups, `layouts` plots several sheets into one file with page labels, and
 //! linked entities get link annotations. The tests read the written file back.
 
-use cadcraft_color::Color;
-use cadcraft_doc::{Block, Common, Drawing, Entity, EntityKind, Handle, Insert, Layer, Line, Space, Viewport};
-use cadcraft_geom::{Vec2, Vec3};
-use cadcraft_io::pdf::{MAX_PAGES, pdf_sheets};
-use cadcraft_io::{PdfOptions, plot};
+use iridium_cad_color::Color;
+use iridium_cad_doc::{Block, Common, Drawing, Entity, EntityKind, Handle, Insert, Layer, Line, Space, Viewport};
+use iridium_cad_geom::{Vec2, Vec3};
+use iridium_cad_io::pdf::{MAX_PAGES, pdf_sheets};
+use iridium_cad_io::{PdfOptions, plot};
 use serde_json::json;
 
 use crate::pdf_read::{self, Doc};
@@ -182,7 +182,7 @@ fn several_sheets_in_one_file_with_page_labels() {
     assert_eq!(doc2.labels, ["Layout1", "Model"]);
     // Title: the first page's label unless given.
     assert_eq!(doc2.title.as_deref(), Some("Layout1"));
-    assert_eq!((doc2.creator.as_deref(), doc2.producer.as_deref()), (Some("Iridium CAD"), Some("Iridium CAD")));
+    assert_eq!((doc2.creator.as_deref(), doc2.producer.as_deref()), (Some("Cad"), Some("Cad")));
 }
 
 #[test]

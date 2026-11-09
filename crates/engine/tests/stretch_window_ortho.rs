@@ -2,9 +2,9 @@
 //! window keeps its area and catches what it crosses. The same holds for every rectangle picked by
 //! two corners (PLOTWINDOW, MVIEW, -VIEW Window, REVCLOUD Rectangular).
 
-use cadcraft_engine::snap::tracking::CursorQuery;
-use cadcraft_engine::{Input, Session};
-use cadcraft_geom::Vec2;
+use iridium_cad_engine::snap::tracking::CursorQuery;
+use iridium_cad_engine::{Input, Session};
+use iridium_cad_geom::Vec2;
 use serde_json::json;
 
 /// Move the cursor to `raw` at the current prompt, as the canvas does.

@@ -3,12 +3,12 @@
 
 use std::sync::Arc;
 
-use cadcraft_color::Color;
-use cadcraft_doc::{
+use iridium_cad_color::Color;
+use iridium_cad_doc::{
     Common, Drawing, EndStyle, EntityKind, FillStyle, JoinStyle, Line, LwPolyline, PlotStyle, PlotStyleTable, Solid, Space, Viewport,
 };
-use cadcraft_geom::{PolyVertex, Vec2, Vec3};
-use cadcraft_render::{DisplayList, Kind, Options, VIEWPORT_CONTENT, build, build_plot, pen};
+use iridium_cad_geom::{PolyVertex, Vec2, Vec3};
+use iridium_cad_render::{DisplayList, Kind, Options, VIEWPORT_CONTENT, build, build_plot, pen};
 
 /// A colour-dependent table whose colour 1 prints 1.00 mm wide with `style`'s end/join/fill.
 fn table(end: EndStyle, join: JoinStyle, fill: FillStyle) -> Options {

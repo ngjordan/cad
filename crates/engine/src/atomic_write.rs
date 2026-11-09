@@ -148,7 +148,7 @@ fn create_temp(dir: &Path, permissions: Option<&Permissions>) -> io::Result<(Fil
     for _ in 0..MAX_TRIES {
         let seq = SEQ.fetch_add(1, Ordering::Relaxed);
         let nanos = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.subsec_nanos()).unwrap_or(0);
-        let tmp = dir.join(format!(".cadcraft-tmp-{pid}-{seq}-{nanos}"));
+        let tmp = dir.join(format!(".iridium-cad-tmp-{pid}-{seq}-{nanos}"));
         match create_exclusive(&tmp, permissions) {
             Ok(file) => return Ok((file, tmp)),
             Err(e) if e.kind() == io::ErrorKind::AlreadyExists => {
@@ -182,7 +182,7 @@ mod tests {
 
     #[test]
     fn creates_missing_parent_directories() {
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-mkdir-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-mkdir-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         let dest = dir.join("new_folder").join("deeper").join("out.bin");
         std::fs::create_dir_all(&dir).unwrap();
         assert_eq!(missing_folder(&dest), Some(dir.join("new_folder")));
@@ -195,7 +195,7 @@ mod tests {
 
     #[test]
     fn a_folder_that_cannot_be_made_is_named_in_the_error() {
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-nomk-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-nomk-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let blocker = dir.join("a_file");
         std::fs::write(&blocker, b"x").unwrap();
@@ -206,15 +206,19 @@ mod tests {
 
     #[test]
     fn replaces_contents_atomically() {
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let dest = dir.join("out.bin");
         std::fs::write(&dest, b"old").unwrap();
         write_atomic(&dest, b"new bytes").unwrap();
         assert_eq!(std::fs::read(&dest).unwrap(), b"new bytes");
         // No temporary files left behind.
-        let leftovers: Vec<_> =
-            std::fs::read_dir(&dir).unwrap().flatten().map(|e| e.file_name()).filter(|n| n.to_string_lossy().starts_with(".cadcraft-tmp")).collect();
+        let leftovers: Vec<_> = std::fs::read_dir(&dir)
+            .unwrap()
+            .flatten()
+            .map(|e| e.file_name())
+            .filter(|n| n.to_string_lossy().starts_with(".iridium-cad-tmp"))
+            .collect();
         assert!(leftovers.is_empty(), "left temp files: {leftovers:?}");
         std::fs::remove_dir_all(&dir).ok();
     }
@@ -223,7 +227,7 @@ mod tests {
     /// a folder that can't be opened (gone) is no error for the sync itself.
     #[test]
     fn the_folder_is_synced_after_the_rename() {
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-sync-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-sync-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         write_atomic(&dir.join("a.bin"), b"x").unwrap();
         assert_eq!(std::fs::read(dir.join("a.bin")).unwrap(), b"x");
@@ -235,11 +239,11 @@ mod tests {
     #[test]
     fn does_not_follow_a_planted_temp_symlink() {
         use std::os::unix::fs::symlink;
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-sym-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-sym-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let victim = dir.join("victim");
         std::fs::write(&victim, b"precious").unwrap();
-        let planted = dir.join(".cadcraft-tmp-plant");
+        let planted = dir.join(".iridium-cad-tmp-plant");
         symlink(&victim, &planted).unwrap();
         assert_eq!(create_exclusive(&planted, None).unwrap_err().kind(), io::ErrorKind::AlreadyExists);
         let dest = dir.join("drawing.dxf");
@@ -252,7 +256,7 @@ mod tests {
     #[test]
     fn replacement_preserves_private_permissions() {
         use std::os::unix::fs::PermissionsExt;
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-mode-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-mode-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let dest = dir.join("private.adt");
         std::fs::write(&dest, b"old").unwrap();
@@ -266,7 +270,7 @@ mod tests {
     #[test]
     fn symlinked_destination_updates_the_target() {
         use std::os::unix::fs::{PermissionsExt, symlink};
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-link-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-link-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let real = dir.join("real.dxf");
         let link = dir.join("link.dxf");
@@ -284,7 +288,7 @@ mod tests {
     #[test]
     fn dangling_symlink_destination_creates_the_target() {
         use std::os::unix::fs::symlink;
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-dangle-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-dangle-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(dir.join("mnt")).unwrap();
         let real = dir.join("mnt").join("real.dxf");
         let link = dir.join("link.dxf");
@@ -299,7 +303,7 @@ mod tests {
     #[test]
     fn dangling_symlink_with_missing_parent_errors_and_keeps_the_link() {
         use std::os::unix::fs::symlink;
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-nomnt-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-nomnt-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let link = dir.join("link.dxf");
         symlink("missing/real.dxf", &link).unwrap();
@@ -314,7 +318,7 @@ mod tests {
     #[test]
     fn private_temp_is_restricted_from_creation() {
         use std::os::unix::fs::PermissionsExt;
-        let dir = std::env::temp_dir().join(format!("cadcraft-aw-create-mode-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
+        let dir = std::env::temp_dir().join(format!("iridium-cad-aw-create-mode-{}-{}", std::process::id(), SEQ.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir_all(&dir).unwrap();
         let path = dir.join("private-temp");
         let permissions = Permissions::from_mode(0o600);

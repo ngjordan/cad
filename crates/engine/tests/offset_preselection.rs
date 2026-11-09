@@ -2,8 +2,8 @@
 //! selecting it and starting OFFSET used to ask for the object again. Now the preselected object
 //! goes straight to the side prompt; a multiple selection still asks which object to offset.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{EntityKind, Handle};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{EntityKind, Handle};
 use serde_json::json;
 
 /// Every line as ((ax, ay), (bx, by)), sorted by the first y.

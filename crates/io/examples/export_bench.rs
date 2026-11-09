@@ -1,7 +1,7 @@
 //! Export timing on a realistic large drawing: `examples/apartment.dxf` repeated on a grid
 //! (a floor plan of many apartments).
 //!
-//! `cargo run --release -p cadcraft-io --example export_bench -- [FORMAT] [GRID] [RUNS] [OUT_DIR]`
+//! `cargo run --release -p iridium-cad-io --example export_bench -- [FORMAT] [GRID] [RUNS] [OUT_DIR]`
 //!
 //! FORMAT is `png`, `pdf`, `svg`, `dxf` or `all` (default `png`), GRID the apartments per side
 //! (default 10), RUNS the timed runs per format (default 7). Prints the median and minimum wall
@@ -10,12 +10,12 @@
 
 use std::time::{Duration, Instant};
 
-use cadcraft_doc::{Drawing, Space};
-use cadcraft_geom::{Mat3, Vec2};
+use iridium_cad_doc::{Drawing, Space};
+use iridium_cad_geom::{Mat3, Vec2};
 
 fn drawing(grid: usize) -> Drawing {
     let src = include_bytes!("../../../examples/apartment.dxf");
-    let Ok(mut d) = cadcraft_io::read(src, "apartment.dxf") else {
+    let Ok(mut d) = iridium_cad_io::read(src, "apartment.dxf") else {
         eprintln!("apartment.dxf did not read");
         std::process::exit(1);
     };
@@ -56,7 +56,7 @@ fn main() {
         let mut last = Vec::new();
         for _ in 0..runs {
             let t = Instant::now();
-            match cadcraft_io::write(&d, &name) {
+            match iridium_cad_io::write(&d, &name) {
                 Ok(bytes) => {
                     times.push(t.elapsed());
                     last = bytes;

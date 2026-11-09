@@ -10,9 +10,9 @@ The built-in devices come first:
 
 | Device | Output |
 |---|---|
-| `Iridium CAD PDF` | vector PDF |
-| `Iridium CAD PNG` | raster PNG on white paper at the device resolution (300 dpi) |
-| `Iridium CAD SVG` | vector SVG |
+| `Cad PDF` | vector PDF |
+| `Cad PNG` | raster PNG on white paper at the device resolution (300 dpi) |
+| `Cad SVG` | vector SVG |
 
 They offer the standard sizes:
 
@@ -23,16 +23,16 @@ They offer the standard sizes:
 ISO sheets have 5 mm margins. Inch sheets have quarter-inch (6.35 mm) margins. A page setup
 with the device `None` plots to PDF on the page setup's paper, as before.
 
-User devices are files in our own format, kept in the `plotters` folder of the Iridium CAD
+User devices are files in our own format, kept in the `plotters` folder of the Cad
 settings directory:
 
 | System | Folder |
 |---|---|
-| Linux and FreeBSD | `$XDG_CONFIG_HOME/cadcraft/plotters` or `~/.config/cadcraft/plotters` |
-| macOS | `~/Library/Application Support/Iridium CAD/plotters` |
-| Windows | `%APPDATA%\Iridium CAD\plotters` |
+| Linux and FreeBSD | `$XDG_CONFIG_HOME/iridium-cad/plotters` or `~/.config/iridium-cad/plotters` |
+| macOS | `~/Library/Application Support/Cad/plotters` |
+| Windows | `%APPDATA%\Cad\plotters` |
 
-`CADCRAFT_CONFIG_DIR` replaces the settings directory; empty means none (`cadcraft-cli`:
+`IRIDIUM_CAD_CONFIG_DIR` replaces the settings directory; empty means none (`iridium-cad-cli`:
 `--config-dir`, which falls back to the same variable). On the web, devices last for the
 session unless the host provides storage (`cmd::plotters::set_plotter_store`). Binary `.pc3`
 files are not read; we haven't found a public specification of that format.
@@ -43,7 +43,7 @@ files are not read; we haven't found a public specification of that format.
 
 ```json
 {
-  "cadcraftPlotter": 1,
+  "iridium-cadPlotter": 1,
   "name": "Office A3",
   "description": "Raster proofs",
   "output": "png",

@@ -1,4 +1,4 @@
-//! The Iridium CAD drawing database.
+//! The Cad drawing database.
 //!
 //! A [`Drawing`] holds the header variables, symbol tables (layers, linetypes, styles), block
 //! definitions, model space and paper-space layouts. Entity collections are copy-on-write
@@ -23,21 +23,21 @@ mod tables;
 use std::collections::{BTreeMap, BTreeSet};
 
 pub use array::*;
-pub use cadcraft_color as color;
-pub use cadcraft_geom as geom;
 pub use constraint::*;
 pub use entity::*;
 pub use extents::{BlockBoundsCache, MAX_BLOCK_DEPTH, entity_bounds, entity_bounds_cached, extent_bounds, extent_bounds_cached};
 pub use format::Format;
 pub use gdt::*;
 pub use header::{HVal, Header};
+pub use iridium_cad_color as color;
+pub use iridium_cad_geom as geom;
 pub use plotstyle::*;
 pub use plotter::*;
 pub use refedit::{RefEdit, WorkItem};
 pub use store::EntityStore;
 pub use tables::*;
 
-/// File data Iridium CAD doesn't model, kept for saving (#528).
+/// File data Cad doesn't model, kept for saving (#528).
 pub mod dynblock;
 pub mod foreign;
 
@@ -87,7 +87,7 @@ impl Space {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Drawing {
     pub header: Header,
-    /// File data Iridium CAD does not model, written back on save.
+    /// File data Cad does not model, written back on save.
     pub foreign: std::sync::Arc<foreign::Foreign>,
     pub layers: Vec<Layer>,
     pub linetypes: Vec<Linetype>,
@@ -133,7 +133,7 @@ pub struct Drawing {
     /// file), counted by the section they came from. Never written to a file.
     pub skipped_records: BTreeMap<String, usize>,
     /// A save option, set on the copy SAVEAS `portableFonts` writes: the file gets Windows fonts
-    /// for the Linux fonts of text styles, and each style keeps its own in Iridium CAD xdata, so the
+    /// for the Linux fonts of text styles, and each style keeps its own in Cad xdata, so the
     /// drawing reopens with it. Never set on an open drawing.
     pub portable_fonts: bool,
 }
@@ -381,8 +381,8 @@ impl Drawing {
     }
 
     /// Bounds of the entities in a space that count in its extents ([`Drawing::in_extents`]).
-    pub fn extents(&self, space: &Space) -> cadcraft_geom::Bounds2 {
-        let mut b = cadcraft_geom::Bounds2::EMPTY;
+    pub fn extents(&self, space: &Space) -> iridium_cad_geom::Bounds2 {
+        let mut b = iridium_cad_geom::Bounds2::EMPTY;
         // One block-bounds cache for the whole space: every reference to a block reuses its
         // measured contents instead of measuring the definition again.
         let mut cache = BlockBoundsCache::default();

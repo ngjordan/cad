@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Repackage a Iridium CAD Linux tarball as a single-file Flatpak bundle:
+# Repackage a Cad Linux tarball as a single-file Flatpak bundle:
 #
 #   $DIST/iridium-cad-<version>-linux-<arch>.flatpak
 #
@@ -10,13 +10,13 @@
 # Needs flatpak, flatpak-builder and the SVG pixbuf loader (librsvg2-common) for the host's
 # `appstreamcli compose`; the freedesktop runtime and SDK named in the manifest are
 # installed per-user from Flathub. Unless --no-test, the bundle is then installed per-user and
-# `cadcraft-cli --version` is run inside the sandbox as a smoke test.
-# Manifest: packaging/linux/flatpak/ph.iridium.cad.bundle.yml.
+# `iridium-cad-cli --version` is run inside the sandbox as a smoke test.
+# Manifest: packaging/linux/flatpak/ph.cad.bundle.yml.
 set -euo pipefail
 # shellcheck source=../env.sh
 . "$(dirname "${BASH_SOURCE[0]}")/../env.sh"
 HERE="$ROOT/packaging/linux"
-APP_ID=ph.iridium.cad
+APP_ID=ph.cad
 FLATHUB=https://dl.flathub.org/repo/flathub.flatpakrepo
 
 TEST=1
@@ -45,13 +45,13 @@ for tool in flatpak flatpak-builder; do
   command -v "$tool" >/dev/null || { echo "error: $tool not found (apt install flatpak flatpak-builder librsvg2-common)" >&2; exit 1; }
 done
 
-echo "==> Iridium CAD $VERSION Flatpak bundle for $ARCH from $(basename "$TARBALL")"
+echo "==> Cad $VERSION Flatpak bundle for $ARCH from $(basename "$TARBALL")"
 
 WORK="$CARGO_TARGET_DIR/flatpak-bundle"
 rm -rf "$WORK"
 mkdir -p "$WORK/stage"
 tar -xzf "$TARBALL" -C "$WORK/stage" --strip-components=1
-[[ -x "$WORK/stage/bin/cadcraft" ]] || { echo "error: $TARBALL has no bin/cadcraft" >&2; exit 1; }
+[[ -x "$WORK/stage/bin/iridium-cad" ]] || { echo "error: $TARBALL has no bin/iridium-cad" >&2; exit 1; }
 cp "$HERE/flatpak/$APP_ID.bundle.yml" "$WORK/$APP_ID.yml"
 
 flatpak remote-add --user --if-not-exists flathub "$FLATHUB"
@@ -73,7 +73,7 @@ fi
 if [[ "$TEST" = 1 ]]; then
   flatpak install --user -y --noninteractive --reinstall "$OUT"
   flatpak info --user "$APP_ID"
-  flatpak run --command=cadcraft-cli "$APP_ID" --version
+  flatpak run --command=iridium-cad-cli "$APP_ID" --version
   flatpak run --command=sh "$APP_ID" -c 'ls /app/share/applications /app/share/metainfo /app/share/mime/packages /app/share/icons/hicolor/256x256/apps'
 fi
 echo "==> done"

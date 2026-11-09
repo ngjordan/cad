@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Cad
+GenericName=Computer-Aided Design
+Comment=Draft, dimension and plot 2D drawings; open DXF and DWG files
+Exec=iridium-cad %F
+TryExec=iridium-cad
+Icon=ph.cad
+Terminal=false
+StartupNotify=true
+StartupWMClass=ph.cad
+Categories=Graphics;Engineering;VectorGraphics;
+MimeType=image/vnd.dxf;image/vnd.dwg;application/x-dxf;application/acad;
+Keywords=cad;drafting;dxf;dwg;drawing;engineering;architecture;mechanical;

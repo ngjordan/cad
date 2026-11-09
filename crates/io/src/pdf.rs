@@ -14,10 +14,10 @@
 
 use std::fmt::Write as _;
 
-use cadcraft_color::Rgb;
-use cadcraft_doc::{Drawing, Handle, PageSetup, Space};
-use cadcraft_geom::{Bounds2, Vec2};
-use cadcraft_render::{DPrim, Kind, Sheet, clip, paper};
+use iridium_cad_color::Rgb;
+use iridium_cad_doc::{Drawing, Handle, PageSetup, Space};
+use iridium_cad_geom::{Bounds2, Vec2};
+use iridium_cad_render::{DPrim, Kind, Sheet, clip, paper};
 use serde_json::Value;
 
 use craft_pdf::write::backend as kr;
@@ -59,7 +59,7 @@ const MAX_TEXT: usize = 1000;
 pub struct PdfOptions {
     /// Plot style table name, replacing the page setup's (`"None"` plots without one).
     pub plot_style_table: Option<String>,
-    /// Paper name from [`cadcraft_render::PAPER_SIZES`] (`"A4"`, `"Letter"`, `"ANSI B"`…).
+    /// Paper name from [`iridium_cad_render::PAPER_SIZES`] (`"A4"`, `"Letter"`, `"ANSI B"`…).
     pub paper: Option<String>,
     /// Custom paper size in millimetres (portrait width, height).
     pub paper_mm: Option<(f64, f64)>,
@@ -438,12 +438,8 @@ fn write_pdf(d: &Drawing, items: &[(Space, PdfOptions)], o: &PdfOptions, text_as
         };
         let links = all_links(d, o);
         let title = if o.title.is_empty() { items.first().map(|(s, _)| sheet_name(s)).unwrap_or_default() } else { o.title.clone() };
-        let metadata = Metadata {
-            creator: "Iridium CAD".into(),
-            producer: "Iridium CAD".into(),
-            title: Some(title.chars().take(MAX_TEXT).collect()),
-            ..Metadata::default()
-        };
+        let metadata =
+            Metadata { creator: "Cad".into(), producer: "Cad".into(), title: Some(title.chars().take(MAX_TEXT).collect()), ..Metadata::default() };
         let settings = kr::SerializeSettings {
             compress_content_streams: o.compress,
             xmp_metadata: false,
@@ -496,7 +492,7 @@ struct SheetPage {
     /// Page size in points.
     media: Vec2,
     /// What it draws, the mapping to points and the plot area (points).
-    list: cadcraft_render::DisplayList,
+    list: iridium_cad_render::DisplayList,
     map: Map,
     clip_pt: Bounds2,
     /// The drawing layers (indices in the layer table) drawn on, in order of first use: the
@@ -543,8 +539,8 @@ fn sheet(d: &Drawing, space: &Space, o: &PdfOptions, links_to: &[(Handle, String
     let unit_mm = paper::page_unit_mm(d, &page);
     let sheet = Sheet::from_page(&page, unit_mm);
     let lineweights = o.lineweights.unwrap_or(if space.is_paper() { page.lineweights } else { true });
-    let plot_style_table = cadcraft_doc::plot_style_table(d, &page.plot_style_table).map(std::sync::Arc::new);
-    let ropts = cadcraft_render::Options {
+    let plot_style_table = iridium_cad_doc::plot_style_table(d, &page.plot_style_table).map(std::sync::Arc::new);
+    let ropts = iridium_cad_render::Options {
         transparency: o.plot_transparency.unwrap_or(page.plot_transparency),
         tolerance: 0.001,
         min_dash: 0.0,
@@ -567,7 +563,7 @@ fn sheet(d: &Drawing, space: &Space, o: &PdfOptions, links_to: &[(Handle, String
     let tolerance = if tol.is_finite() && tol > 0.0 { tol } else { ropts.tolerance };
     // Relative point sizes follow the plotted window (else the extents).
     let view_height = window.map(|w| w.height()).unwrap_or(0.0);
-    let list = cadcraft_render::build_plot(d, space, &cadcraft_render::Options { tolerance, view_height, ..ropts });
+    let list = iridium_cad_render::build_plot(d, space, &iridium_cad_render::Options { tolerance, view_height, ..ropts });
     let b = window.unwrap_or(list.bounds);
     let s = plot_scale(&b, &sheet, fit, o.scale);
     // A layout plotted over a window is placed like model space: the window on the printable area.
@@ -581,7 +577,7 @@ fn sheet(d: &Drawing, space: &Space, o: &PdfOptions, links_to: &[(Handle, String
     };
     // Plot style ends, joins and fill patterns at the plot scale (a layout's are already drawn).
     let mut list = list;
-    cadcraft_render::pen::apply(&mut list, map.s * unit_mm);
+    iridium_cad_render::pen::apply(&mut list, map.s * unit_mm);
     let media = sheet.size * k;
     let clip_pt = if placed { Bounds2::new(sheet.printable.min * k, sheet.printable.max * k) } else { Bounds2::new(Vec2::ZERO, media) };
     // The layers drawn on, in order of first use.
@@ -645,7 +641,7 @@ fn all_links(d: &Drawing, o: &PdfOptions) -> Vec<(Handle, String)> {
 
 /// The link target of `PE_URL` extended data: the first string (group 1000) after
 /// `1001 PE_URL`, before the next application's data.
-fn pe_url(xdata: &[cadcraft_doc::RawTag]) -> Option<String> {
+fn pe_url(xdata: &[iridium_cad_doc::RawTag]) -> Option<String> {
     let start = xdata.iter().position(|t| t.code == 1001 && t.value.trim().eq_ignore_ascii_case("PE_URL"))?;
     let url = xdata.get(start + 1..)?.iter().take_while(|t| t.code != 1001).find(|t| t.code == 1000)?.value.trim();
     (!url.is_empty() && url.len() <= MAX_URL).then(|| url.to_string())
@@ -653,7 +649,7 @@ fn pe_url(xdata: &[cadcraft_doc::RawTag]) -> Option<String> {
 
 /// Link annotation rectangles: the area (in points) each linked entity covers on the sheet,
 /// clipped to the plot area.
-fn links(list: &cadcraft_render::DisplayList, map: &Map, clip_pt: &Bounds2, links: &[(Handle, String)]) -> Vec<(Bounds2, String)> {
+fn links(list: &iridium_cad_render::DisplayList, map: &Map, clip_pt: &Bounds2, links: &[(Handle, String)]) -> Vec<(Bounds2, String)> {
     if links.is_empty() {
         return Vec::new();
     }
@@ -779,7 +775,7 @@ struct StrokeStyle {
 
 /// Opacity of a transparency in percent.
 fn opacity(t: u8) -> NormalizedF32 {
-    NormalizedF32::new(f32::from(100 - t.min(cadcraft_render::MAX_TRANSPARENCY)) / 100.0).unwrap_or(NormalizedF32::ONE)
+    NormalizedF32::new(f32::from(100 - t.min(iridium_cad_render::MAX_TRANSPARENCY)) / 100.0).unwrap_or(NormalizedF32::ONE)
 }
 
 fn paint(c: Rgb) -> kr::paint::Paint {
@@ -855,7 +851,7 @@ fn marks(s: &mut Surface<'_>, p: &SheetPage, groups: &Groups, fonts: &mut fonts:
             continue;
         }
         // A wipeout's mask always hides what is under it.
-        let t = if prim.kind == Kind::Mask { 0 } else { prim.transparency.min(cadcraft_render::MAX_TRANSPARENCY) };
+        let t = if prim.kind == Kind::Mask { 0 } else { prim.transparency.min(iridium_cad_render::MAX_TRANSPARENCY) };
         let w = f64::from(prim.lw) * PT_PER_MM;
         let w = if w.is_finite() && w > 0.0 { w.min(100.0) } else { 0.0 };
         let m = Mark { rgb, t, w };
@@ -980,7 +976,7 @@ fn point(s: &mut Surface<'_>, batch: &mut Option<(StrokeStyle, PathBuilder)>, ma
 
 /// Write one glyph as text in its embedded font: font size 1, placed by the glyph's matrix (one
 /// em along each axis). A glyph whose matrix is out of range or collapses is left out.
-fn glyph(s: &mut Surface<'_>, font: kr::text::Font, t: &cadcraft_render::PlotText, map: &Map, rgb: Rgb, transparency: u8) {
+fn glyph(s: &mut Surface<'_>, font: kr::text::Font, t: &iridium_cad_render::PlotText, map: &Map, rgb: Rgb, transparency: u8) {
     let k = map.s * map.k;
     let g = &t.glyph;
     let (Some((a, b)), Some((c, d)), Some((e, f))) = (coord(g.x * k), coord(g.y * k), coord(map.pt(g.origin))) else { return };
@@ -1021,8 +1017,8 @@ fn uri(url: &str) -> Option<String> {
 #[cfg(test)]
 mod saved_setup_tests {
     use super::*;
-    use cadcraft_doc::{Common, EntityKind, Layout, Line};
-    use cadcraft_geom::Vec3;
+    use iridium_cad_doc::{Common, EntityKind, Layout, Line};
+    use iridium_cad_geom::Vec3;
     use serde_json::json;
 
     /// A layout drawn in mm at A1 size (frame 20,5 - 836,589) whose page setup is A4 landscape

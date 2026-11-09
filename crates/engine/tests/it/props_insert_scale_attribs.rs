@@ -1,8 +1,8 @@
 //! Setting a block reference's scale through Properties moves and resizes its attributes like SCALE
 //! about the insertion point (#481).
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{EntityKind, Handle};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{EntityKind, Handle};
 use serde_json::json;
 
 fn setup(at: [f64; 2], scale: f64) -> (Session, Handle) {

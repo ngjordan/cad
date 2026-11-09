@@ -3,10 +3,10 @@
 
 use std::sync::Arc;
 
-use cadcraft_color::{Color, Rgb};
-use cadcraft_doc::*;
-use cadcraft_geom::Vec3;
-use cadcraft_io::{read_dxf, write_dxf};
+use iridium_cad_color::{Color, Rgb};
+use iridium_cad_doc::*;
+use iridium_cad_geom::Vec3;
+use iridium_cad_io::{read_dxf, write_dxf};
 
 fn text(x: f64, value: &str) -> Text {
     Text {

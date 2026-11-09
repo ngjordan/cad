@@ -9,9 +9,9 @@ mod rename;
 
 pub use matchprop::MatchProps;
 
-use cadcraft_color::Color;
-use cadcraft_doc::{EntityKind, Lineweight, Transparency};
-use cadcraft_geom::Vec3;
+use iridium_cad_color::Color;
+use iridium_cad_doc::{EntityKind, Lineweight, Transparency};
+use iridium_cad_geom::Vec3;
 use serde_json::{Value, json};
 
 use super::{CommandSpec, always, bad, bool_or, f64_req, find_command, ok, point_req, point_value, str_param, targets};
@@ -90,7 +90,7 @@ pub fn specs() -> Vec<CommandSpec> {
     ]
 }
 
-pub(super) fn entity_props(d: &cadcraft_doc::Drawing, e: &cadcraft_doc::Entity) -> Value {
+pub(super) fn entity_props(d: &iridium_cad_doc::Drawing, e: &iridium_cad_doc::Entity) -> Value {
     let mut v = json!({
         "handle": e.handle.hex(),
         "type": e.kind.type_name(),
@@ -103,16 +103,16 @@ pub(super) fn entity_props(d: &cadcraft_doc::Drawing, e: &cadcraft_doc::Entity) 
         "thickness": e.common.thickness,
         "visible": e.common.visible,
     });
-    if cadcraft_doc::can_be_annotative(&e.kind)
+    if iridium_cad_doc::can_be_annotative(&e.kind)
         && let Some(o) = v.as_object_mut()
     {
-        o.insert("annotative".into(), json!(cadcraft_doc::is_annotative(e)));
+        o.insert("annotative".into(), json!(iridium_cad_doc::is_annotative(e)));
         o.insert("annotativeScales".into(), json!(e.common.anno_scales.iter().map(|s| s.name.clone()).collect::<Vec<_>>()));
     }
     let geo = serde_json::to_value(&e.kind).unwrap_or(Value::Null);
     if let (Some(o), Some(g)) = (v.as_object_mut(), geo.as_object()) {
         o.insert("geometry".into(), Value::Object(g.clone()));
-        let b = cadcraft_doc::entity_bounds(d, e, 0);
+        let b = iridium_cad_doc::entity_bounds(d, e, 0);
         if !b.is_empty() {
             o.insert("bounds".into(), json!([[b.min.x, b.min.y], [b.max.x, b.max.y]]));
         }
@@ -123,15 +123,15 @@ pub(super) fn entity_props(d: &cadcraft_doc::Drawing, e: &cadcraft_doc::Entity) 
             }
             EntityKind::Circle(c) => {
                 o.insert("diameter".into(), json!(c.radius * 2.0));
-                o.insert("circumference".into(), json!(c.radius * cadcraft_geom::TAU));
-                o.insert("area".into(), json!(c.radius * c.radius * cadcraft_geom::PI));
+                o.insert("circumference".into(), json!(c.radius * iridium_cad_geom::TAU));
+                o.insert("area".into(), json!(c.radius * c.radius * iridium_cad_geom::PI));
             }
             EntityKind::Arc(a) => {
-                o.insert("arcLength".into(), json!(a.radius * cadcraft_geom::ccw_sweep(a.start, a.end)));
-                o.insert("totalAngle".into(), json!(cadcraft_geom::ccw_sweep(a.start, a.end).to_degrees()));
+                o.insert("arcLength".into(), json!(a.radius * iridium_cad_geom::ccw_sweep(a.start, a.end)));
+                o.insert("totalAngle".into(), json!(iridium_cad_geom::ccw_sweep(a.start, a.end).to_degrees()));
             }
             EntityKind::LwPolyline(p) => {
-                let pl = cadcraft_geom::Polyline { vertices: p.vertices.clone(), closed: p.closed };
+                let pl = iridium_cad_geom::Polyline { vertices: p.vertices.clone(), closed: p.closed };
                 o.insert("length".into(), json!(pl.len()));
                 if p.closed {
                     o.insert("area".into(), json!(pl.area().abs()));
@@ -241,7 +241,7 @@ fn run_set(s: &mut Session, p: &Value) -> Result<Value> {
 }
 
 fn apply_kind_properties(
-    entity: &mut cadcraft_doc::Entity,
+    entity: &mut iridium_cad_doc::Entity,
     params: &Value,
     dim_style: Option<&String>,
     dim_overrides: &serde_json::Map<String, Value>,
@@ -260,7 +260,7 @@ fn apply_kind_properties(
             let len = num("length").filter(|x| *x > 0.0 && *x < 1e15).unwrap_or_else(|| a.dist(b));
             let ang = num("angle").map(f64::to_radians).unwrap_or_else(|| a.angle_to(b));
             if num("length").is_some() || num("angle").is_some() {
-                let e = cadcraft_geom::Vec2::polar(a, len, ang);
+                let e = iridium_cad_geom::Vec2::polar(a, len, ang);
                 if e.is_finite() {
                     l.b.x = e.x;
                     l.b.y = e.y;
@@ -278,10 +278,10 @@ fn apply_kind_properties(
                 c.radius = dm / 2.0;
             }
             if let Some(cf) = num("circumference").filter(|x| *x > 0.0) {
-                c.radius = cf / cadcraft_geom::TAU;
+                c.radius = cf / iridium_cad_geom::TAU;
             }
             if let Some(a) = num("area").filter(|x| *x > 0.0) {
-                c.radius = (a / cadcraft_geom::PI).sqrt();
+                c.radius = (a / iridium_cad_geom::PI).sqrt();
             }
         }
         EntityKind::Arc(a) => {
@@ -292,10 +292,10 @@ fn apply_kind_properties(
                 a.radius = r;
             }
             if let Some(x) = num("startAngle") {
-                a.start = cadcraft_geom::norm_angle(x.to_radians());
+                a.start = iridium_cad_geom::norm_angle(x.to_radians());
             }
             if let Some(x) = num("endAngle") {
-                a.end = cadcraft_geom::norm_angle(x.to_radians());
+                a.end = iridium_cad_geom::norm_angle(x.to_radians());
             }
         }
         EntityKind::Text(t) => {
@@ -349,7 +349,7 @@ fn apply_kind_properties(
     }
 }
 
-fn set_insert_properties(insert: &mut cadcraft_doc::Insert, params: &Value) {
+fn set_insert_properties(insert: &mut iridium_cad_doc::Insert, params: &Value) {
     let number = |key: &str| params.get(key).and_then(Value::as_f64).filter(|value| value.is_finite());
 
     if let Some(x) = number("rotation") {
@@ -364,19 +364,19 @@ fn set_insert_properties(insert: &mut cadcraft_doc::Insert, params: &Value) {
                 q.x = r.x;
                 q.y = r.y;
             }
-            t.rotation = cadcraft_geom::norm_angle(t.rotation + turn);
+            t.rotation = iridium_cad_geom::norm_angle(t.rotation + turn);
             if let Some(ml) = &mut a.multiline {
                 let r = ml.mtext.insert.xy().rotate_about(base, turn);
                 ml.mtext.insert.x = r.x;
                 ml.mtext.insert.y = r.y;
-                ml.mtext.rotation = cadcraft_geom::norm_angle(ml.mtext.rotation + turn);
+                ml.mtext.rotation = iridium_cad_geom::norm_angle(ml.mtext.rotation + turn);
             }
         }
     }
     if let Some(x) = number("scale").filter(|x| *x != 0.0) {
         // A new positive scale carries the attached attribute text with it, like SCALE about the insertion point.
         if x > 0.0 && insert.scale.x > 0.0 {
-            let m = cadcraft_geom::Mat3::scale_about(insert.insert.xy(), x / insert.scale.x);
+            let m = iridium_cad_geom::Mat3::scale_about(insert.insert.xy(), x / insert.scale.x);
             for a in &mut insert.attribs {
                 let mut k = EntityKind::Text(a.text.clone());
                 k.transform(&m);
@@ -391,7 +391,7 @@ fn set_insert_properties(insert: &mut cadcraft_doc::Insert, params: &Value) {
 }
 
 fn set_dimension_properties(
-    dimension: &mut cadcraft_doc::Dimension,
+    dimension: &mut iridium_cad_doc::Dimension,
     params: &Value,
     style: Option<&String>,
     overrides: &serde_json::Map<String, Value>,
@@ -410,7 +410,7 @@ fn set_dimension_properties(
     }
 }
 
-fn set_hatch_properties(hatch: &mut cadcraft_doc::Hatch, params: &Value) {
+fn set_hatch_properties(hatch: &mut iridium_cad_doc::Hatch, params: &Value) {
     let number = |key: &str| params.get(key).and_then(Value::as_f64).filter(|value| value.is_finite());
 
     if let Some(v) = str_param(params, "pattern") {
@@ -435,7 +435,7 @@ fn set_hatch_properties(hatch: &mut cadcraft_doc::Hatch, params: &Value) {
 }
 
 struct CommonEntityProperties<'a> {
-    anno_scale: &'a cadcraft_doc::AnnoScale,
+    anno_scale: &'a iridium_cad_doc::AnnoScale,
     color: Option<Color>,
     linetype: Option<&'a str>,
     lineweight: Option<Lineweight>,
@@ -443,9 +443,9 @@ struct CommonEntityProperties<'a> {
     thickness: Option<f64>,
 }
 
-fn set_common_properties(entity: &mut cadcraft_doc::Entity, params: &Value, common: &CommonEntityProperties<'_>) {
+fn set_common_properties(entity: &mut iridium_cad_doc::Entity, params: &Value, common: &CommonEntityProperties<'_>) {
     if let Some(annotative) = params.get("annotative").and_then(Value::as_bool) {
-        cadcraft_doc::set_annotative(entity, annotative, common.anno_scale);
+        iridium_cad_doc::set_annotative(entity, annotative, common.anno_scale);
     }
     if let Some(layer) = str_param(params, "layer") {
         entity.common.layer = layer.to_string();
@@ -497,9 +497,9 @@ pub(crate) fn set_current_color_value(s: &mut Session, v: &Value) -> Option<()> 
 
 /// `getvar CECOLOR` as AutoCAD gives it, always text: "BYLAYER", "BYBLOCK", the index ("1" for
 /// red) or "RGB:r,g,b".
-pub(crate) fn current_color_value(d: &cadcraft_doc::Drawing) -> String {
+pub(crate) fn current_color_value(d: &iridium_cad_doc::Drawing) -> String {
     if let Some(rgb) = d.header.get("CECOLOR_RGB").and_then(|v| v.as_i64()).and_then(|v| u32::try_from(v).ok()) {
-        let cadcraft_color::Rgb(r, g, b) = cadcraft_color::Rgb::from_u32(rgb);
+        let iridium_cad_color::Rgb(r, g, b) = iridium_cad_color::Rgb::from_u32(rgb);
         return format!("RGB:{r},{g},{b}");
     }
     match Color::from_aci(d.header.i64("CECOLOR", 256) as i16) {
@@ -511,10 +511,10 @@ pub(crate) fn current_color_value(d: &cadcraft_doc::Drawing) -> String {
 
 /// A true colour keeps its RGB in CECOLOR_RGB (which wins for new objects); any other colour must
 /// clear a stale one.
-fn set_current_color(d: &mut cadcraft_doc::Drawing, c: Color) {
+fn set_current_color(d: &mut iridium_cad_doc::Drawing, c: Color) {
     match c {
         Color::True(rgb) => {
-            d.header.set_i64("CECOLOR", i64::from(cadcraft_color::nearest_aci(rgb)));
+            d.header.set_i64("CECOLOR", i64::from(iridium_cad_color::nearest_aci(rgb)));
             d.header.set_i64("CECOLOR_RGB", i64::from(rgb.to_u32()));
         }
         other => {
@@ -532,7 +532,7 @@ fn run_linetype(s: &mut Session, p: &Value) -> Result<Value> {
     }
     let d = s.doc_mut()?;
     if let Some(load) = str_param(p, "load") {
-        let lib = cadcraft_doc::library::standard_linetypes_for(d);
+        let lib = iridium_cad_doc::library::standard_linetypes_for(d);
         let mut n = 0;
         for lt in lib {
             if (load == "*" || lt.name.eq_ignore_ascii_case(load)) && d.linetype(&lt.name).is_none() {
@@ -551,7 +551,7 @@ fn run_linetype(s: &mut Session, p: &Value) -> Result<Value> {
         d.header.set_str("CELTYPE", cur);
     }
     Ok(
-        json!({ "loaded": d.linetypes.iter().map(|l| json!({"name": l.name, "description": l.description})).collect::<Vec<_>>(), "library": cadcraft_doc::library::standard_linetypes().iter().map(|l| l.name.clone()).collect::<Vec<_>>() }),
+        json!({ "loaded": d.linetypes.iter().map(|l| json!({"name": l.name, "description": l.description})).collect::<Vec<_>>(), "library": iridium_cad_doc::library::standard_linetypes().iter().map(|l| l.name.clone()).collect::<Vec<_>>() }),
     )
 }
 
@@ -679,12 +679,12 @@ fn run_limits(s: &mut Session, p: &Value) -> Result<Value> {
     let a = point_req("limits", p, "min")?;
     let b = point_req("limits", p, "max")?;
     let d = s.doc_mut()?;
-    d.header.set("LIMMIN", cadcraft_doc::HVal::Point(a.to3(0.0)));
-    d.header.set("LIMMAX", cadcraft_doc::HVal::Point(b.to3(0.0)));
+    d.header.set("LIMMIN", iridium_cad_doc::HVal::Point(a.to3(0.0)));
+    d.header.set("LIMMAX", iridium_cad_doc::HVal::Point(b.to3(0.0)));
     ok()
 }
 
-fn style_json(st: &cadcraft_doc::TextStyle, current: &str) -> Value {
+fn style_json(st: &iridium_cad_doc::TextStyle, current: &str) -> Value {
     json!({
         "name": st.name,
         "font": st.font,
@@ -697,11 +697,11 @@ fn style_json(st: &cadcraft_doc::TextStyle, current: &str) -> Value {
         "vertical": st.vertical,
         "annotative": st.annotative,
         "current": st.name.eq_ignore_ascii_case(current),
-        "trueType": cadcraft_fonts::TextFont::resolve(&st.font).is_outline(),
+        "trueType": iridium_cad_fonts::TextFont::resolve(&st.font).is_outline(),
     })
 }
 
-fn styles_json(d: &cadcraft_doc::Drawing) -> Value {
+fn styles_json(d: &iridium_cad_doc::Drawing) -> Value {
     let cur = d.header.str("TEXTSTYLE", "Standard");
     json!({ "current": cur, "styles": d.text_styles.iter().map(|t| style_json(t, &cur)).collect::<Vec<_>>() })
 }
@@ -715,7 +715,7 @@ fn run_style(s: &mut Session, p: &Value) -> Result<Value> {
     let idx = match d.text_styles.iter().position(|t| t.name.eq_ignore_ascii_case(&name)) {
         Some(i) => i,
         None => {
-            d.text_styles.push(cadcraft_doc::TextStyle { name: name.clone(), ..Default::default() });
+            d.text_styles.push(iridium_cad_doc::TextStyle { name: name.clone(), ..Default::default() });
             d.text_styles.len() - 1
         }
     };
@@ -767,7 +767,7 @@ fn run_style_current(s: &mut Session, p: &Value) -> Result<Value> {
 
 /// Text style names used by entities (in model, paper spaces and blocks), dimension,
 /// multileader and table styles (their cell styles), and the text of complex linetypes.
-pub(super) fn text_styles_in_use(d: &cadcraft_doc::Drawing) -> Vec<String> {
+pub(super) fn text_styles_in_use(d: &iridium_cad_doc::Drawing) -> Vec<String> {
     let mut out: Vec<String> = d.dim_styles.iter().map(|s| s.text_style.clone()).collect();
     out.extend(d.mleader_styles.iter().map(|s| s.text_style.clone()));
     out.extend(d.table_styles.iter().flat_map(|s| s.cell_styles.iter().map(|c| c.text_style.clone())));
@@ -827,14 +827,14 @@ fn run_style_rename(s: &mut Session, p: &Value) -> Result<Value> {
         EntityKind::MLeader(m) => m.text.iter_mut().for_each(|t| fix(&mut t.style)),
         _ => {}
     };
-    let mut hs: Vec<cadcraft_doc::Handle> = d.model.iter().filter(|e| uses(&e.kind)).map(|e| e.handle).collect();
+    let mut hs: Vec<iridium_cad_doc::Handle> = d.model.iter().filter(|e| uses(&e.kind)).map(|e| e.handle).collect();
     hs.extend(d.layouts.iter().flat_map(|l| l.entities.iter().filter(|e| uses(&e.kind)).map(|e| e.handle)));
     for h in hs {
         d.modify_entity(h, |e| repoint(&mut e.kind))?;
     }
     // Block definitions too, so their text keeps resolving to the renamed style.
     for block in d.blocks.values_mut() {
-        let hs: Vec<cadcraft_doc::Handle> = block.entities.iter().filter(|e| uses(&e.kind)).map(|e| e.handle).collect();
+        let hs: Vec<iridium_cad_doc::Handle> = block.entities.iter().filter(|e| uses(&e.kind)).map(|e| e.handle).collect();
         if !hs.is_empty() {
             let b = std::sync::Arc::make_mut(block);
             for h in hs {
@@ -865,7 +865,7 @@ fn run_style_delete(s: &mut Session, p: &Value) -> Result<Value> {
     Ok(styles_json(d))
 }
 
-fn dimstyles_json(d: &cadcraft_doc::Drawing) -> Value {
+fn dimstyles_json(d: &iridium_cad_doc::Drawing) -> Value {
     json!({ "current": d.header.str("DIMSTYLE", "Standard"), "styles": d.dim_styles.iter().map(|s| s.name.clone()).collect::<Vec<_>>() })
 }
 
@@ -879,7 +879,7 @@ fn run_dimstyle(s: &mut Session, p: &Value) -> Result<Value> {
     let idx = match d.dim_styles.iter().position(|t| t.name.eq_ignore_ascii_case(&name)) {
         Some(i) => i,
         None => {
-            d.dim_styles.push(cadcraft_doc::DimStyle { name: name.clone(), ..base });
+            d.dim_styles.push(iridium_cad_doc::DimStyle { name: name.clone(), ..base });
             d.dim_styles.len() - 1
         }
     };
@@ -912,7 +912,7 @@ fn run_dimstyle_list(s: &mut Session, p: &Value) -> Result<Value> {
         let st = d.dim_style(n).ok_or_else(|| bad("dimstyle.list", format!("no dimension style `{n}`")))?;
         let vars: serde_json::Map<String, Value> = {
             let v = serde_json::to_value(st).unwrap_or(Value::Null);
-            cadcraft_doc::DIMVARS.iter().filter_map(|(var, field)| v.get(*field).map(|x| ((*var).to_string(), x.clone()))).collect()
+            iridium_cad_doc::DIMVARS.iter().filter_map(|(var, field)| v.get(*field).map(|x| ((*var).to_string(), x.clone()))).collect()
         };
         if let Some(o) = out.as_object_mut() {
             o.insert("style".into(), serde_json::to_value(st).unwrap_or(Value::Null));
@@ -931,9 +931,9 @@ fn run_dimstyle_current(s: &mut Session, p: &Value) -> Result<Value> {
     Ok(dimstyles_json(d))
 }
 
-fn dims_using(d: &cadcraft_doc::Drawing, name: &str) -> Vec<(cadcraft_doc::Space, cadcraft_doc::Handle)> {
+fn dims_using(d: &iridium_cad_doc::Drawing, name: &str) -> Vec<(iridium_cad_doc::Space, iridium_cad_doc::Handle)> {
     let mut out = Vec::new();
-    for space in std::iter::once(cadcraft_doc::Space::Model).chain(d.layouts.iter().map(|l| cadcraft_doc::Space::Paper(l.name.clone()))) {
+    for space in std::iter::once(iridium_cad_doc::Space::Model).chain(d.layouts.iter().map(|l| iridium_cad_doc::Space::Paper(l.name.clone()))) {
         if let Some(st) = d.space(&space) {
             for e in st.iter() {
                 let uses = match &e.kind {
@@ -952,7 +952,7 @@ fn dims_using(d: &cadcraft_doc::Drawing, name: &str) -> Vec<(cadcraft_doc::Space
 }
 
 /// Dimensions and leaders inside block definitions that use the style (block name, entity handle).
-fn block_dims_using(d: &cadcraft_doc::Drawing, name: &str) -> Vec<(String, cadcraft_doc::Handle)> {
+fn block_dims_using(d: &iridium_cad_doc::Drawing, name: &str) -> Vec<(String, iridium_cad_doc::Handle)> {
     let mut out = Vec::new();
     for (bname, b) in &d.blocks {
         for e in b.entities.iter() {
@@ -1054,12 +1054,12 @@ pub(super) fn dim_override(s: &mut Session, p: &Value) -> Result<Value> {
         .map(|o| o.iter().filter(|(k, _)| !matches!(k.as_str(), "handles" | "handle" | "clear")).map(|(k, v)| (k.clone(), v.clone())).collect())
         .unwrap_or_default();
     // Validate against a scratch style; store canonical field names.
-    let mut scratch = cadcraft_doc::DimStyle::default();
+    let mut scratch = iridium_cad_doc::DimStyle::default();
     let rejected = scratch.apply_fields(&fields);
     let good: serde_json::Map<String, Value> = fields
         .iter()
         .filter(|(k, _)| !rejected.contains(k))
-        .filter_map(|(k, v)| cadcraft_doc::DimStyle::field_name(k).map(|f| (f.to_string(), v.clone())))
+        .filter_map(|(k, v)| iridium_cad_doc::DimStyle::field_name(k).map(|f| (f.to_string(), v.clone())))
         .collect();
     if !clear && good.is_empty() {
         return Err(bad("dimoverride", format!("no valid dimension variables given (ignored: {})", rejected.join(", "))));
@@ -1089,7 +1089,7 @@ fn run_tablestyle(s: &mut Session, p: &Value) -> Result<Value> {
         let idx = match d.table_styles.iter().position(|t| t.name.eq_ignore_ascii_case(name)) {
             Some(i) => i,
             None => {
-                d.table_styles.push(cadcraft_doc::TableStyle { name: name.to_string(), ..Default::default() });
+                d.table_styles.push(iridium_cad_doc::TableStyle { name: name.to_string(), ..Default::default() });
                 d.table_styles.len() - 1
             }
         };
@@ -1121,7 +1121,7 @@ fn run_mleaderstyle(s: &mut Session, p: &Value) -> Result<Value> {
         let idx = match d.mleader_styles.iter().position(|t| t.name.eq_ignore_ascii_case(name)) {
             Some(i) => i,
             None => {
-                d.mleader_styles.push(cadcraft_doc::MLeaderStyle { name: name.to_string(), ..Default::default() });
+                d.mleader_styles.push(iridium_cad_doc::MLeaderStyle { name: name.to_string(), ..Default::default() });
                 d.mleader_styles.len() - 1
             }
         };
@@ -1215,7 +1215,7 @@ fn run_rename(s: &mut Session, p: &Value) -> Result<Value> {
             if d.header.str("CELTYPE", "ByLayer").eq_ignore_ascii_case(&from) {
                 d.header.set_str("CELTYPE", &to);
             }
-            let users = |st: &cadcraft_doc::EntityStore| -> Vec<cadcraft_doc::Handle> {
+            let users = |st: &iridium_cad_doc::EntityStore| -> Vec<iridium_cad_doc::Handle> {
                 st.iter().filter(|e| e.common.linetype.eq_ignore_ascii_case(&from)).map(|e| e.handle).collect()
             };
             let mut hs = users(&d.model);

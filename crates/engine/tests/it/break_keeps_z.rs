@@ -1,8 +1,8 @@
 //! BREAK and BREAKATPOINT keep the Z / elevation of the pieces they leave.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{Arc, Common, Entity, EntityKind, Handle, Line, LwPolyline};
-use cadcraft_engine::geom::{PolyVertex, Vec2, Vec3};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{Arc, Common, Entity, EntityKind, Handle, Line, LwPolyline};
+use iridium_cad_engine::geom::{PolyVertex, Vec2, Vec3};
 use serde_json::{Value, json};
 
 fn add(s: &mut Session, kind: EntityKind) -> String {

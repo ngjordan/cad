@@ -1,6 +1,6 @@
 //! MIRROR refuses a mirror line whose points are closer than the geometry tolerance.
 
-use cadcraft_engine::Session;
+use iridium_cad_engine::Session;
 use serde_json::json;
 
 #[test]

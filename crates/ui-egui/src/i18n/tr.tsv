@@ -1,6 +1,6 @@
-# Iridium CAD Turkish interface catalog — original translations by the Iridium CAD contributors.
+# CAD Turkish interface catalog — original translations by the CAD contributors.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # Clean room: every entry is written from the plain meaning of the English label in ordinary
 # Turkish computing and technical-drawing vocabulary (Katman, Ölçülendirme, Tarama, Yuvarlatma,
 # Pah, Öteleme, Kırp, Uzat, Nesne Kenetleme, Görünüm Penceresi, Yerleşim). No other product's
@@ -49,7 +49,7 @@
 	A drawing opened from a file keeps that file's format.	Bir dosyadan açılan çizim o dosyanın biçimini korur.
 	A variable name starts with a letter and has only letters, digits and _	Değişken adı bir harfle başlar ve yalnızca harf, rakam ve _ içerir
 	About	Hakkında
-	About Iridium CAD	Iridium CAD Hakkında
+	About Cad	CAD Hakkında
 	Absolute	Mutlak
 	Accessibility	Erişilebilirlik
 	Add	Ekle
@@ -139,9 +139,9 @@
 	ByBlock	BloğaGöre
 	ByColor	RengeGöre
 	ByLayer	KatmanaGöre
-	Iridium CAD	Iridium CAD
-	Iridium CAD Help	Iridium CAD Yardımı
-	Iridium CAD keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	Iridium CAD bu tercihleri, nesne kenetleme kiplerini ve çizim seçeneklerini kullanıcı hesabınız için saklar ve açılışta geri yükler.
+	Cad	CAD
+	Cad Help	CAD Yardımı
+	Cad keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	CAD bu tercihleri, nesne kenetleme kiplerini ve çizim seçeneklerini kullanıcı hesabınız için saklar ve açılışta geri yükler.
 	Calibrate	Kalibre Et
 	Calibrate 3D Mouse	3B Fareyi Kalibre Et
 	Cancel	İptal
@@ -205,7 +205,7 @@
 	Commits	Commit'ler
 	Company	Şirket
 	Compare Drawings...	Çizimleri Karşılaştır...
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	Bilgisayar destekli tasarım ve teknik çizim: saf Rust ile yazılmış, açık kaynaklı, clean-room bir CAD uygulaması.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	Bilgisayar destekli tasarım ve teknik çizim: saf Rust ile yazılmış, açık kaynaklı, clean-room bir CAD uygulaması.
 	Concentric	Eş Merkezli
 	Cone	Koni
 	Constraint Bars	Kısıtlama Çubukları
@@ -479,7 +479,7 @@
 	Hide All	Tümünü Gizle
 	Hide All Constraint Bars	Tüm Kısıtlama Çubuklarını Gizle
 	Hide All Dynamic Dimensions	Tüm Dinamik Ölçüleri Gizle
-	Hide Iridium CAD	Iridium CAD'ı Gizle
+	Hide Cad	CAD'ı Gizle
 	Hide Layer List	Katman Listesini Gizle
 	Hide Objects	Nesneleri Gizle
 	Hide Others	Diğerlerini Gizle
@@ -822,7 +822,7 @@
 	Quick Select...	Hızlı Seçim...
 	QuickCalc	Hızlı Hesap
 	QuickCalc Pick	Hızlı Hesap Seçimi
-	Quit Iridium CAD	Iridium CAD'tan Çık
+	Quit Cad	CAD'tan Çık
 	Radius	Yarıçap
 	Raster Image	Raster Görüntü
 	Ray	Işın
@@ -1347,7 +1347,7 @@ menu	Draw	Çiz
 menu	Modify	Değiştir
 menu	View	Görünüm
 	Check for Updates…	Güncellemeleri denetle…
-	Iridium CAD is up to date.	Iridium CAD güncel.
+	Cad is up to date.	CAD güncel.
 	Could not check for updates.	Güncellemeler denetlenemedi.
 	Find All	Find All
 	Find what:	Find what:

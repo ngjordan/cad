@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use super::*;
 use crate::{CadApp, Services};
-use cadcraft_engine::Session;
+use iridium_cad_engine::Session;
 use serde_json::json;
 
 fn placeholders(text: &str) -> BTreeSet<&str> {
@@ -76,7 +76,7 @@ fn missing_commands_menus_tools_and_snap_labels(language: &str) -> Vec<String> {
     sources.extend(crate::menus::MENUS.iter().copied());
     // File ▸ Open Recent is built at run time, not from a command's menu path.
     sources.extend([crate::menus::OPEN_RECENT, crate::menus::CLEAR_RECENT]);
-    for c in cadcraft_engine::command_specs() {
+    for c in iridium_cad_engine::command_specs() {
         sources.insert(c.label);
         sources.extend(c.menu.iter().copied());
     }
@@ -90,7 +90,7 @@ fn missing_commands_menus_tools_and_snap_labels(language: &str) -> Vec<String> {
             sources.extend(large.iter().chain(*small).map(|(_, _, label)| *label));
         }
     }
-    sources.extend(cadcraft_engine::snap::mode::ALL.iter().map(|(_, name)| *name));
+    sources.extend(iridium_cad_engine::snap::mode::ALL.iter().map(|(_, name)| *name));
     sources.into_iter().filter(|s| !s.is_empty() && !catalog.contains_key(&("", *s))).map(str::to_string).collect()
 }
 
@@ -148,7 +148,7 @@ fn missing_marked_ui_literals(language: &str) -> BTreeSet<String> {
                     .unwrap();
                 let key: String = serde_json::from_str(&rest[..end]).unwrap();
                 // Coordinate axes, glyph buttons and product names are not translated.
-                if !["X", "Y", "B", "Iridium CAD"].contains(&key.as_str()) && !catalog.contains_key(&("", key.as_str())) {
+                if !["X", "Y", "B", "Cad"].contains(&key.as_str()) && !catalog.contains_key(&("", key.as_str())) {
                     missing.insert(key);
                 }
             }
@@ -453,7 +453,7 @@ fn dialogs_render_in_every_language_and_keep_their_source_ids() {
     for language in translated() {
         for (dialog, heading) in [
             ("dsettings", "Drafting Settings"),
-            ("about", "About Iridium CAD"),
+            ("about", "About Cad"),
             ("commands", "Command Reference"),
             ("blocks", "Blocks"),
             ("layers", "Layer Properties Manager"),

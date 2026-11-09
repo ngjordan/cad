@@ -1,8 +1,8 @@
 //! Tool Sets (left) and the Layers / Properties palettes (right).
 
-use cadcraft_color::{Color, Rgb};
-use cadcraft_doc::EntityKind;
 use egui::{Color32, Rect, Sense, Stroke, pos2, vec2};
+use iridium_cad_color::{Color, Rgb};
+use iridium_cad_doc::EntityKind;
 use serde_json::{Value, json};
 
 use crate::CadApp;
@@ -136,7 +136,7 @@ pub const DRAFTING: &[(&str, &[Tool], &[Tool])] = &[
 ];
 
 fn command_known(id: &str) -> bool {
-    cadcraft_engine::find_command(id).is_some() || crate::menus::is_ui_command(id)
+    iridium_cad_engine::find_command(id).is_some() || crate::menus::is_ui_command(id)
 }
 
 /// Tool Sets strip with Drafting/Modeling tabs, their command buttons and the collapse control.
@@ -575,7 +575,7 @@ fn edit_field(ui: &mut egui::Ui, id: egui::Id, value: String) -> Option<String> 
 /// `6 1/2`). Text it can't read goes to `bad`, to be reported rather than dropped.
 fn number(typed: Option<String>, bad: &mut Option<String>) -> Option<f64> {
     let typed = typed?;
-    let v = cadcraft_engine::units::parse_distance(&typed);
+    let v = iridium_cad_engine::units::parse_distance(&typed);
     if v.is_none() {
         *bad = Some(typed);
     }
@@ -610,17 +610,17 @@ fn unavailable(ui: &mut egui::Ui, text: &str) {
     value_box(ui, crate::i18n::t(text), false, false).on_hover_text(crate::tl!("Not available yet"));
 }
 
-type Custom = Option<(String, Vec<cadcraft_engine::doc::dynblock::CustomProperty>)>;
+type Custom = Option<(String, Vec<iridium_cad_engine::doc::dynblock::CustomProperty>)>;
 
 /// The dynamic block name and custom properties of block reference `h`, worked out once per
 /// drawing revision.
-fn custom_properties(ui: &egui::Ui, app: &CadApp, h: cadcraft_engine::doc::Handle) -> Custom {
+fn custom_properties(ui: &egui::Ui, app: &CadApp, h: iridium_cad_engine::doc::Handle) -> Custom {
     let st = app.session.state().ok()?;
     let id = egui::Id::unique(("dynamic-block-custom", st.uid, st.revision, h));
     if let Some(c) = ui.data(|d| d.get_temp::<Custom>(id)) {
         return c;
     }
-    let c = cadcraft_engine::doc::dynblock::custom_properties(&st.doc, h);
+    let c = iridium_cad_engine::doc::dynblock::custom_properties(&st.doc, h);
     ui.data_mut(|d| d.insert_temp(id, c.clone()));
     c
 }
@@ -715,7 +715,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
     let h = &d.header;
     // Lengths are shown as the drawing's units say (UNITS), and read back in any format.
     let (lu, lp) = (h.i64("LUNITS", 2), h.i64("LUPREC", 4));
-    let len = |v: f64| cadcraft_engine::units::format_distance(v, lu, lp);
+    let len = |v: f64| iridium_cad_engine::units::format_distance(v, lu, lp);
     let mut bad: Option<String> = None;
     if sel.is_empty() {
         // Current properties for new objects; each row runs the command that sets it.
@@ -783,14 +783,14 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
             }
         });
         prop_row(ui, "Lineweight", |ui| {
-            ui.menu_button(crate::i18n::t(&cadcraft_doc::Lineweight::from_dxf(h.i64("CELWEIGHT", -1) as i16).name()), |ui| {
+            ui.menu_button(crate::i18n::t(&iridium_cad_doc::Lineweight::from_dxf(h.i64("CELWEIGHT", -1) as i16).name()), |ui| {
                 for n in ["ByLayer", "ByBlock", "Default"] {
                     if ui.button(crate::i18n::t(n)).clicked() {
                         act("lweight", json!({ "lineweight": n }));
                         ui.close();
                     }
                 }
-                for v in cadcraft_doc::Lineweight::STANDARD {
+                for v in iridium_cad_doc::Lineweight::STANDARD {
                     if ui.button(format!("{:.2} mm", f64::from(v) / 100.0)).clicked() {
                         act("lweight", json!({ "lineweight": f64::from(v) / 100.0 }));
                         ui.close();
@@ -833,7 +833,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
         // The current layout's plot style table; named tables give the current plot style.
         let space = app.session.layout_space();
         let layout = space.layout().and_then(|n| d.layout(n).map(|l| (n.to_string(), l.page.plot_style_table.clone())));
-        let table = layout.as_ref().and_then(|(_, t)| cadcraft_doc::plot_style_table(d, t));
+        let table = layout.as_ref().and_then(|(_, t)| iridium_cad_doc::plot_style_table(d, t));
         match table.as_ref().filter(|t| !t.is_color_dependent()) {
             Some(t) => prop_row(ui, "Plot style", |ui| {
                 let items = ["ByLayer", "ByBlock"].map(String::from).into_iter().chain(t.styles.iter().map(|s| s.name.clone()));
@@ -846,7 +846,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
         match &layout {
             Some((name, current)) => prop_row(ui, "Plot style table", |ui| {
                 let shown = if current.trim().is_empty() { "None".to_string() } else { current.clone() };
-                let items = std::iter::once("None".to_string()).chain(cadcraft_doc::plot_style_table_names(d));
+                let items = std::iter::once("None".to_string()).chain(iridium_cad_doc::plot_style_table_names(d));
                 if let Some(n) = pick_menu(ui, &shown, items) {
                     act("pagesetup", json!({ "layout": name, "plotStyleTable": n }));
                 }
@@ -870,7 +870,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
     // Selected objects: common + geometry for a single object.
     let first = sel.first().and_then(|h| d.entity(*h)).map(|e| (**e).clone());
     let Some(e) = first else { return };
-    let same = |f: &dyn Fn(&cadcraft_doc::Entity) -> String| -> String {
+    let same = |f: &dyn Fn(&iridium_cad_doc::Entity) -> String| -> String {
         let vals: Vec<String> = sel.iter().filter_map(|h| d.entity(*h)).map(|e| f(e)).collect();
         match vals.first() {
             Some(v0) if vals.iter().all(|v| v == v0) => v0.clone(),
@@ -879,7 +879,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
     };
     let selected_color = Some(e.common.color).filter(|c| sel.iter().filter_map(|h| d.entity(*h)).all(|e| e.common.color == *c));
     let color = selected_color.map_or_else(|| "*VARIES*".into(), Color::name);
-    let effective_color = |e: &cadcraft_doc::Entity| {
+    let effective_color = |e: &iridium_cad_doc::Entity| {
         let layer = d.layer(&e.common.layer).map_or(Color::WHITE, |l| l.color);
         e.common.color.resolve(layer, Color::WHITE)
     };
@@ -957,7 +957,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
                     ui.close();
                 }
             }
-            for v in cadcraft_doc::Lineweight::STANDARD {
+            for v in iridium_cad_doc::Lineweight::STANDARD {
                 if ui.button(format!("{:.2} mm", f64::from(v) / 100.0)).clicked() {
                     set = Some(json!({ "handles": ids, "lineweight": f64::from(v) / 100.0 }));
                     ui.close();
@@ -1078,7 +1078,7 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
             }
             EntityKind::LwPolyline(pl) => {
                 num(ui, "Global width", "width", len(pl.const_width), &mut set, &mut bad, &ids);
-                let g = cadcraft_geom::Polyline { vertices: pl.vertices.clone(), closed: pl.closed };
+                let g = iridium_cad_geom::Polyline { vertices: pl.vertices.clone(), closed: pl.closed };
                 prop_row(ui, "Length", |ui| read_only(ui, &len(g.len())));
                 if pl.closed {
                     prop_row(ui, "Area", |ui| read_only(ui, &format!("{:.4}", g.area().abs())));
@@ -1180,8 +1180,8 @@ pub(crate) fn properties_section(app: &mut CadApp, ui: &mut egui::Ui) {
 mod tests {
     use super::*;
     use crate::Services;
-    use cadcraft_engine::Session;
     use egui::{Color32, Shape};
+    use iridium_cad_engine::Session;
 
     fn contains_swatch(shape: &Shape, color: Color32) -> bool {
         match shape {

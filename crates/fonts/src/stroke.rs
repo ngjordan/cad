@@ -1,4 +1,4 @@
-//! "Iridium CAD Stroke": an original single-stroke drafting font, designed for Iridium CAD on a
+//! "Cad Stroke": an original single-stroke drafting font, designed for Cad on a
 //! small grid (public domain / CC0 as part of this codebase).
 //!
 //! Each glyph is `(width, strokes)`. A stroke is a run of points; each point is two characters:

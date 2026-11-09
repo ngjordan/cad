@@ -6,7 +6,7 @@
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 
-use cadcraft_doc::{Drawing, Entity, EntityKind, EntityStore, Handle, Space};
+use iridium_cad_doc::{Drawing, Entity, EntityKind, EntityStore, Handle, Space};
 use serde_json::{Value, json};
 
 use crate::{Result, Session};

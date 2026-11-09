@@ -11,8 +11,8 @@
 
 use std::sync::Arc;
 
-use cadcraft_doc::{Drawing, EntityKind, Space, VportConfig, VportTile};
-use cadcraft_geom::Vec2;
+use iridium_cad_doc::{Drawing, EntityKind, Space, VportConfig, VportTile};
+use iridium_cad_geom::Vec2;
 use serde_json::{Value, json};
 
 use super::super::qselect::wildcard;

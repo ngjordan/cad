@@ -1,11 +1,11 @@
 //! DXF save → reopen keeps table and object-section data: complex linetype elements,
 //! multileader styles, layout page setups, named views, UCSs and groups.
 
-use cadcraft_doc::geom::{Vec2, Vec3};
-use cadcraft_doc::{
+use iridium_cad_doc::geom::{Vec2, Vec3};
+use iridium_cad_doc::{
     Common, DashElement, Drawing, EntityKind, Group, Line, Linetype, MLeaderStyle, NamedView, Space, TableStyle, TextStyle, Ucs, library,
 };
-use cadcraft_io::{read_dxf, write_dxf};
+use iridium_cad_io::{read_dxf, write_dxf};
 
 fn round_trip(d: &Drawing) -> Drawing {
     read_dxf(write_dxf(d).as_bytes()).expect("reopen")
@@ -76,8 +76,8 @@ fn multileader_styles_and_current_style_round_trip() {
     d.mleader_styles.push(callout);
     d.header.set_str("CMLEADERSTYLE", "Callout");
     let text = write_dxf(&d);
-    let tags = cadcraft_dxf::parse(text.as_bytes()).expect("parse written DXF");
-    let header = cadcraft_dxf::sections(&tags).into_iter().find(|s| s.name == "HEADER").expect("HEADER");
+    let tags = iridium_cad_dxf::parse(text.as_bytes()).expect("parse written DXF");
+    let header = iridium_cad_dxf::sections(&tags).into_iter().find(|s| s.name == "HEADER").expect("HEADER");
     assert!(header.tags.iter().all(|t| t.code != 9 || t.str() != "$CMLEADERSTYLE"));
     let r = read_dxf(text.as_bytes()).expect("reopen");
     assert_eq!(r.mleader_styles, d.mleader_styles);

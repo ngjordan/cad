@@ -1,9 +1,9 @@
 {
-  "id": "cadcraft",
-  "name": "Iridium CAD",
+  "id": "iridium-cad",
+  "name": "Cad",
   "upgradeCode": "D79EE0B6-2F3A-5114-A9C3-EB039CB13E73",
   "sources": [
-    "cadcraft.wxs"
+    "iridium-cad.wxs"
   ],
   "icon": "assets/app-icon/iridium-cad.ico",
   "localization": [],
@@ -11,49 +11,49 @@
     "UI"
   ],
   "payloads": [
-    "cadcraft-cli.exe",
-    "cadcraft.exe"
+    "iridium-cad-cli.exe",
+    "iridium-cad.exe"
   ],
   "registry": [
     [
       "-1",
-      "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\cadcraft.exe",
+      "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iridium-cad.exe",
       "",
       "[#CadcraftExe]"
     ],
     [
       "-1",
       "Software\\Classes\\.dxf\\OpenWithProgids",
-      "Iridium CAD.Drawing",
+      "Cad.Drawing",
       ""
     ],
     [
       "-1",
       "Software\\Classes\\.dwg\\OpenWithProgids",
-      "Iridium CAD.Drawing",
+      "Cad.Drawing",
       ""
     ],
     [
       "-1",
-      "Software\\Iridium CAD",
+      "Software\\Cad",
       "DesktopShortcut",
       "1"
     ],
     [
       "-1",
-      "Software\\Iridium CAD",
+      "Software\\Cad",
       "InstallDir",
       "[INSTALLFOLDER]"
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\cadcraft.exe\\shell\\open\\command",
+      "Software\\Classes\\Applications\\iridium-cad.exe\\shell\\open\\command",
       "",
       "\"[#CadcraftExe]\" \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\Iridium CAD.Drawing\\shell\\open\\command",
+      "Software\\Classes\\Cad.Drawing\\shell\\open\\command",
       "",
       "\"[#CadcraftExe]\" \"%1\""
     ]

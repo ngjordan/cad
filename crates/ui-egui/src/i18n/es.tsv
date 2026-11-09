@@ -1,6 +1,6 @@
-# Iridium CAD Spanish interface catalog — original translations.
+# CAD Spanish interface catalog — original translations.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # UTF-8: context<TAB>English source<TAB>Spanish translation.
 # Empty context = ordinary label; @plural = one|other forms with {n}.
 # Command IDs, typed keywords, technology/product names and user data stay unchanged.
@@ -30,7 +30,7 @@
 	A drawing opened from a file keeps that file's format.	Un dibujo abierto desde un archivo conserva el formato de ese archivo.
 	A variable name starts with a letter and has only letters, digits and _	El nombre de una variable empieza por una letra y solo lleva letras, dígitos y _
 	About	Acerca de
-	About Iridium CAD	Acerca de Iridium CAD
+	About Cad	Acerca de CAD
 	Absolute	Absolutas
 	Add Current Scale	Añadir escala actual
 	Add Leader	Añadir directriz
@@ -109,9 +109,9 @@
 	ByBlock	PorBloque
 	ByColor	PorColor
 	ByLayer	PorCapa
-	Iridium CAD	Iridium CAD
-	Iridium CAD Help	Ayuda de Iridium CAD
-	Iridium CAD keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	Iridium CAD guarda estas preferencias, los modos de referencia a objetos y los ajustes de dibujo para tu cuenta de usuario y los restaura al iniciarse.
+	Cad	CAD
+	Cad Help	Ayuda de CAD
+	Cad keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	CAD guarda estas preferencias, los modos de referencia a objetos y los ajustes de dibujo para tu cuenta de usuario y los restaura al iniciarse.
 	Cancel	Cancelar
 	Cartesian (x, y)	Cartesianas (x, y)
 	Center	Centro
@@ -163,7 +163,7 @@
 	Commits	Commits
 	Company	Empresa
 	Compare Drawings...	Comparar dibujos...
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	Diseño y dibujo asistidos por computadora: una aplicación CAD de código abierto, desarrollada de forma independiente y escrita íntegramente en Rust.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	Diseño y dibujo asistidos por computadora: una aplicación CAD de código abierto, desarrollada de forma independiente y escrita íntegramente en Rust.
 	Concentric	Concéntrica
 	Cone	Cono
 	Constraint Bars	Barras de restricciones
@@ -800,7 +800,7 @@
 	Quick Select Properties	Propiedades de selección rápida
 	Quick Select...	Selección rápida...
 	QuickCalc	Calculadora rápida
-	Quit Iridium CAD	Salir de Iridium CAD
+	Quit Cad	Salir de CAD
 	Radius	Radio
 	Raster Image	Imagen ráster
 	Ray	Semirrecta
@@ -1223,7 +1223,7 @@
 @plural	{n} contributor	{n} colaborador|{n} colaboradores
 	Drawing as bytes	Dibujo como bytes
 	Services	Servicios
-	Hide Iridium CAD	Ocultar Iridium CAD
+	Hide Cad	Ocultar CAD
 	Hide Others	Ocultar otros
 	Accessibility	Accesibilidad
 	Show System Cursor	Mostrar cursor del sistema
@@ -1253,7 +1253,7 @@
 	Query Texts	Consultar textos
 	Analyze Shapes	Analizar formas
 	Check for Updates…	Buscar actualizaciones…
-	Iridium CAD is up to date.	Iridium CAD está actualizado.
+	Cad is up to date.	CAD está actualizado.
 	Could not check for updates.	No se pudo buscar actualizaciones.
 	Find All	Find All
 	Find what:	Find what:

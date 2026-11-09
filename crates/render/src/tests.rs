@@ -1,16 +1,16 @@
 use crate::raster::{RasterOptions, View, render};
 use crate::*;
-use cadcraft_doc::{Common, Drawing, EntityKind, Hatch, HatchLoop, Space};
-use cadcraft_geom::{PolyVertex, Vec3};
+use iridium_cad_doc::{Common, Drawing, EntityKind, Hatch, HatchLoop, Space};
+use iridium_cad_geom::{PolyVertex, Vec3};
 
 fn sample() -> Drawing {
     let mut d = Drawing::new_imperial();
-    d.add(&Space::Model, Common::default(), EntityKind::Line(cadcraft_doc::Line { a: Vec3::new(0.0, 0.0, 0.0), b: Vec3::new(10.0, 0.0, 0.0) }))
+    d.add(&Space::Model, Common::default(), EntityKind::Line(iridium_cad_doc::Line { a: Vec3::new(0.0, 0.0, 0.0), b: Vec3::new(10.0, 0.0, 0.0) }))
         .unwrap();
     d.add(
         &Space::Model,
         Common { color: Color::Index(1), ..Default::default() },
-        EntityKind::Circle(cadcraft_doc::Circle { center: Vec3::new(5.0, 5.0, 0.0), radius: 3.0 }),
+        EntityKind::Circle(iridium_cad_doc::Circle { center: Vec3::new(5.0, 5.0, 0.0), radius: 3.0 }),
     )
     .unwrap();
     d
@@ -28,7 +28,7 @@ fn builds_lines_and_circles() {
 #[test]
 fn linetype_dashes_line() {
     let mut d = sample();
-    d.linetypes.extend(cadcraft_doc::library::standard_linetypes());
+    d.linetypes.extend(iridium_cad_doc::library::standard_linetypes());
     d.layer_mut("0").unwrap().linetype = "DASHED".into();
     let l = build(&d, &Space::Model, &Options::default());
     assert!(l.prims.len() > 10);
@@ -47,7 +47,7 @@ fn text_produces_strokes() {
     d.add(
         &Space::Model,
         Common::default(),
-        EntityKind::Text(cadcraft_doc::Text {
+        EntityKind::Text(iridium_cad_doc::Text {
             insert: Vec3::ZERO,
             align_pt: None,
             height: 1.0,
@@ -117,15 +117,15 @@ fn raster_rejects_bad_size() {
     assert!(render(&l, &View { center: Vec2::ZERO, scale: 1.0, width: 0, height: 10 }, &RasterOptions::default()).is_none());
 }
 
-fn layout_with_viewport(vp: cadcraft_doc::Viewport) -> Drawing {
+fn layout_with_viewport(vp: iridium_cad_doc::Viewport) -> Drawing {
     let mut d = sample(); // line (0,0)-(10,0) and red circle at (5,5) r3
     let paper = Space::Paper("Layout1".into());
     d.add(&paper, Common::default(), EntityKind::Viewport(vp)).unwrap();
     d
 }
 
-fn vp(center: Vec2, w: f64, h: f64, view_center: Vec2, view_height: f64, id: u32) -> cadcraft_doc::Viewport {
-    cadcraft_doc::Viewport {
+fn vp(center: Vec2, w: f64, h: f64, view_center: Vec2, view_height: f64, id: u32) -> iridium_cad_doc::Viewport {
+    iridium_cad_doc::Viewport {
         center: center.to3(0.0),
         width: w,
         height: h,
@@ -220,7 +220,7 @@ fn viewport_contents_built_on_all_cores_match_one_thread() {
     let mut d = layout_with_viewport(vp(Vec2::new(5.0, 4.0), 8.0, 6.0, Vec2::new(30.0, 30.0), 60.0, 2));
     for i in 0..1200 {
         let (x, y) = (f64::from(i % 40) * 1.5, f64::from(i / 40) * 2.0);
-        let line = EntityKind::Line(cadcraft_doc::Line { a: Vec3::new(x, y, 0.0), b: Vec3::new(x + 1.0, y + 1.5, 0.0) });
+        let line = EntityKind::Line(iridium_cad_doc::Line { a: Vec3::new(x, y, 0.0), b: Vec3::new(x + 1.0, y + 1.5, 0.0) });
         d.add(&Space::Model, Common::default(), line).unwrap();
     }
     let paper = Space::Paper("Layout1".into());
@@ -250,11 +250,11 @@ fn hostile_viewports_do_not_panic() {
 
 fn text_doc(style_font: &str, value: &str) -> Drawing {
     let mut d = Drawing::new_imperial();
-    d.text_styles.push(cadcraft_doc::TextStyle { name: "TT".into(), font: style_font.into(), ..Default::default() });
+    d.text_styles.push(iridium_cad_doc::TextStyle { name: "TT".into(), font: style_font.into(), ..Default::default() });
     d.add(
         &Space::Model,
         Common::default(),
-        EntityKind::Text(cadcraft_doc::Text {
+        EntityKind::Text(iridium_cad_doc::Text {
             insert: Vec3::ZERO,
             align_pt: None,
             height: 1.0,
@@ -273,7 +273,7 @@ fn text_doc(style_font: &str, value: &str) -> Drawing {
 
 /// The first common system TrueType font, if any is installed (tests skip otherwise).
 fn system_font() -> Option<&'static str> {
-    ["Arial", "Helvetica", "DejaVuSans", "Verdana", "LiberationSans-Regular"].into_iter().find(|n| cadcraft_fonts::ttf::find(n).is_some())
+    ["Arial", "Helvetica", "DejaVuSans", "Verdana", "LiberationSans-Regular"].into_iter().find(|n| iridium_cad_fonts::ttf::find(n).is_some())
 }
 
 #[test]
@@ -306,7 +306,7 @@ fn missing_font_falls_back_to_stroke() {
 
 #[test]
 fn backwards_and_upside_down_mirror_text() {
-    let mut d = text_doc("Iridium CAD Stroke", "ABC");
+    let mut d = text_doc("Cad Stroke", "ABC");
     let normal = build(&d, &Space::Model, &Options::default()).bounds;
     assert!(normal.min.x >= -1e-9 && normal.min.y >= -1e-9);
     d.text_styles.iter_mut().for_each(|s| s.backwards = true);
@@ -328,7 +328,7 @@ fn truetype_mtext_and_dimension_text() {
     d.add(
         &Space::Model,
         Common::default(),
-        EntityKind::MText(cadcraft_doc::MText {
+        EntityKind::MText(iridium_cad_doc::MText {
             insert: Vec3::ZERO,
             height: 1.0,
             width: 0.0,
@@ -352,9 +352,9 @@ fn truetype_mtext_and_dimension_text() {
     assert!(l.prims.iter().filter(|p| p.kind == Kind::Tris).count() > 2, "arrows plus filled glyphs");
 }
 
-fn lin_dim() -> cadcraft_doc::Dimension {
-    cadcraft_doc::Dimension {
-        kind: cadcraft_doc::DimKind::Linear { rotation: 0.0 },
+fn lin_dim() -> iridium_cad_doc::Dimension {
+    iridium_cad_doc::Dimension {
+        kind: iridium_cad_doc::DimKind::Linear { rotation: 0.0 },
         defpt: Vec3::new(0.0, 2.0, 0.0),
         text_mid: Vec3::ZERO,
         p13: Vec3::ZERO,
@@ -398,10 +398,10 @@ fn dimension_colours_by_role() {
 #[test]
 fn table_title_is_centred_and_merged() {
     let mut d = Drawing::new_imperial();
-    let cell = |t: &str| cadcraft_doc::TableCell { text: t.into(), ..Default::default() };
+    let cell = |t: &str| iridium_cad_doc::TableCell { text: t.into(), ..Default::default() };
     let mut title = vec![cell("TITLE"), cell(""), cell("")];
     title[0].merged = Some((1, 3));
-    let t = cadcraft_doc::Table {
+    let t = iridium_cad_doc::Table {
         insert: Vec3::new(0.0, 0.0, 0.0),
         col_widths: vec![2.0, 2.0, 2.0],
         row_heights: vec![1.0, 1.0],
@@ -488,18 +488,18 @@ fn dense_hatch_on_screen_is_one_solid_fill() {
 #[test]
 fn sparse_dots_keep_their_look_when_lines_are_close() {
     // Dot rows half a pixel apart but dots five pixels apart along them: not solid colour.
-    let fam = |dashes: &[f64]| cadcraft_doc::library::PatternLine { angle: 0.0, origin: (0.0, 0.0), delta: (0.0, 0.5), dashes: dashes.to_vec() };
+    let fam = |dashes: &[f64]| iridium_cad_doc::library::PatternLine { angle: 0.0, origin: (0.0, 0.0), delta: (0.0, 0.5), dashes: dashes.to_vec() };
     let sparse = Hatch { pattern_lines: vec![fam(&[0.0, -5.0])], ..pattern_hatch("MYDOTS", 1.0, (0.0, 0.0, 40.0, 40.0)) };
-    assert!(!crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &sparse, 1.0));
+    assert!(!crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &sparse, 1.0));
     // Dots closer than a pixel along rows closer than a pixel: solid.
     let dense = Hatch { pattern_lines: vec![fam(&[0.0, -0.5])], ..sparse.clone() };
-    assert!(crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &dense, 1.0));
+    assert!(crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &dense, 1.0));
     // A family with only gaps draws nothing, so it never reads as solid.
     let blank = Hatch { pattern_lines: vec![fam(&[-0.5])], ..sparse.clone() };
-    assert!(!crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &blank, 1.0));
-    assert!(crate::hatch::pattern_lines(&cadcraft_doc::Drawing::new_imperial(), &blank, &loops_of(&blank), 1.0, None).is_empty());
+    assert!(!crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &blank, 1.0));
+    assert!(crate::hatch::pattern_lines(&iridium_cad_doc::Drawing::new_imperial(), &blank, &loops_of(&blank), 1.0, None).is_empty());
     // Full detail is never solid.
-    assert!(!crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &dense, 0.0));
+    assert!(!crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &dense, 0.0));
 }
 
 #[test]
@@ -508,8 +508,8 @@ fn scattered_dot_pattern_reads_solid_once_dots_fill_the_pixels() {
     // geometry of the old scale 3): three dot families, no single one dense enough on its own at
     // 0.5 per pixel, but together about four dots on every pixel. Zoomed in 4x the dots stand apart.
     let h = pattern_hatch("AR-SAND", 3.0 / 16.0, (0.0, 0.0, 100.0, 100.0));
-    assert!(crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &h, 0.5));
-    assert!(!crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &h, 0.125));
+    assert!(crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &h, 0.5));
+    assert!(!crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &h, 0.125));
 }
 
 /// Same polylines up to float noise: the view-limited path rotates into the family frame and back,
@@ -530,14 +530,14 @@ fn normal_zoom_pattern_is_unchanged() {
     for (pattern, px) in [("ANSI31", 0.05), ("ANSI33", 0.05), ("AR-CONC", 0.02), ("AR-SAND", 0.01), ("DOTS", 0.01)] {
         let h = pattern_hatch(pattern, 1.0, (0.0, 0.0, 6.0, 4.0));
         let loops = loops_of(&h);
-        let full = crate::hatch::pattern_lines(&cadcraft_doc::Drawing::new_imperial(), &h, &loops, 0.0, None);
+        let full = crate::hatch::pattern_lines(&iridium_cad_doc::Drawing::new_imperial(), &h, &loops, 0.0, None);
         assert!(!full.is_empty(), "{pattern}");
-        assert!(!crate::hatch::reads_solid(&cadcraft_doc::Drawing::new_imperial(), &h, px), "{pattern}");
-        let same_res = crate::hatch::pattern_lines(&cadcraft_doc::Drawing::new_imperial(), &h, &loops, px, None);
+        assert!(!crate::hatch::reads_solid(&iridium_cad_doc::Drawing::new_imperial(), &h, px), "{pattern}");
+        let same_res = crate::hatch::pattern_lines(&iridium_cad_doc::Drawing::new_imperial(), &h, &loops, px, None);
         assert_lines_close(&same_res, &full, pattern);
         // A view covering the whole hatch changes nothing either.
         let all = Bounds2::new(Vec2::new(-1.0, -1.0), Vec2::new(7.0, 5.0));
-        let in_view = crate::hatch::pattern_lines(&cadcraft_doc::Drawing::new_imperial(), &h, &loops, px, Some(&all));
+        let in_view = crate::hatch::pattern_lines(&iridium_cad_doc::Drawing::new_imperial(), &h, &loops, px, Some(&all));
         assert_lines_close(&in_view, &full, pattern);
     }
 }
@@ -548,8 +548,8 @@ fn dash_repeat_under_two_pixels_is_one_run() {
     // drawn as one run per span covering the same length as the full-detail span.
     let h = pattern_hatch("ANSI33", 1.0, (0.0, 0.0, 6.0, 4.0));
     let loops = loops_of(&h);
-    let full = crate::hatch::pattern_lines(&cadcraft_doc::Drawing::new_imperial(), &h, &loops, 0.0, None);
-    let lod = crate::hatch::pattern_lines(&cadcraft_doc::Drawing::new_imperial(), &h, &loops, 0.1, None);
+    let full = crate::hatch::pattern_lines(&iridium_cad_doc::Drawing::new_imperial(), &h, &loops, 0.0, None);
+    let lod = crate::hatch::pattern_lines(&iridium_cad_doc::Drawing::new_imperial(), &h, &loops, 0.1, None);
     assert!(lod.len() < full.len(), "{} vs {}", lod.len(), full.len());
     assert!(lod.iter().all(|r| r.len() == 2));
     // The continuous family: identical runs in both.
@@ -618,12 +618,12 @@ fn hatch_in_a_squashed_block_keeps_lines_that_show() {
     // A block hatch inserted 100x wider than tall: along x its lines are spread far apart on
     // screen, so it is drawn with lines, not merged into a fill.
     let mut d = Drawing::new_imperial();
-    let mut blk = cadcraft_doc::Block::new("B");
-    let mut e = cadcraft_doc::Entity::new(cadcraft_doc::Handle(1), EntityKind::Hatch(pattern_hatch("ANSI31", 1.0, (0.0, 0.0, 4.0, 4.0))));
+    let mut blk = iridium_cad_doc::Block::new("B");
+    let mut e = iridium_cad_doc::Entity::new(iridium_cad_doc::Handle(1), EntityKind::Hatch(pattern_hatch("ANSI31", 1.0, (0.0, 0.0, 4.0, 4.0))));
     e.common = Common::default();
     blk.entities.push(e);
     d.blocks.insert("B".into(), std::sync::Arc::new(blk));
-    let ins = cadcraft_doc::Insert {
+    let ins = iridium_cad_doc::Insert {
         block: "B".into(),
         insert: Vec3::new(0.0, 0.0, 0.0),
         scale: Vec3::new(100.0, 1.0, 1.0),
@@ -653,21 +653,21 @@ fn max_scale_is_the_most_stretched_axis() {
 // ---------- transparency ----------
 
 fn line_common(c: Common) -> (Common, EntityKind) {
-    (c, EntityKind::Line(cadcraft_doc::Line { a: Vec3::ZERO, b: Vec3::new(10.0, 0.0, 0.0) }))
+    (c, EntityKind::Line(iridium_cad_doc::Line { a: Vec3::ZERO, b: Vec3::new(10.0, 0.0, 0.0) }))
 }
 
 fn with_transparency() -> Options {
     Options { transparency: true, ..Default::default() }
 }
 
-fn block_entity(handle: u64, common: Common, kind: EntityKind) -> cadcraft_doc::Entity {
-    let mut e = cadcraft_doc::Entity::new(cadcraft_doc::Handle(handle), kind);
+fn block_entity(handle: u64, common: Common, kind: EntityKind) -> iridium_cad_doc::Entity {
+    let mut e = iridium_cad_doc::Entity::new(iridium_cad_doc::Handle(handle), kind);
     e.common = common;
     e
 }
 
 fn insert_of(block: &str) -> EntityKind {
-    EntityKind::Insert(cadcraft_doc::Insert {
+    EntityKind::Insert(iridium_cad_doc::Insert {
         block: block.into(),
         insert: Vec3::ZERO,
         scale: Vec3::new(1.0, 1.0, 1.0),
@@ -682,9 +682,9 @@ fn insert_of(block: &str) -> EntityKind {
 
 #[test]
 fn transparency_resolves_by_object_layer_and_block() {
-    use cadcraft_doc::Transparency::{ByBlock, ByLayer, Percent};
+    use iridium_cad_doc::Transparency::{ByBlock, ByLayer, Percent};
     let mut d = Drawing::new_imperial();
-    d.layers.push(cadcraft_doc::Layer { name: "Walls".into(), transparency: 40, ..Default::default() });
+    d.layers.push(iridium_cad_doc::Layer { name: "Walls".into(), transparency: 40, ..Default::default() });
     let add = |d: &mut Drawing, c: Common| {
         let (c, k) = line_common(c);
         d.add(&Space::Model, c, k).unwrap();
@@ -694,14 +694,14 @@ fn transparency_resolves_by_object_layer_and_block() {
     // ByBlock outside a block: opaque.
     add(&mut d, Common { transparency: ByBlock, ..Default::default() });
     // Block "Inner": a ByBlock line and a ByLayer line on layer 0 (the reference's layer).
-    let mut inner = cadcraft_doc::Block::new("Inner");
+    let mut inner = iridium_cad_doc::Block::new("Inner");
     let (c, k) = line_common(Common { transparency: ByBlock, ..Default::default() });
     inner.entities.push(block_entity(1, c, k));
     let (c, k) = line_common(Common::default());
     inner.entities.push(block_entity(2, c, k));
     d.blocks.insert("Inner".into(), std::sync::Arc::new(inner));
     // Block "Outer": a ByBlock reference to Inner, on layer Walls.
-    let mut outer = cadcraft_doc::Block::new("Outer");
+    let mut outer = iridium_cad_doc::Block::new("Outer");
     outer.entities.push(block_entity(3, Common { layer: "Walls".into(), transparency: ByBlock, ..Default::default() }, insert_of("Inner")));
     d.blocks.insert("Outer".into(), std::sync::Arc::new(outer));
     d.add(&Space::Model, Common { transparency: Percent(70), ..Default::default() }, insert_of("Outer")).unwrap();
@@ -717,8 +717,8 @@ fn transparency_resolves_by_object_layer_and_block() {
 #[test]
 fn hostile_transparency_values_are_clamped() {
     let mut d = Drawing::new_imperial();
-    d.layers.push(cadcraft_doc::Layer { name: "Odd".into(), transparency: 250, ..Default::default() });
-    let (c, k) = line_common(Common { transparency: cadcraft_doc::Transparency::Percent(u8::MAX), ..Default::default() });
+    d.layers.push(iridium_cad_doc::Layer { name: "Odd".into(), transparency: 250, ..Default::default() });
+    let (c, k) = line_common(Common { transparency: iridium_cad_doc::Transparency::Percent(u8::MAX), ..Default::default() });
     d.add(&Space::Model, c, k).unwrap();
     let (c, k) = line_common(Common { layer: "Odd".into(), ..Default::default() });
     d.add(&Space::Model, c, k).unwrap();
@@ -734,12 +734,16 @@ fn hostile_transparency_values_are_clamped() {
 fn transparent_solid_hatch_blends_with_the_line_under_it() {
     let mut d = Drawing::new_imperial();
     // The line runs mid-pixel (y = 2.025 is screen row 99.5) so it fills one row exactly.
-    d.add(&Space::Model, Common::default(), EntityKind::Line(cadcraft_doc::Line { a: Vec3::new(-2.0, 2.025, 0.0), b: Vec3::new(6.0, 2.025, 0.0) }))
-        .unwrap();
+    d.add(
+        &Space::Model,
+        Common::default(),
+        EntityKind::Line(iridium_cad_doc::Line { a: Vec3::new(-2.0, 2.025, 0.0), b: Vec3::new(6.0, 2.025, 0.0) }),
+    )
+    .unwrap();
     let solid = Hatch { solid: true, pattern: "SOLID".into(), ..pattern_hatch("SOLID", 1.0, (0.0, 0.0, 4.0, 4.0)) };
     d.add(
         &Space::Model,
-        Common { color: Color::Index(1), transparency: cadcraft_doc::Transparency::Percent(50), ..Default::default() },
+        Common { color: Color::Index(1), transparency: iridium_cad_doc::Transparency::Percent(50), ..Default::default() },
         EntityKind::Hatch(solid),
     )
     .unwrap();
@@ -761,10 +765,10 @@ fn transparent_solid_hatch_blends_with_the_line_under_it() {
     assert_eq!(pixel(&Options::default(), 1.0, 2.025), (255, 0, 0));
 }
 
-fn attrib(tag: &str) -> cadcraft_doc::Attrib {
-    cadcraft_doc::Attrib {
+fn attrib(tag: &str) -> iridium_cad_doc::Attrib {
+    iridium_cad_doc::Attrib {
         tag: tag.into(),
-        text: cadcraft_doc::Text {
+        text: iridium_cad_doc::Text {
             insert: Vec3::new(1.0, 1.0, 0.0),
             align_pt: None,
             height: 1.0,
@@ -789,7 +793,7 @@ fn attrib(tag: &str) -> cadcraft_doc::Attrib {
 /// properties, and a reference to it with `reference`'s, carrying the attribute.
 fn attributed(def: Common, reference: Common) -> Drawing {
     let mut d = Drawing::new_imperial();
-    let mut blk = cadcraft_doc::Block::new("B");
+    let mut blk = iridium_cad_doc::Block::new("B");
     let (c, k) = line_common(Common::default());
     blk.entities.push(block_entity(1, c, k));
     blk.entities.push(block_entity(2, def, EntityKind::AttDef(attrib("TAG"))));
@@ -811,7 +815,7 @@ fn line_and_text(d: &Drawing) -> (u8, Vec<u8>) {
 
 #[test]
 fn attributes_draw_with_their_own_transparency() {
-    use cadcraft_doc::Transparency::{ByBlock, Percent};
+    use iridium_cad_doc::Transparency::{ByBlock, Percent};
     // A reference at 60 % on an opaque layer: layer-0 ByLayer contents (the line and the
     // attribute) take the reference's layer, so both are opaque.
     let d = attributed(Common::default(), Common { transparency: Percent(60), ..Default::default() });
@@ -832,7 +836,7 @@ fn attributes_draw_with_their_own_transparency() {
 
 #[test]
 fn attributes_follow_the_reference_layer_and_have_no_definition() {
-    use cadcraft_doc::Transparency::Percent;
+    use iridium_cad_doc::Transparency::Percent;
     // A layer-0 ByLayer definition in a reference on a 40 % layer: the line and the attribute
     // both take the reference's layer.
     let mut d = attributed(Common::default(), Common { layer: "Glass".into(), ..Default::default() });
@@ -843,14 +847,14 @@ fn attributes_follow_the_reference_layer_and_have_no_definition() {
     assert!(text.iter().all(|t| *t == 40), "{text:?}");
     // No definition in the block: the attribute follows the reference (30 %), with or without
     // properties of its own.
-    for props in [cadcraft_doc::AttribProps::default(), cadcraft_doc::AttribProps { color: Some(Color::Index(3)), ..Default::default() }] {
+    for props in [iridium_cad_doc::AttribProps::default(), iridium_cad_doc::AttribProps { color: Some(Color::Index(3)), ..Default::default() }] {
         let mut d = Drawing::new_imperial();
-        let mut blk = cadcraft_doc::Block::new("B");
+        let mut blk = iridium_cad_doc::Block::new("B");
         let (c, k) = line_common(Common::default());
         blk.entities.push(block_entity(1, c, k));
         d.blocks.insert("B".into(), std::sync::Arc::new(blk));
         let EntityKind::Insert(mut ins) = insert_of("B") else { panic!("an insert") };
-        ins.attribs.push(cadcraft_doc::Attrib { props: props.clone(), ..attrib("TAG") });
+        ins.attribs.push(iridium_cad_doc::Attrib { props: props.clone(), ..attrib("TAG") });
         d.add(&Space::Model, Common { transparency: Percent(30), ..Default::default() }, EntityKind::Insert(ins)).unwrap();
         let (line, text) = line_and_text(&d);
         assert_eq!(line, 0, "layer-0 ByLayer contents take the reference's opaque layer");
@@ -861,7 +865,7 @@ fn attributes_follow_the_reference_layer_and_have_no_definition() {
 #[test]
 fn mtext_exact_spacing_ignores_taller_lines() {
     // #711: a doubled middle line pushes the next baseline down with At least, not with Exactly.
-    let mtext = |contents: &str, line_spacing: f64, line_spacing_exact: bool| cadcraft_doc::MText {
+    let mtext = |contents: &str, line_spacing: f64, line_spacing_exact: bool| iridium_cad_doc::MText {
         insert: Vec3::ZERO,
         height: 1.0,
         width: 10.0,
@@ -890,9 +894,9 @@ fn mtext_exact_spacing_ignores_taller_lines() {
 fn table_cell_text_height_scales_with_the_table() {
     let height = |table_h: f64, own: Option<f64>| {
         let d = Drawing::new_imperial();
-        let st = crate::table_style_of(&d, &cadcraft_doc::Table::default());
-        let cell = cadcraft_doc::TableCell { text: "a".into(), text_height: own, ..Default::default() };
-        let t = cadcraft_doc::Table {
+        let st = crate::table_style_of(&d, &iridium_cad_doc::Table::default());
+        let cell = iridium_cad_doc::TableCell { text: "a".into(), text_height: own, ..Default::default() };
+        let t = iridium_cad_doc::Table {
             col_widths: vec![500.0],
             row_heights: vec![500.0],
             cells: vec![vec![cell]],
@@ -921,7 +925,7 @@ fn cancelled_build_stops_early() {
     // A hatch sweep stops at its next pattern line.
     let h = pattern_hatch("ANSI31", 1.0, (0.0, 0.0, 6.0, 4.0));
     let loops = loops_of(&h);
-    let drawing = cadcraft_doc::Drawing::new_imperial();
+    let drawing = iridium_cad_doc::Drawing::new_imperial();
     assert!(!crate::hatch::pattern_lines_until(&drawing, &h, &loops, 0.0, None, None).is_empty());
     assert!(crate::hatch::pattern_lines_until(&drawing, &h, &loops, 0.0, None, set.as_deref()).is_empty());
 }
@@ -933,7 +937,7 @@ fn thin_wide_polyline_keeps_every_side_at_every_zoom() {
     let square = |const_width: f64| {
         let mut d = Drawing::new_imperial();
         let vertices = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)].map(|(x, y)| PolyVertex::new(Vec2::new(x, y))).to_vec();
-        let p = cadcraft_doc::LwPolyline { vertices, closed: true, const_width, elevation: 0.0, plinegen: false };
+        let p = iridium_cad_doc::LwPolyline { vertices, closed: true, const_width, elevation: 0.0, plinegen: false };
         d.add(&Space::Model, Common::default(), EntityKind::LwPolyline(p)).unwrap();
         d
     };
@@ -970,14 +974,14 @@ fn wide_polyline_centre_line_is_drawn_on_screen_only() {
     for lt in ["Continuous", "DASHED"] {
         let drawing = |transparency: u8| {
             let mut d = Drawing::new_imperial();
-            d.linetypes.extend(cadcraft_doc::library::standard_linetypes().into_iter().filter(|l| l.name == "DASHED"));
+            d.linetypes.extend(iridium_cad_doc::library::standard_linetypes().into_iter().filter(|l| l.name == "DASHED"));
             let vertices = [(0.0, 0.0), (3.0, 0.0), (3.0, 3.0)].map(|(x, y)| PolyVertex::new(Vec2::new(x, y))).to_vec();
-            let p = cadcraft_doc::LwPolyline { vertices, closed: false, const_width: 0.2, elevation: 0.0, plinegen: false };
+            let p = iridium_cad_doc::LwPolyline { vertices, closed: false, const_width: 0.2, elevation: 0.0, plinegen: false };
             let common = Common {
                 color: Color::Index(1),
                 linetype: lt.into(),
-                lineweight: cadcraft_doc::Lineweight::Mm100(50),
-                transparency: cadcraft_doc::Transparency::Percent(transparency),
+                lineweight: iridium_cad_doc::Lineweight::Mm100(50),
+                transparency: iridium_cad_doc::Transparency::Percent(transparency),
                 ..Default::default()
             };
             d.add(&Space::Model, common, EntityKind::LwPolyline(p)).unwrap();
@@ -1130,12 +1134,12 @@ fn raster_hatch_pattern_matches_one_by_one() {
 fn without_linetypes_every_line_is_drawn_whole() {
     let drawing = |lt: &str| {
         let mut d = Drawing::new_imperial();
-        d.linetypes.extend(cadcraft_doc::library::standard_linetypes().into_iter().filter(|l| l.name == "DASHED"));
+        d.linetypes.extend(iridium_cad_doc::library::standard_linetypes().into_iter().filter(|l| l.name == "DASHED"));
         d.layer_mut("0").unwrap().linetype = lt.into();
-        let line = EntityKind::Line(cadcraft_doc::Line { a: Vec3::new(0.0, 0.0, 0.0), b: Vec3::new(30.0, 0.0, 0.0) });
+        let line = EntityKind::Line(iridium_cad_doc::Line { a: Vec3::new(0.0, 0.0, 0.0), b: Vec3::new(30.0, 0.0, 0.0) });
         d.add(&Space::Model, Common::default(), line).unwrap();
         let vertices = [(0.0, 5.0), (30.0, 5.0)].map(|(x, y)| PolyVertex::new(Vec2::new(x, y))).to_vec();
-        let wide = cadcraft_doc::LwPolyline { vertices, closed: false, const_width: 0.2, elevation: 0.0, plinegen: false };
+        let wide = iridium_cad_doc::LwPolyline { vertices, closed: false, const_width: 0.2, elevation: 0.0, plinegen: false };
         d.add(&Space::Model, Common::default(), EntityKind::LwPolyline(wide)).unwrap();
         d
     };

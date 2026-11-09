@@ -377,7 +377,7 @@ fn plural_ko(_n: u64) -> usize {
 }
 
 /// Arabic integer plurals (CLDR `ar`): zero (0), one (1), two (2), few (3–10, 103–110),
-/// many (11–99) — the same rule pdfcraft uses, so the sibling apps agree.
+/// many (11–99) — the same rule PDF uses, so the sibling apps agree.
 pub fn plural_arabic(n: u64) -> usize {
     match (n, n % 100) {
         (0, _) => 0,

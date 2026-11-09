@@ -5,7 +5,7 @@ use super::ctx::{AssocObj, Ctx};
 use super::entity::{entity, hatch_reactors};
 use super::header::{code_page, header_vars};
 use super::layout::{paper_views, record_head, sheet_first, table_head, vport_table};
-use super::objects::{cadcraft_fonts_name, group_obj, mleader_style_obj, scale_list, table_style_obj};
+use super::objects::{group_obj, iridium_cad_fonts_name, mleader_style_obj, scale_list, table_style_obj};
 use super::{
     Block, Color, DimStyle, DimVal, Drawing, Entity, EntityKind, EntityStore, Group, HVal, Handle, HashMap, Layout, MLeaderStyle, PageSetup, Space,
     TableStyle, Tag, Vec2, Vec3, Version, W, dxf_ext,
@@ -15,7 +15,7 @@ struct TableWritePlan<'a> {
     d: &'a Drawing,
     version: Version,
     cx: &'a mut Ctx,
-    ext: cadcraft_geom::Bounds2,
+    ext: iridium_cad_geom::Bounds2,
 }
 
 fn write_tables(w: &mut W, plan: TableWritePlan<'_>) -> HashMap<String, String> {
@@ -91,9 +91,9 @@ fn write_tables(w: &mut W, plan: TableWritePlan<'_>) -> HashMap<String, String> 
         w.i(71, if s.backwards { 2 } else { 0 } | if s.upside_down { 4 } else { 0 });
         w.f(42, 0.2);
         // The built-in font goes out as `txt`, which every reader has, and a Linux font as its
-        // Windows one with portable fonts; Iridium CAD's own name travels in `CADCRAFT` xdata
+        // Windows one with portable fonts; Cad's own name travels in `IRIDIUM_CAD` xdata
         // (`1000 FONT`, name) so the style reopens with it.
-        let file = if s.font == cadcraft_fonts_name() { "txt" } else { cadcraft_fonts::windows::written_font(&s.font, d.portable_fonts) };
+        let file = if s.font == iridium_cad_fonts_name() { "txt" } else { iridium_cad_fonts::windows::written_font(&s.font, d.portable_fonts) };
         w.s(3, file);
         w.s(4, &s.big_font);
         if s.annotative {
@@ -129,7 +129,7 @@ fn write_tables(w: &mut W, plan: TableWritePlan<'_>) -> HashMap<String, String> 
             *t = Tag::s(340, h.unwrap_or_else(|| fallback_style.clone()));
         }
     }
-    // VIEW: named views (DXF Reference, VIEW). A view's layer state is Iridium CAD xdata.
+    // VIEW: named views (DXF Reference, VIEW). A view's layer state is Cad xdata.
     let th = table_head(w, "VIEW", d.views.len());
     for v in &d.views {
         record_head(w, "VIEW", &th, "AcDbViewTableRecord");
@@ -194,7 +194,7 @@ fn write_layer_table(w: &mut W, d: &Drawing) {
         let xref = if crate::dxf_xref::dependent(&l.name) { 48 } else { 0 };
         w.i(70, i64::from(l.frozen) | if l.vp_freeze_new { 2 } else { 0 } | if l.locked { 4 } else { 0 } | xref);
         let aci = match l.color {
-            Color::True(rgb) => i64::from(cadcraft_color::nearest_aci(rgb)),
+            Color::True(rgb) => i64::from(iridium_cad_color::nearest_aci(rgb)),
             c => i64::from(c.to_aci()).clamp(1, 255),
         };
         w.i(62, if l.on { aci } else { -aci });
@@ -206,7 +206,7 @@ fn write_layer_table(w: &mut W, d: &Drawing) {
             w.i(290, 0);
         }
         w.i(370, i64::from(l.lineweight.to_dxf()));
-        let normal = w.pstyles.get(&cadcraft_doc::NORMAL_STYLE.to_ascii_uppercase()).cloned();
+        let normal = w.pstyles.get(&iridium_cad_doc::NORMAL_STYLE.to_ascii_uppercase()).cloned();
         if let Some(h) = w.pstyles.get(&l.plot_style.trim().to_ascii_uppercase()).cloned().or(normal) {
             w.s(390, h);
         }
@@ -444,7 +444,7 @@ fn layout_obj(w: &mut W, context: LayoutWriteContext<'_>, data: LayoutWriteData<
     }
     w.i(70, plot_flags);
     // Plot paper units: 1 millimetres, 0 inches (#1058).
-    w.i(72, i64::from(cadcraft_render::paper::page_unit_mm(d, page) == 1.0));
+    w.i(72, i64::from(iridium_cad_render::paper::page_unit_mm(d, page) == 1.0));
     w.i(73, i64::from(page.landscape));
     w.i(74, plot_type);
     w.s(7, &page.plot_style_table);
@@ -471,7 +471,7 @@ fn layout_obj(w: &mut W, context: LayoutWriteContext<'_>, data: LayoutWriteData<
     w.p(17, Vec3::new(0.0, 1.0, 0.0));
     w.i(76, 0);
     w.s(330, brh);
-    // The saved paper-space view (centre, height) as Iridium CAD xdata.
+    // The saved paper-space view (centre, height) as Cad xdata.
     if let Some((c, height)) = view.filter(|(c, v)| c.x.is_finite() && c.y.is_finite() && v.is_finite()) {
         w.s(1001, dxf_ext::APP);
         w.s(1000, "PSVIEW");
@@ -496,7 +496,7 @@ struct ObjectWritePlan<'a> {
     ps_brs: &'a [(String, String, &'a Layout)],
     layout_handles: &'a [String],
     xrecords: &'a [(&'static str, String, Vec<String>)],
-    scales: &'a [(&'a cadcraft_doc::AnnoScale, String)],
+    scales: &'a [(&'a iridium_cad_doc::AnnoScale, String)],
     pstyles: &'a [(String, String)],
     table_styles: &'a [TableStyle],
     mleader_styles: &'a [MLeaderStyle],
@@ -677,7 +677,7 @@ fn write_named_objects(w: &mut W, plan: &ObjectWritePlan<'_>) {
         w.group("ACAD_REACTORS", 330, &[pstyle_dict]);
         w.s(330, pstyle_dict.clone());
     }
-    // Parametric constraints and parameters, saved layer states, plot style tables (Iridium CAD
+    // Parametric constraints and parameters, saved layer states, plot style tables (Cad
     // data).
     for (_, h, chunks) in xrecords {
         w.s(0, "XRECORD");
@@ -963,7 +963,7 @@ pub(super) fn tags_for(d: &Drawing, version: Version, target: Version, frozen_34
     let group_dict = w.h();
     let layout_dict = w.h();
     let table_style_dict = w.h();
-    // Iridium CAD data in XRECORDs of the named object dictionary: (key, handle, text chunks).
+    // Cad data in XRECORDs of the named object dictionary: (key, handle, text chunks).
     let mut xrecords: Vec<(&str, String, Vec<String>)> = Vec::new();
     // The drawing's own next handle: table records and objects are numbered above it, so
     // reading it back (instead of $HANDSEED) keeps their handles across saves (#495).
@@ -985,10 +985,10 @@ pub(super) fn tags_for(d: &Drawing, version: Version, target: Version, frozen_34
     }
     // The annotation scale list: the ACAD_SCALELIST dictionary of SCALE objects.
     let scale_dict = w.h();
-    let scales: Vec<(&cadcraft_doc::AnnoScale, String)> = d.scales.iter().filter(|s| s.is_valid()).map(|s| (s, w.h())).collect();
+    let scales: Vec<(&iridium_cad_doc::AnnoScale, String)> = d.scales.iter().filter(|s| s.is_valid()).map(|s| (s, w.h())).collect();
     // Plot style names used by layers and objects (Normal always), each a placeholder object.
     let pstyle_dict = w.h();
-    let mut pstyle_names: Vec<String> = vec![cadcraft_doc::NORMAL_STYLE.to_string()];
+    let mut pstyle_names: Vec<String> = vec![iridium_cad_doc::NORMAL_STYLE.to_string()];
     let named = d.layers.iter().map(|l| l.plot_style.as_str()).chain(every.iter().map(|e| e.common.plot_style.as_str()));
     for n in named {
         let n = n.trim();

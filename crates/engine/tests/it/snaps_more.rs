@@ -1,10 +1,10 @@
 //! The remaining object snaps (#519, gaps.md U8): Insertion on attribute definitions and
 //! multileaders, Geometric Center on closed splines, and no Midpoint on closed curves.
 
-use cadcraft_doc::{EntityKind, Space};
-use cadcraft_engine::Session;
-use cadcraft_engine::snap::{self, mode};
-use cadcraft_geom::Vec2;
+use iridium_cad_doc::{EntityKind, Space};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::snap::{self, mode};
+use iridium_cad_geom::Vec2;
 use serde_json::json;
 
 /// The snap of `modes` near `p` (a hair off it, inside a 0.1 aperture).

@@ -1,6 +1,6 @@
-# Iridium CAD Swedish interface catalog — original translations by the Iridium CAD contributors.
+# CAD Swedish interface catalog — original translations by the CAD contributors.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # Clean room: every entry is written from the plain meaning of the English label in ordinary
 # computing vocabulary. No other product's Swedish interface, string table or terminology
 # database was consulted, and no other catalog is used as a source.
@@ -34,7 +34,7 @@
 	A drawing opened from a file keeps that file's format.	En ritning som öppnats från en fil behåller filens format.
 	A variable name starts with a letter and has only letters, digits and _	Ett variabelnamn börjar med en bokstav och innehåller bara bokstäver, siffror och _
 	About	Om
-	About Iridium CAD	Om Iridium CAD
+	About Cad	Om CAD
 	Absolute	Absolut
 	Add Current Scale	Lägg till aktuell skala
 	Add Leader	Lägg till hänvisningslinje
@@ -110,9 +110,9 @@
 	ByBlock	Enligt block
 	ByColor	Enligt färg
 	ByLayer	Enligt lager
-	Iridium CAD	Iridium CAD
-	Iridium CAD Help	Hjälp för Iridium CAD
-	Iridium CAD keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	Iridium CAD sparar de här inställningarna, objektfästena och ritlägena för ditt användarkonto och återställer dem när programmet startar.
+	Cad	CAD
+	Cad Help	Hjälp för CAD
+	Cad keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	CAD sparar de här inställningarna, objektfästena och ritlägena för ditt användarkonto och återställer dem när programmet startar.
 	Cancel	Avbryt
 	Cartesian (x, y)	Kartesisk (x, y)
 	Center	Centrum
@@ -164,7 +164,7 @@
 	Commits	Commits
 	Company	Företag
 	Compare Drawings...	Jämför ritningar...
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	Datorstödd konstruktion och ritning: ett CAD-program med öppen källkod, skrivet från grunden i ren Rust.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	Datorstödd konstruktion och ritning: ett CAD-program med öppen källkod, skrivet från grunden i ren Rust.
 	Concentric	Koncentrisk
 	Cone	Kon
 	Constraint Bars	Villkorsfält
@@ -798,7 +798,7 @@
 	Quick Select Properties	Egenskaper för snabbmarkering
 	Quick Select...	Snabbmarkering...
 	QuickCalc	Snabbkalkyl
-	Quit Iridium CAD	Avsluta Iridium CAD
+	Quit Cad	Avsluta CAD
 	Radius	Radie
 	Raster Image	Rasterbild
 	Ray	Stråle
@@ -1216,7 +1216,7 @@
 @plural	{n} contributor	{n} bidragsgivare|{n} bidragsgivare
 	Drawing as bytes	Ritningen som byte
 	Services	Tjänster
-	Hide Iridium CAD	Dölj Iridium CAD
+	Hide Cad	Dölj CAD
 	Hide Others	Dölj övriga
 	Accessibility	Tillgänglighet
 	Show System Cursor	Visa systemets muspekare
@@ -1446,7 +1446,7 @@ menu	Modify	Ändra
 	Yards	Yard
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.
 	Check for Updates…	Sök efter uppdateringar…
-	Iridium CAD is up to date.	Iridium CAD är uppdaterat.
+	Cad is up to date.	CAD är uppdaterat.
 	Could not check for updates.	Det gick inte att söka efter uppdateringar.
 	Find All	Find All
 	Find what:	Find what:

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/app-icon/hicolor/256x256/apps/ph.iridium.cad.png" width="128" height="128" alt="Iridium CAD icon: a drafting set square and compass arc on a blue grid tile">
+  <img src="assets/app-icon/hicolor/256x256/apps/ph.cad.png" width="128" height="128" alt="CAD icon: a drafting set square and compass arc on a blue grid tile">
 </p>
 
-<h1 align="center">Iridium CAD</h1>
+<h1 align="center">CAD</h1>
 
 <p align="center">
   <b>Computer-aided design and drafting; an open-source, modern 2D and 3D CAD application, built in pure Rust.</b>
@@ -22,8 +22,8 @@
   <img alt="Agent-drivable over MCP" src="https://img.shields.io/badge/agents-MCP-084f39?style=flat-square">
   <img alt="Status: early development" src="https://img.shields.io/badge/status-early%20development-084f39?style=flat-square">
   <br>
-  <a href="https://sonarcloud.io/project/overview?id=storytold_cadcraft"><img alt="Scanned by SonarCloud" src="https://img.shields.io/badge/Scanned_by-SonarCloud-4b9fd5?style=flat-square&logo=sonarqubecloud&logoColor=white"></a>
-  <a href="https://coderabbit.ai"><img alt="Reviewed by CodeRabbit" src="https://img.shields.io/coderabbit/prs/github/storytold/cadcraft?style=flat-square&label=Reviewed%20by%20CodeRabbit&logo=coderabbit"></a>
+  <a href="https://sonarcloud.io/project/overview?id=ngjordan_cad"><img alt="Scanned by SonarCloud" src="https://img.shields.io/badge/Scanned_by-SonarCloud-4b9fd5?style=flat-square&logo=sonarqubecloud&logoColor=white"></a>
+  <a href="https://coderabbit.ai"><img alt="Reviewed by CodeRabbit" src="https://img.shields.io/coderabbit/prs/github/ngjordan/cad?style=flat-square&label=Reviewed%20by%20CodeRabbit&logo=coderabbit"></a>
 </p>
 
 <p align="center">
@@ -31,23 +31,23 @@
 </p>
 
 <p align="center">
-  <a href="https://iridium.ph"><b>Iridium CAD by Iridium Technologies, Inc.</b></a> ·
-  <a href="https://github.com/storytold/cadcraft">Based on CADCraft by the ArtCraft team</a>
+  <a href="https://iridium.ph"><b>CAD by Iridium Technologies, Inc.</b></a> ·
+  <a href="https://github.com/ngjordan/cad">Based on the upstream CADCraft project</a>
 </p>
 
 <br>
 
 <p align="center">
-  <img src="docs/images/ui-apartment.png" alt="Iridium CAD with an apartment floor plan open: hatched grey walls, blue windows, green door swings, furniture outlines, yellow room names with areas, a yellow room schedule table, a multileader note and cyan dimensions with architectural ticks; Tool Sets on the left, Layers and Properties on the right, the command line at the bottom" width="100%">
-  <br><sub><b>Apartment plan</b> (<a href="examples/apartment.dxf">examples/apartment.dxf</a>): walls with pick-point hatching, TrueType MTEXT room labels, a TABLE, a multileader and architectural dimensions — built entirely from Iridium CAD commands.</sub>
+  <img src="docs/images/ui-apartment.png" alt="CAD with an apartment floor plan open: hatched grey walls, blue windows, green door swings, furniture outlines, yellow room names with areas, a yellow room schedule table, a multileader note and cyan dimensions with architectural ticks; Tool Sets on the left, Layers and Properties on the right, the command line at the bottom" width="100%">
+  <br><sub><b>Apartment plan</b> (<a href="examples/apartment.dxf">examples/apartment.dxf</a>): walls with pick-point hatching, TrueType MTEXT room labels, a TABLE, a multileader and architectural dimensions — built entirely from CAD commands.</sub>
 </p>
 
 > [!NOTE]
-> **Iridium CAD is built for people who draft, dimension and document their designs.** Iridium Technologies, Inc. builds it from an open-source independent project in pure Rust.
+> **CAD is built for people who draft, dimension and document their designs.** Iridium Technologies, Inc. builds it from an open-source independent project in pure Rust.
 
 <p align="center">
   <a href="#screenshots">Screenshots</a> ·
-  <a href="#why-cadcraft">Why Iridium CAD</a> ·
+  <a href="#why-cad">Why CAD</a> ·
   <a href="#what-works-today">What works today</a> ·
   <a href="#quick-start">Quick start</a> ·
   <a href="#drive-it-from-agents-mcp-and-the-cli">Agents, MCP and the CLI</a> ·
@@ -62,8 +62,8 @@
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/images/ui-layout.png" alt="A paper-space layout in Iridium CAD: a white sheet with a dashed printable area and a viewport showing the apartment plan at scale, the status bar showing the A1 Plan layout tab and a PAPER toggle"></td>
-    <td width="50%"><img src="docs/images/ui-bracket.png" alt="Iridium CAD with a mounting bracket part drawing: front view with bolt holes, centre lines and dimensions, a hatched section view, notes and a title block"></td>
+    <td width="50%"><img src="docs/images/ui-layout.png" alt="A paper-space layout in CAD: a white sheet with a dashed printable area and a viewport showing the apartment plan at scale, the status bar showing the A1 Plan layout tab and a PAPER toggle"></td>
+    <td width="50%"><img src="docs/images/ui-bracket.png" alt="CAD with a mounting bracket part drawing: front view with bolt holes, centre lines and dimensions, a hatched section view, notes and a title block"></td>
   </tr>
   <tr>
     <td><sub><b>Layouts</b>: paper space with viewports, page setups and PLOT to PDF. Double-click a viewport to work in model space through it.</sub></td>
@@ -71,7 +71,7 @@
   </tr>
 </table>
 
-## Why Iridium CAD
+## Why CAD
 
 - **The workflow you know.** Type `L`, click two points, type `@5<45`, press Enter. The command
   line, prompts with clickable `[Keywords]`, AutoComplete, object snaps, polar tracking, ortho,
@@ -89,7 +89,7 @@
 
 ## What works today
 
-Iridium CAD is in early, fast development. Honest status (see [ROADMAP.md](ROADMAP.md) for parity
+CAD is in early, fast development. Honest status (see [ROADMAP.md](ROADMAP.md) for parity
 numbers):
 
 | Area | Status |
@@ -102,21 +102,21 @@ numbers):
 | Layers & properties | Layers palette and Layer Properties Manager (on/off, freeze, lock, plot, colour, linetype), layer tools (isolate, freeze, off, lock, match, previous), Properties palette with per-object editing, linetypes, lineweights, colour index and true colour |
 | Annotation | All DIM* commands with full DIMSTYLE variables, overrides and every arrowhead, associative dimensions that follow geometry, MLEADER, TABLE, TrueType fonts (`.ttf`, `.otf`, `.ttc` collections), MTEXT formatting codes (fonts, heights, colours, stacked fractions), our own single-stroke drafting font |
 | Hatch & blocks | Pick-point hatch boundaries with islands, pattern, solid and gradient fills from our own pattern library, BLOCK/INSERT, attributes and nested blocks |
-| Files | DXF read (R12–2018, ASCII and binary) and write (R2000), including dimension styles, associativity, tables and constraints; DWG read (via the acadrust library) and write (R2000); PDF plotting, SVG and PNG export. Entities Iridium CAD doesn't model yet are not kept on save: see [file-format parity](docs/file-format-parity.md) |
+| Files | DXF read (R12–2018, ASCII and binary) and write (R2000), including dimension styles, associativity, tables and constraints; DWG read (via the acadrust library) and write (R2000); PDF plotting, SVG and PNG export. Entities CAD doesn't model yet are not kept on save: see [file-format parity](docs/file-format-parity.md) |
 | Layouts & plotting | Paper-space layouts, viewports (scale, lock, per-viewport layer freeze), MSPACE/PSPACE through viewports, page setups, PLOT and EXPORTPDF |
 | Parametric | Geometric and dimensional constraints, AUTOCONSTRAIN, PARAMETERS with expressions, conflict detection; constraints re-solve after every edit |
 | Grips | Hot grips with Space to cycle Stretch, Move, Rotate, Scale and Mirror |
 | Interface languages | English, Ukrainian (Українська), Brazilian Portuguese (Português (Brasil)), German (Deutsch), Spanish (Español), Czech (Čeština), Russian (Русский), French (Français), Simplified Chinese (简体中文, with an installed CJK font), Italian (Italiano), Korean (한국어, with an installed Hangul font), Swedish (Svenska), Arabic (العربية, with an installed Arabic font), Hungarian (Magyar) and Turkish (Türkçe), live switching and a remembered Auto/system-language choice; [details](docs/localization.md) |
-| Automation | MCP server, JSON control channel, `cadcraft-cli` (info, convert, run, commands, mcp) |
+| Automation | MCP server, JSON control channel, `iridium-cad-cli` (info, convert, run, commands, mcp) |
 
 ## Quick start
 
-Iridium CAD requires Rust 1.95 or later.
+CAD requires Rust 1.95 or later.
 
 ```sh
-git clone https://github.com/storytold/cadcraft
-cd cadcraft
-cargo run --release -p cadcraft -- --sample       # opens the sample drawing
+git clone https://github.com/ngjordan/cad
+cd iridium-cad
+cargo run --release -p iridium-cad -- --sample       # opens the sample drawing
 ```
 
 Then try typing at the command line:
@@ -128,12 +128,12 @@ offset 0.25                     then pick the circle and a side
 zoom e                          zoom to extents
 ```
 
-The web build: `cd apps/cadcraft-web && trunk serve` (needs [trunk](https://github.com/trunk-rs/trunk)).
+The web build: `cd apps/iridium-cad-web && trunk serve` (needs [trunk](https://github.com/trunk-rs/trunk)).
 
 ### Fonts
 
-Iridium CAD has no fonts in its repository; it uses the TrueType/OpenType fonts installed on your
-system. Builds made with the optional [craft-fonts](https://github.com/storytold/craft-fonts)
+CAD has no fonts in its repository; it uses the TrueType/OpenType fonts installed on your
+system. Builds made with the optional [craft-fonts](https://github.com/ngjordan/craft-fonts)
 input (`CRAFT_FONTS_DIR=<absolute path to a checkout> cargo build --release`) also embed its
 fonts: BIZ UDPGothic, BIZ UDMincho and Shippori Mincho (Japanese) and Noto Sans Arabic (the web
 build, which has no system fonts, only BIZ UDPGothic Regular and Noto Sans Arabic). A text style
@@ -157,7 +157,7 @@ run) an environment variable, steer this:
 Linux and the BSDs `/usr/share/fonts`, `/usr/local/share/fonts`, `~/.local/share/fonts` or
 `~/.fonts`) and name it in a text style (`STYLE`, or `style {"name":"FA","font":"Vazirmatn"}`)
 by file name (`Vazirmatn-Regular.ttf`) or family name (`Vazirmatn`), or inline in MTEXT with
-`\fVazirmatn;`. Restart Iridium CAD after installing a font: the font folders are scanned once.
+`\fVazirmatn;`. Restart CAD after installing a font: the font folders are scanned once.
 
 **Right-to-left text (Persian, Arabic, Urdu, Hebrew).** TEXT and MTEXT lines are laid out with the
 Unicode Bidirectional Algorithm (the paragraph direction comes from its first letter, so numbers
@@ -174,41 +174,41 @@ point.
 
 ### Logs
 
-The desktop app writes its `log` records to standard error and to `logs/cadcraft.log` in the
-settings directory (Linux and the BSDs `~/.config/cadcraft/logs/`, or
-`$XDG_CONFIG_HOME/cadcraft/logs/`; macOS `~/Library/Application Support/Iridium CAD/logs/`; Windows
-`%APPDATA%\Iridium CAD\logs\`; or under `CADCRAFT_CONFIG_DIR`). A start from a desktop menu or the
+The desktop app writes its `log` records to standard error and to `logs/iridium-cad.log` in the
+settings directory (Linux and the BSDs `~/.config/iridium-cad/logs/`, or
+`$XDG_CONFIG_HOME/iridium-cad/logs/`; macOS `~/Library/Application Support/CAD/logs/`; Windows
+`%APPDATA%\CAD\logs\`; or under `CADCRAFT_CONFIG_DIR`). A start from a desktop menu or the
 Dock has no terminal, so this file is what to attach to a bug report. Each launch moves the
-previous log to `cadcraft.1.log` (and that one to `cadcraft.2.log`), so the log of a run that
+previous log to `iridium-cad.1.log` (and that one to `iridium-cad.2.log`), so the log of a run that
 crashed survives the next start. The file stops growing at 16 MiB. `--version` writes no file.
 
 | Variable | Effect |
 |---|---|
 | `CADCRAFT_CONFIG_DIR` | Use this directory instead of the platform settings directory (the log goes to its `logs/`); empty means no settings folder (no log file, autosave, workspace or plotters) |
-| `RUST_LOG` | Log levels for standard error and the log file. Default: `info` for Iridium CAD's own crates, `warn` for everything else. env_logger-style directives replace that, e.g. `RUST_LOG=debug`, `RUST_LOG=warn,cadcraft_io=trace` or `RUST_LOG=info,wgpu_core=warn`; a directive ending in `*` covers every target starting with it (`cadcraft*=debug`). `cadcraft_engine=debug` also logs every command-line message. |
+| `RUST_LOG` | Log levels for standard error and the log file. Default: `info` for CAD's own crates, `warn` for everything else. env_logger-style directives replace that, e.g. `RUST_LOG=debug`, `RUST_LOG=warn,cadcraft_io=trace` or `RUST_LOG=info,wgpu_core=warn`; a directive ending in `*` covers every target starting with it (`cadcraft*=debug`). `cadcraft_engine=debug` also logs every command-line message. |
 
-The logger is `apps/cadcraft/src/logging.rs`; the web build logs to the browser console instead.
+The logger is `apps/iridium-cad/src/logging.rs`; the web build logs to the browser console instead.
 
 ## Drive it from agents, MCP and the CLI
 
 ```sh
 # MCP server on stdio, headless:
-cadcraft-cli mcp
+iridium-cad-cli mcp
 # …or bridged to the running app (start it with --control 7979):
-cadcraft-cli mcp --connect 127.0.0.1:7979
+iridium-cad-cli mcp --connect 127.0.0.1:7979
 
 # One-shot headless runs:
-cadcraft-cli run --sample --script 'CIRCLE 22,3 1\n' --save out.dxf --export out.png
-cadcraft-cli info drawing.dxf
-cadcraft-cli convert drawing.dxf drawing.svg
+iridium-cad-cli run --sample --script 'CIRCLE 22,3 1\n' --save out.dxf --export out.png
+iridium-cad-cli info drawing.dxf
+iridium-cad-cli convert drawing.dxf drawing.svg
 
 # Frame part of the drawing (model space, drawing units, lower-left corner first):
-cadcraft-cli convert drawing.dwg detail.png --window 0,0,20000,15000
-cadcraft-cli run drawing.dwg --cmd 'zoom {"mode":"window","p1":[0,0],"p2":[20000,15000]}' --export detail.png
-cadcraft-cli run drawing.dwg --cmd 'select {"window":[[0,0],[20000,15000]]}' --cmd 'zoom {"mode":"object"}' --export sel.png
+iridium-cad-cli convert drawing.dwg detail.png --window 0,0,20000,15000
+iridium-cad-cli run drawing.dwg --cmd 'zoom {"mode":"window","p1":[0,0],"p2":[20000,15000]}' --export detail.png
+iridium-cad-cli run drawing.dwg --cmd 'select {"window":[[0,0],[20000,15000]]}' --cmd 'zoom {"mode":"object"}' --export sel.png
 
 # Act on what an earlier --cmd made: {last} is the last handle it returned.
-cadcraft-cli run --metric --cmd 'layout.set {"name":"Layout1"}' \
+iridium-cad-cli run --metric --cmd 'layout.set {"name":"Layout1"}' \
   --cmd 'mview {"p1":[20,20],"p2":[200,150]}' --cmd 'viewport.set {"handle":"{last}","scale":1}'
 ```
 
@@ -228,10 +228,10 @@ MCP tools include `command_line` (type at the prompt), `execute` (any command wi
 `screenshot` and `ui_click`. The desktop app's JSON control channel is documented in
 [docs/control-protocol.md](docs/control-protocol.md).
 
-To run LISP routines, scripts and alias files, or to drive Iridium CAD from your own programs, see
+To run LISP routines, scripts and alias files, or to drive CAD from your own programs, see
 [docs/customization.md](docs/customization.md).
 
-`cadcraft-cli --help` documents every subcommand and flag; exit codes, streams, environment
+`iridium-cad-cli --help` documents every subcommand and flag; exit codes, streams, environment
 variables and its RFC-0012 conventions are in [docs/cli.md](docs/cli.md).
 
 ## Architecture
@@ -245,14 +245,14 @@ fonts ┤ render               stroke font + TEXT/MTEXT layout │ display lists
 io    ┤                       DXF mapping, SVG/PNG export
 engine┤                       sessions, commands, command line + prompts, snaps, selection, undo
 ui-egui · mcp                 the swappable egui front end · MCP server
-apps: cadcraft · cadcraft-cli · cadcraft-web
+apps: iridium-cad · iridium-cad-cli · iridium-cad-web
 ```
 
 Nothing below `ui-egui` knows about egui, so the front end can be replaced. `cargo xtask ci`
 checks formatting, clippy, tests, asset attribution, the crate layering and the wasm build.
 
 Drafting and layer-palette icon buttons use the pinned `craft-ui` button component for interaction,
-accessible labels and keyboard focus. Iridium CAD keeps its multicolor icon painter, dark palette,
+accessible labels and keyboard focus. CAD keeps its multicolor icon painter, dark palette,
 disabled tint and tool commands. The native host saves workspace visibility and toolset choices
 atomically; `CADCRAFT_CONFIG_DIR` selects an isolated profile. Compact toolbar groups move into a
 More menu, and status readouts truncate with a full-value tooltip before they reach layout tabs.
@@ -263,11 +263,11 @@ have accessible labels and visible keyboard focus. Property controls remain appl
 
 ### System cursor
 
-Over the drawing area Iridium CAD hides the system cursor and draws its own crosshair. Tools that follow the system cursor (Windows Magnifier set to follow or centre the mouse pointer, other screen magnifiers, screen recorders, remote desktops) lose track of it there. Turn on **View ▸ Accessibility ▸ Show System Cursor** to keep a small system crosshair visible at the centre of the drawn one, or start Iridium CAD with the environment variable `CADCRAFT_SYSTEM_CURSOR=1` (on Windows, set it once with `setx CADCRAFT_SYSTEM_CURSOR 1` and start Iridium CAD again). Agents can switch it with the control channel: `ui.set {"systemCursor": true}`.
+Over the drawing area CAD hides the system cursor and draws its own crosshair. Tools that follow the system cursor (Windows Magnifier set to follow or centre the mouse pointer, other screen magnifiers, screen recorders, remote desktops) lose track of it there. Turn on **View ▸ Accessibility ▸ Show System Cursor** to keep a small system crosshair visible at the centre of the drawn one, or start CAD with the environment variable `CADCRAFT_SYSTEM_CURSOR=1` (on Windows, set it once with `setx CADCRAFT_SYSTEM_CURSOR 1` and start CAD again). Agents can switch it with the control channel: `ui.set {"systemCursor": true}`.
 
 ### Animation effects
 
-Iridium CAD follows the operating system's animation setting. When the system is set to show no animations, dialogs, menus and tooltips appear at once instead of fading in, collapsing sections and scroll bars change at once, and the mouse wheel scrolls lists a whole step at a time instead of gliding. Zooming the drawing with the wheel always moves a whole step; with Ctrl held (a touchpad pinch, on Windows) it glides to the new zoom only while animation effects show.
+CAD follows the operating system's animation setting. When the system is set to show no animations, dialogs, menus and tooltips appear at once instead of fading in, collapsing sections and scroll bars change at once, and the mouse wheel scrolls lists a whole step at a time instead of gliding. Zooming the drawing with the wheel always moves a whole step; with Ctrl held (a touchpad pinch, on Windows) it glides to the new zoom only while animation effects show.
 
 | System | Where the setting is |
 |---|---|
@@ -276,7 +276,7 @@ Iridium CAD follows the operating system's animation setting. When the system is
 | Linux, BSD | the desktop's reduced-motion (or animations) setting, read through the XDG Desktop Portal |
 | Web | the browser's `prefers-reduced-motion` |
 
-A change to the system setting is picked up while Iridium CAD runs, within a few seconds. To choose for Iridium CAD alone, use **View ▸ Accessibility ▸ Animation Effects**: **Use System Setting** (the default), **On** or **Off**. Options ▸ Display has the same choice. Agents can set it with the control channel: `ui.set {"animations": "off"}` (`"system"`, `"on"` or `"off"`), and `ui.inspect` reports whether animations show (`animations`).
+A change to the system setting is picked up while CAD runs, within a few seconds. To choose for CAD alone, use **View ▸ Accessibility ▸ Animation Effects**: **Use System Setting** (the default), **On** or **Off**. Options ▸ Display has the same choice. Agents can set it with the control channel: `ui.set {"animations": "off"}` (`"system"`, `"on"` or `"off"`), and `ui.inspect` reports whether animations show (`animations`).
 
 Drafting feedback is not an animation effect and stays as it is: rubber bands and previews, snap markers, the pause that acquires an object snap tracking point, the text cursor's blink, the spinner shown while a drawing opens, and pan and zoom, which follow the pointer and the wheel directly.
 
@@ -286,27 +286,27 @@ See [ROADMAP.md](ROADMAP.md) for the stage, measured parity and the estimate of 
 
 ## Downloads
 
-**Download Iridium CAD** from GitHub: the [latest release](https://github.com/storytold/cadcraft/releases/latest) has every build listed below, and [all releases](https://github.com/storytold/cadcraft/releases) has earlier versions and their notes. `<ver>` in the file names is the version number, and `SHA256SUMS.txt` lists a checksum for every file.
+**Download CAD** from GitHub: the [latest release](https://github.com/ngjordan/cad/releases/latest) has every build listed below, and [all releases](https://github.com/ngjordan/cad/releases) has earlier versions and their notes. `<ver>` in the file names is the version number, and `SHA256SUMS.txt` lists a checksum for every file.
 
 > [!WARNING]
-> Download official Iridium CAD builds from the [storytold/cadcraft releases](https://github.com/storytold/cadcraft/releases). Verify that the repository owner is `storytold`. Before you run a download, check that its checksum matches the line for that file in the release's `SHA256SUMS.txt`:
+> Download official CAD builds from the [ngjordan/cad releases](https://github.com/ngjordan/cad/releases). Verify that the repository owner is `ngjordan`. Before you run a download, check that its checksum matches the line for that file in the release's `SHA256SUMS.txt`:
 >
 > ```sh
-> shasum -a 256 cadcraft-<ver>-macos-universal.dmg     # macOS (on Linux: sha256sum FILE)
-> Get-FileHash .\cadcraft-<ver>-windows-x64.msi        # Windows PowerShell
+> shasum -a 256 iridium-cad-<ver>-macos-universal.dmg     # macOS (on Linux: sha256sum FILE)
+> Get-FileHash .\iridium-cad-<ver>-windows-x64.msi        # Windows PowerShell
 > ```
 
 ### Windows
 
 | Build | Installer | Portable |
 |---|---|---|
-| x64 (64-bit Intel/AMD) | `cadcraft-<ver>-windows-x64.msi` | `cadcraft-<ver>-windows-x64-portable.zip` |
-| arm64 (Snapdragon and other ARM PCs) | `cadcraft-<ver>-windows-arm64.msi` | `cadcraft-<ver>-windows-arm64-portable.zip` |
-| x86 (32-bit) | `cadcraft-<ver>-windows-x86.msi` | `cadcraft-<ver>-windows-x86-portable.zip` |
+| x64 (64-bit Intel/AMD) | `iridium-cad-<ver>-windows-x64.msi` | `iridium-cad-<ver>-windows-x64-portable.zip` |
+| arm64 (Snapdragon and other ARM PCs) | `iridium-cad-<ver>-windows-arm64.msi` | `iridium-cad-<ver>-windows-arm64-portable.zip` |
+| x86 (32-bit) | `iridium-cad-<ver>-windows-x86.msi` | `iridium-cad-<ver>-windows-x86-portable.zip` |
 
 Installers and executables are code-signed.
 
-The installer adds Iridium CAD to the Start menu and asks whether to add a desktop shortcut too (unticked by default). For a silent install with the desktop shortcut: `msiexec /i cadcraft-<ver>-windows-x64.msi /qn DESKTOPSHORTCUT=1`.
+The installer adds CAD to the Start menu and asks whether to add a desktop shortcut too (unticked by default). For a silent install with the desktop shortcut: `msiexec /i iridium-cad-<ver>-windows-x64.msi /qn DESKTOPSHORTCUT=1`.
 A silent install is per-user by default; add `ALLUSERS=1`, from an elevated terminal or deployment tool, for an all-users install.
 
 **If the app doesn't open on Windows:** the desktop app initializes only DirectX 12 by default.
@@ -317,7 +317,7 @@ PowerShell, from the folder containing the executable:
 
 ```powershell
 $env:WGPU_BACKEND = "vulkan"
-& .\cadcraft.exe
+& .\iridium-cad.exe
 Remove-Item Env:WGPU_BACKEND                     # restore the default for later launches
 ```
 
@@ -328,63 +328,64 @@ and web backend defaults are unchanged.
 
 | Build | File | Notes |
 |---|---|---|
-| App, universal (Apple silicon + Intel) | `cadcraft-<ver>-macos-universal.dmg` | Signed and notarized |
-| Command-line tool, universal | `cadcraft-cli-<ver>-macos-universal.zip` | Signed and notarized |
+| App, universal (Apple silicon + Intel) | `iridium-cad-<ver>-macos-universal.dmg` | Signed and notarized |
+| Command-line tool, universal | `iridium-cad-cli-<ver>-macos-universal.zip` | Signed and notarized |
 
 ### Linux
 
 | Format | x86_64 | aarch64 (ARM64) | Notes |
 |---|---|---|---|
-| AppImage | `cadcraft-<ver>-linux-x86_64.AppImage` | `cadcraft-<ver>-linux-aarch64.AppImage` | Runs anywhere; updates itself with [AppImageUpdate](https://github.com/AppImageCommunity/AppImageUpdate) (`.zsync` files) |
-| Flatpak | `cadcraft-<ver>-linux-x86_64.flatpak` | `cadcraft-<ver>-linux-aarch64.flatpak` | Sandboxed; `flatpak install --user <file>` |
-| Debian/Ubuntu | `cadcraft-<ver>-linux-x86_64.deb` | `cadcraft-<ver>-linux-aarch64.deb` | |
-| Fedora/RHEL/openSUSE | `cadcraft-<ver>-linux-x86_64.rpm` | `cadcraft-<ver>-linux-aarch64.rpm` | |
-| Tarball | `cadcraft-<ver>-linux-x86_64.tar.gz` | `cadcraft-<ver>-linux-aarch64.tar.gz` | Unpack anywhere |
+| AppImage | `iridium-cad-<ver>-linux-x86_64.AppImage` | `iridium-cad-<ver>-linux-aarch64.AppImage` | Runs anywhere; updates itself with [AppImageUpdate](https://github.com/AppImageCommunity/AppImageUpdate) (`.zsync` files) |
+| Flatpak | `iridium-cad-<ver>-linux-x86_64.flatpak` | `iridium-cad-<ver>-linux-aarch64.flatpak` | Sandboxed; `flatpak install --user <file>` |
+| Debian/Ubuntu | `iridium-cad-<ver>-linux-x86_64.deb` | `iridium-cad-<ver>-linux-aarch64.deb` | |
+| Fedora/RHEL/openSUSE | `iridium-cad-<ver>-linux-x86_64.rpm` | `iridium-cad-<ver>-linux-aarch64.rpm` | |
+| Tarball | `iridium-cad-<ver>-linux-x86_64.tar.gz` | `iridium-cad-<ver>-linux-aarch64.tar.gz` | Unpack anywhere |
 
-RISC-V (riscv64): `cadcraft-<ver>-linux-riscv64.tar.gz`, cross-compiled; needs glibc 2.39 or newer (Ubuntu 24.04+, Debian 13+).
+RISC-V (riscv64): `iridium-cad-<ver>-linux-riscv64.tar.gz`, cross-compiled; needs glibc 2.39 or newer (Ubuntu 24.04+, Debian 13+).
 
 ### FreeBSD
 
 | Build | File |
 |---|---|
-| x86_64 | `cadcraft-<ver>-freebsd-x86_64.tar.gz` |
+| x86_64 | `iridium-cad-<ver>-freebsd-x86_64.tar.gz` |
 
 ### Web (WebAssembly)
 
 | Build | File | Notes |
 |---|---|---|
-| Static site | `cadcraft-web-<ver>.zip` | Runs in a modern browser; host it on any static server |
+| Static site | `iridium-cad-web-<ver>.zip` | Runs in a modern browser; host it on any static server |
 
 ## The Crafting Apps
 
-Iridium CAD is one of the Iridium applications, alongside the Iridium Docs word processor and the
-Iridium Sheets spreadsheet. Each is built from an open-source independent project, in pure Rust, and
+CAD is one of five open-source desktop applications, alongside the Docs word processor and the
+Sheets spreadsheet. Each is built from an open-source independent project, in pure Rust, and
 each stands on its own.
 
 | App | What it's for | Code |
-|:-:|---|---|
-| **Iridium CAD** | Computer-aided design and drafting | [GitHub](https://github.com/ngjordan/iridium-cad) |
-| **Iridium Sheets** | Spreadsheets and data | [GitHub](https://github.com/ngjordan/iridium-sheets) |
-| **Iridium Docs** | Word processing and documents | [GitHub](https://github.com/ngjordan/iridium-docs) |
+| **Sheets** | Spreadsheets and data | [GitHub](https://github.com/ngjordan/sheets) |
+| **Docs** | Word processing and documents | [GitHub](https://github.com/ngjordan/docs) |
+| **CAD** | Computer-aided design and drafting | [GitHub](https://github.com/ngjordan/cad) |
+| **Decks** | Presentations and slide shows | [GitHub](https://github.com/ngjordan/decks) |
+| **PDF** | Reading, organizing and protecting PDF files | [GitHub](https://github.com/ngjordan/pdf) |
 
 ## License and credits
 
-Iridium CAD is dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
-Copyright (c) 2026 ArtCraft Team and the CADCraft contributors. Required notices are in [NOTICE](NOTICE).
+CAD is dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
+Copyright (c) 2026 Iridium Technologies, Inc. and the CADCraft contributors. Required notices are in [NOTICE](NOTICE).
 
 Bundled fonts, icons, images and other assets keep their own open licenses; each one is listed
 with its author, source and license in [ATTRIBUTION.md](ATTRIBUTION.md).
 
-Iridium CAD's icons, its single-stroke drafting font, its hatch patterns and its linetypes are all
+CAD's icons, its single-stroke drafting font, its hatch patterns and its linetypes are all
 original work, drawn or defined in code. The sample drawings are generated in code too.
 
-The ArtCraft name, wordmark and logos are trademarks of the ArtCraft Team and are not covered by
-this license. This is a modified distribution and the ArtCraft marks have been removed, as the
+The upstream project name, wordmark and logos are trademarks of the the upstream team and are not covered by
+this license. This is a modified distribution and the upstream marks have been removed, as the
 upstream brand licence requires for forks.
 
 <p align="center">
-  <sub>Based on <a href="https://github.com/storytold/cadcraft">CADCraft</a> by the ArtCraft team.
-  Iridium CAD is a modified distribution; the ArtCraft marks have been removed as the upstream
+  <sub>Based on <a href="https://github.com/ngjordan/cad">CADCraft</a> by the upstream team.
+  CAD is a modified distribution; the upstream marks have been removed as the upstream
   brand licence requires. MIT OR Apache-2.0.</sub>
 </p>
 

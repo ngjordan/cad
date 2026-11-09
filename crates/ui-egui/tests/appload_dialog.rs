@@ -6,12 +6,12 @@ use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
-use cadcraft_engine::Session;
-use cadcraft_ui_egui::{CadApp, Services};
+use iridium_cad_engine::Session;
+use iridium_cad_ui_egui::{CadApp, Services};
 use serde_json::json;
 
 fn temp_dir(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("cadcraft-appload-{tag}-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("iridium-cad-appload-{tag}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     std::fs::create_dir_all(&dir).expect("a temporary directory");
     dir

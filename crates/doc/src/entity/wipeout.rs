@@ -5,7 +5,7 @@
 
 use std::borrow::Cow;
 
-use cadcraft_geom::Vec2;
+use iridium_cad_geom::Vec2;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

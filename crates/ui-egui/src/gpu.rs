@@ -17,11 +17,11 @@
 
 use std::sync::{Arc, Mutex};
 
-use cadcraft_color::Rgb;
-use cadcraft_geom::{Bounds2, Vec2};
-use cadcraft_render::{DisplayList, Kind};
 use egui_wgpu::wgpu;
 use egui_wgpu::wgpu::util::DeviceExt;
+use iridium_cad_color::Rgb;
+use iridium_cad_geom::{Bounds2, Vec2};
+use iridium_cad_render::{DisplayList, Kind};
 
 use crate::switch::Switch;
 
@@ -44,7 +44,7 @@ const POINT_SIZE: f32 = 1.5;
 /// queued behind the one on screen; Windows DX12 honours one). `low_latency` (the
 /// app passes it on Linux/BSD) prefers a mode that never queues: `AutoNoVsync` picks Immediate,
 /// then Mailbox, then falls back to FIFO, so it is valid on every surface; under a compositor the
-/// compositor still syncs to the display. `vsync` is the `CADCRAFT_VSYNC` override: `1`/`on`
+/// compositor still syncs to the display. `vsync` is the `IRIDIUM_CAD_VSYNC` override: `1`/`on`
 /// forces FIFO (tear-free without a compositor), `0`/`off` forces the low-latency mode.
 pub fn surface_config(vsync: Switch, low_latency: bool) -> egui_wgpu::SurfaceConfig {
     let no_vsync = !vsync.or(!low_latency);
@@ -793,8 +793,8 @@ fn batch_ranges(counts: impl IntoIterator<Item = u32>, range: std::ops::Range<us
 #[cfg(test)]
 mod tests {
     use super::*;
-    use cadcraft_doc::Handle;
-    use cadcraft_render::DPrim;
+    use iridium_cad_doc::Handle;
+    use iridium_cad_render::DPrim;
 
     #[test]
     fn surface_config_prefers_low_latency_where_asked_and_honours_override() {

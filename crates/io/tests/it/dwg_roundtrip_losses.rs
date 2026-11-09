@@ -1,13 +1,13 @@
 //! Data that used to be lost only when a drawing is saved as DWG and reopened (the DWG bridge
 //! converts our DXF with acadrust), and the paper-space viewport the DXF writer adds for it.
 
-use cadcraft_color::{Color, Rgb};
-use cadcraft_doc::*;
-use cadcraft_geom::{Vec2, Vec3};
+use iridium_cad_color::{Color, Rgb};
+use iridium_cad_doc::*;
+use iridium_cad_geom::{Vec2, Vec3};
 
 fn through_dwg(d: &Drawing) -> Drawing {
-    let dwg = cadcraft_io::write(d, "x.dwg").unwrap();
-    cadcraft_io::read(&dwg, "x.dwg").unwrap()
+    let dwg = iridium_cad_io::write(d, "x.dwg").unwrap();
+    iridium_cad_io::read(&dwg, "x.dwg").unwrap()
 }
 
 fn line(d: &mut Drawing, space: &Space, common: Common) -> Handle {
@@ -69,12 +69,12 @@ fn dwg_keeps_true_colours_and_transparency() {
         Common { layer: "Fancy".into(), color: Color::True(Rgb(1, 2, 3)), transparency: Transparency::Percent(40), ..Common::default() },
     );
 
-    let dwg = cadcraft_io::write(&d, "x.dwg").unwrap();
-    assert_eq!(cadcraft_dwg::version(&dwg).as_deref(), Some("AC1032"));
-    let header = records(&cadcraft_io::write_dxf(&d), "SECTION");
+    let dwg = iridium_cad_io::write(&d, "x.dwg").unwrap();
+    assert_eq!(iridium_cad_dwg::version(&dwg).as_deref(), Some("AC1032"));
+    let header = records(&iridium_cad_io::write_dxf(&d), "SECTION");
     assert_eq!(header.first().and_then(|h| group(h, "1")), Some("AC1015"), "the DXF stays R2000");
 
-    let back = cadcraft_io::read(&dwg, "x.dwg").unwrap();
+    let back = iridium_cad_io::read(&dwg, "x.dwg").unwrap();
     let e = back.entity(h).unwrap();
     assert_eq!(e.common.color, Color::True(Rgb(1, 2, 3)));
     assert_eq!(e.common.transparency, Transparency::Percent(40));
@@ -104,7 +104,7 @@ fn dwg_keeps_table_styles() {
 
 /// DWG doesn't store viewport ids; readers number a layout's viewports in order, and id 1 is the
 /// paper-space viewport (the sheet, not drawn). The writer puts that viewport ahead of a layout's
-/// own viewports, so a viewport made in Iridium CAD (id 2) keeps its id instead of becoming the
+/// own viewports, so a viewport made in Cad (id 2) keeps its id instead of becoming the
 /// sheet; our reader drops the added viewport again, so a DXF round trip is unchanged.
 #[test]
 fn viewport_ids_survive_dwg_and_the_paper_viewport_stays_implicit() {
@@ -113,7 +113,7 @@ fn viewport_ids_survive_dwg_and_the_paper_viewport_stays_implicit() {
     let h = d.add(&first, Common::default(), viewport(2)).unwrap();
     d.add(&first, Common::default(), viewport(3)).unwrap();
 
-    let text = cadcraft_io::write_dxf(&d);
+    let text = iridium_cad_io::write_dxf(&d);
     let vps = records(&text, "VIEWPORT");
     assert_eq!(vps.len(), 3, "{text}");
     assert_eq!(group(&vps[0], "69"), Some("1"));
@@ -122,7 +122,7 @@ fn viewport_ids_survive_dwg_and_the_paper_viewport_stays_implicit() {
     assert_eq!(group(&vps[1], "68"), Some("2"));
     assert_eq!(group(&vps[1], "90"), Some("32768"));
 
-    let back = cadcraft_io::read_dxf(text.as_bytes()).unwrap();
+    let back = iridium_cad_io::read_dxf(text.as_bytes()).unwrap();
     assert_eq!(viewport_ids(&back.layouts[0]), [2, 3]);
     assert_eq!(back.layouts[0].entities.len(), 2);
 
@@ -134,9 +134,9 @@ fn viewport_ids_survive_dwg_and_the_paper_viewport_stays_implicit() {
     let mut d = Drawing::new_metric();
     d.add(&first, Common::default(), viewport(1)).unwrap();
     d.add(&first, Common::default(), viewport(2)).unwrap();
-    let text = cadcraft_io::write_dxf(&d);
+    let text = iridium_cad_io::write_dxf(&d);
     assert!(!text.contains("PAPERVIEW"));
-    assert_eq!(viewport_ids(&cadcraft_io::read_dxf(text.as_bytes()).unwrap().layouts[0]), [1, 2]);
+    assert_eq!(viewport_ids(&iridium_cad_io::read_dxf(text.as_bytes()).unwrap().layouts[0]), [1, 2]);
 }
 
 /// The paper-space viewport (id 1) of a drawing from another program can come after a model
@@ -172,7 +172,7 @@ fn the_added_paper_viewport_follows_the_plot_scale() {
         (page.scale, page.scale_to_fit) = (scale, fit);
         let first = Space::Paper(d.layouts[0].name.clone());
         d.add(&first, Common::default(), viewport(2)).unwrap();
-        let text = cadcraft_io::write_dxf(&d);
+        let text = iridium_cad_io::write_dxf(&d);
         let vps = records(&text, "VIEWPORT");
         assert_eq!(group(&vps[0], "1000"), Some("PAPERVIEW"), "{text}");
         group(&vps[0], "40").unwrap().parse::<f64>().unwrap()

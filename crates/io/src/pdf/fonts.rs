@@ -7,10 +7,10 @@
 
 use std::collections::HashMap;
 
-use cadcraft_fonts::subset::{self, Embedding};
-use cadcraft_fonts::ttf::Face;
-use cadcraft_render::{DisplayList, PlotText};
 use craft_pdf::write::backend::text::Font;
+use iridium_cad_fonts::subset::{self, Embedding};
+use iridium_cad_fonts::ttf::Face;
+use iridium_cad_render::{DisplayList, PlotText};
 
 /// Most embedded fonts in one file.
 const MAX_FONTS: usize = 64;

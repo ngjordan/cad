@@ -1,5 +1,5 @@
-use cadcraft_doc::{EntityKind, Handle, MLeader};
-use cadcraft_geom::Vec2;
+use iridium_cad_doc::{EntityKind, Handle, MLeader};
+use iridium_cad_geom::Vec2;
 use serde_json::{Value, json};
 
 use crate::{Input, Session};
@@ -118,13 +118,13 @@ fn hostile_mleader_edit_params_never_panic() {
     ] {
         let _ = s.execute(id, &p);
     }
-    let _ = cadcraft_render::build(s.doc().unwrap(), &cadcraft_doc::Space::Model, &cadcraft_render::Options::default());
+    let _ = iridium_cad_render::build(s.doc().unwrap(), &iridium_cad_doc::Space::Model, &iridium_cad_render::Options::default());
 }
 
 mod units {
     use super::super::{Spacing, align_directional, align_distribute, align_parallel};
-    use cadcraft_doc::{Handle, MLeader};
-    use cadcraft_geom::{Vec2, Vec3};
+    use iridium_cad_doc::{Handle, MLeader};
+    use iridium_cad_geom::{Vec2, Vec3};
 
     fn unit_ml(arrow: [f64; 2], land: [f64; 2]) -> MLeader {
         MLeader {

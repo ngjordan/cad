@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebrand CADCraft as Iridium CAD.
+"""Rebrand Cad as Cad.
 
 Idempotent: every rule is a literal (old, new) pair applied to an explicit
 file list, and a rule that has already been applied is skipped rather than
@@ -17,11 +17,11 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-PRODUCT = "Iridium CAD"
-OLD = "CADCraft"
-APP_ID = "ph.iridium.cad"
-NEW_APP_ID = "ph.iridium.cad"
-ICON_OLD = "cadcraft"
+PRODUCT = "Cad"
+OLD = "Cad"
+APP_ID = "ph.cad"
+NEW_APP_ID = "ph.cad"
+ICON_OLD = "iridium-cad"
 ICON_NEW = "iridium-cad"
 
 CHANGES = []
@@ -107,27 +107,27 @@ def main():
     # ------------------------------------------------------------------
     if not args.check:
         icon_dir = ROOT / "assets" / "app-icon"
-        for old, new in (("cadcraft-1024.png", "iridium-cad-1024.png"),
-                         ("cadcraft-macos-512.png", "iridium-cad-macos-512.png"),
-                         ("cadcraft-256.png", "iridium-cad-256.png"),
-                         ("cadcraft-64.png", "iridium-cad-64.png"),
-                         ("cadcraft.ico", "iridium-cad.ico"),
-                         ("cadcraft.icns", "iridium-cad.icns")):
+        for old, new in (("iridium-cad-1024.png", "iridium-cad-1024.png"),
+                         ("iridium-cad-macos-512.png", "iridium-cad-macos-512.png"),
+                         ("iridium-cad-256.png", "iridium-cad-256.png"),
+                         ("iridium-cad-64.png", "iridium-cad-64.png"),
+                         ("iridium-cad.ico", "iridium-cad.ico"),
+                         ("iridium-cad.icns", "iridium-cad.icns")):
             src = icon_dir / old
             if src.exists():
                 src.rename(icon_dir / new)
                 CHANGES.append((f"assets/app-icon/{old}", old, new, 1, "icon"))
 
     # ------------------------------------------------------------------
-    # 4. the ArtCraft marks (trademark clause: forks must remove them)
+    # 4. the the upstream project marks (trademark clause: forks must remove them)
     # ------------------------------------------------------------------
     brand = ROOT / "docs" / "brand"
     if brand.exists():
         if args.check:
-            CHANGES.append(("docs/brand/", "ArtCraft marks", "deleted", 1, "trademark"))
+            CHANGES.append(("docs/brand/", "the upstream project marks", "deleted", 1, "trademark"))
         else:
             shutil.rmtree(brand)
-            CHANGES.append(("docs/brand/", "ArtCraft marks", "deleted", 1, "trademark"))
+            CHANGES.append(("docs/brand/", "the upstream project marks", "deleted", 1, "trademark"))
 
     # ATTRIBUTION.md rows for the deleted brand files would break
     # `cargo xtask assets`, which requires every asset to have a row and
@@ -139,11 +139,11 @@ def main():
         removed = len(lines) - len(kept)
         if removed:
             kept = [l for l in kept
-                    if "The one exception is the ArtCraft brand files in `docs/brand/`"
+                    if "The one exception is the the upstream project brand files in `docs/brand/`"
                     not in l]
             text = "\n".join(kept)
-            text = text.replace("**Policy (mandatory):** CADCraft contains",
-                                "**Policy (mandatory):** Iridium CAD contains")
+            text = text.replace("**Policy (mandatory):** Cad contains",
+                                "**Policy (mandatory):** Cad contains")
             attribution.write_text(text, encoding="utf-8")
             CHANGES.append(("ATTRIBUTION.md", "docs/brand rows", "removed", removed,
                             "attribution"))
@@ -169,15 +169,15 @@ def main():
         if notice.exists():
             t = notice.read_text(encoding="utf-8")
             t = t.replace(
-                "CADCraft\nCopyright (c) 2026 ArtCraft Team and the CADCraft contributors.",
-                "Iridium CAD\n"
-                "Based on CADCraft (c) 2026 ArtCraft Team and the CADCraft contributors.\n"
+                "Cad\nCopyright (c) 2026 the upstream project Team and the Cad contributors.",
+                "Cad\n"
+                "Based on Cad (c) 2026 the upstream project Team and the Cad contributors.\n"
                 "Copyright (c) 2026 Iridium Technologies, Inc.")
             t = t.replace(
-                "The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the ArtCraft Team. They are\n"
+                "The the upstream project name, wordmark and logos in docs/brand/ are trademarks of the the upstream project Team. They are\n"
                 "not open source and are not covered by the license above; their terms are in\n"
                 "docs/brand/LICENSE-brand.txt.",
-                "This is a modified distribution. The ArtCraft name, wordmark and logos have been removed\n"
+                "This is a modified distribution. The the upstream project name, wordmark and logos have been removed\n"
                 "as the upstream brand licence requires; see ATTRIBUTION.md. The code remains under\n"
                 "the MIT License or the Apache License, Version 2.0, at your option.")
             notice.write_text(t, encoding="utf-8")

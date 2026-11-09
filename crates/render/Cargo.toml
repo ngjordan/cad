@@ -1,6 +1,6 @@
 [package]
-name = "cadcraft-render"
-description = "Iridium CAD rendering: display lists (linetypes, hatches, text, blocks, dimensions) and a CPU rasteriser"
+name = "iridium-cad-render"
+description = "Cad rendering: display lists (linetypes, hatches, text, blocks, dimensions) and a CPU rasteriser"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -9,10 +9,10 @@ license.workspace = true
 workspace = true
 
 [dependencies]
-cadcraft-geom = { workspace = true }
-cadcraft-color = { workspace = true }
-cadcraft-doc = { workspace = true }
-cadcraft-fonts = { workspace = true }
+iridium-cad-geom = { workspace = true }
+iridium-cad-color = { workspace = true }
+iridium-cad-doc = { workspace = true }
+iridium-cad-fonts = { workspace = true }
 tiny-skia = { workspace = true }
 lyon_tessellation = { workspace = true }
 

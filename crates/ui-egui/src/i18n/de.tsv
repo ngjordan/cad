@@ -1,6 +1,6 @@
-# Iridium CAD German interface catalog — original translations by the Iridium CAD contributors.
+# CAD German interface catalog — original translations by the CAD contributors.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # UTF-8: context<TAB>English source<TAB>German translation.
 # Empty context = ordinary label; @plural = one|other forms with {n}.
 # Keep command IDs, keywords, technology/product names and user data unchanged.
@@ -28,7 +28,7 @@
 	= Equals	= Gleich
 	> Greater than	> Größer als
 	About	Über
-	About Iridium CAD	Über Iridium CAD
+	About Cad	Über CAD
 	Absolute	Absolut
 	Add Leader	Führungslinie hinzufügen
 	Align	Ausrichten
@@ -84,7 +84,7 @@
 	ByBlock	VonBlock
 	ByColor	VonFarbe
 	ByLayer	VonLayer
-	Iridium CAD Help	Iridium CAD-Hilfe
+	Cad Help	CAD-Hilfe
 	Cancel	Abbrechen
 	Cartesian (x, y)	Kartesisch (x, y)
 	Center	Zentrum
@@ -123,7 +123,7 @@
 	Command Reference	Befehlsreferenz
 	Commits	Commits
 	Company	Firma
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	Rechnergestütztes Konstruieren und Zeichnen: eine quelloffene, unabhängig entwickelte CAD-Anwendung in reinem Rust.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	Rechnergestütztes Konstruieren und Zeichnen: eine quelloffene, unabhängig entwickelte CAD-Anwendung in reinem Rust.
 	Concentric	Konzentrisch
 	Cone	Kegel
 	Constraint Bars	Abhängigkeitsleisten
@@ -596,7 +596,7 @@
 	Quick Select Properties	Schnellauswahl-Eigenschaften
 	Quick Select...	Schnellauswahl...
 	QuickCalc	QuickCalc
-	Quit Iridium CAD	Iridium CAD beenden
+	Quit Cad	CAD beenden
 	Radius	Radius
 	Raster Image	Rasterbild
 	Ray	Strahl
@@ -1003,7 +1003,7 @@
 @plural	{n} contributor	{n} Mitwirkender|{n} Mitwirkende
 	Drawing as bytes	Zeichnung als Bytes
 	Services	Dienste
-	Hide Iridium CAD	Iridium CAD ausblenden
+	Hide Cad	CAD ausblenden
 	Hide Others	Andere ausblenden
 	Accessibility	Bedienungshilfen
 	Show System Cursor	Systemzeiger anzeigen
@@ -1039,7 +1039,7 @@
 	Text color	Textfarbe
 	Click the ruler to add a tab stop, right-click to remove one	Klick auf das Lineal setzt einen Tabstopp, Rechtsklick entfernt ihn
 	Check for Updates…	Nach Updates suchen…
-	Iridium CAD is up to date.	Iridium CAD ist auf dem neuesten Stand.
+	Cad is up to date.	CAD ist auf dem neuesten Stand.
 	Could not check for updates.	Die Suche nach Updates ist fehlgeschlagen.
 	Find All	Find All
 	Find what:	Find what:

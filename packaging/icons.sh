@@ -7,7 +7,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIR="$ROOT/assets/app-icon"
 SRC="$DIR/iridium-cad-1024.png"
-ID="ph.iridium.cad"
+ID="ph.cad"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 command -v sips >/dev/null || { echo "error: sips not found (macOS only)" >&2; exit 1; }

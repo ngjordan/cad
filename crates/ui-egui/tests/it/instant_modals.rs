@@ -1,10 +1,10 @@
 //! "Save changes?" is fully drawn, dim included, in the frame of the Close that asks it.
 
-use cadcraft_engine::Session;
-use cadcraft_ui_egui::{CadApp, Services, menus};
 use egui::epaint::Shape;
 use egui::vec2;
 use egui_kittest::Harness;
+use iridium_cad_engine::Session;
+use iridium_cad_ui_egui::{CadApp, Services, menus};
 use serde_json::json;
 
 /// The opacity of each painted text containing `needle`.

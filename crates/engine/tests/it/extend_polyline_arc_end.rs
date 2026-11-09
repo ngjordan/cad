@@ -3,9 +3,9 @@
 //! with the old bulge (which changed the arc's radius and centre, or missed the boundary). The
 //! polyline keeps its width, elevation and linetype generation.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{Common, Entity, EntityKind, Handle, LwPolyline};
-use cadcraft_engine::geom::{PolyVertex, Vec2};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{Common, Entity, EntityKind, Handle, LwPolyline};
+use iridium_cad_engine::geom::{PolyVertex, Vec2};
 use serde_json::json;
 
 const TOL: f64 = 1e-9;

@@ -2,8 +2,8 @@
 //! edges, Fence, Crossing, Edge (EDGEMODE), Project (PROJMODE), eRase and Undo, and the JSON
 //! forms' `fence`, `crossing`, `edgeMode` and `mode`.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::EntityKind;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::EntityKind;
 use serde_json::json;
 
 type Seg = ((f64, f64), (f64, f64));

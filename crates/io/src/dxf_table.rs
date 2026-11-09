@@ -4,12 +4,12 @@
 //! Reference documents (text style 7, height 140, alignment 170, text colour 62, fill colour 63
 //! with flag 283, border lineweights 274–279, visibility 284–289 and colours 64–69). Everything
 //! else — custom cell styles, per-style margins, data format and precision, true colours — goes
-//! into Iridium CAD xdata (`CELLSTYLES`, JSON). ACAD_TABLE: the cell texts are the evaluated values;
-//! row and cell styles and the formulas go into Iridium CAD xdata (`TABLEX`, JSON).
+//! into Cad xdata (`CELLSTYLES`, JSON). ACAD_TABLE: the cell texts are the evaluated values;
+//! row and cell styles and the formulas go into Cad xdata (`TABLEX`, JSON).
 
-use cadcraft_color::Color;
-use cadcraft_doc::{CellBorder, CellStyle, DataLink, Lineweight, MAX_CELL_STYLES, MAX_TABLE_PARTS, Table, TableBreak, TableStyle};
-use cadcraft_dxf::Tag;
+use iridium_cad_color::Color;
+use iridium_cad_doc::{CellBorder, CellStyle, DataLink, Lineweight, MAX_CELL_STYLES, MAX_TABLE_PARTS, Table, TableBreak, TableStyle};
+use iridium_cad_dxf::Tag;
 use serde::{Deserialize, Serialize};
 
 use crate::dxf_ext::{APP, xdata};

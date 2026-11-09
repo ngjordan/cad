@@ -1,4 +1,4 @@
-use cadcraft_geom::Vec3;
+use iridium_cad_geom::Vec3;
 
 use super::{Entity, Handle, Mat3, Result, Session, Value, Vec2, bad, bool_or, erase_kept, f64_req, json, point_param, point_req, targets};
 
@@ -125,7 +125,7 @@ pub(super) fn run_mirror(s: &mut Session, p: &Value) -> Result<Value> {
     let hs = targets(s, p)?;
     let a = point_req("mirror", p, "p1")?;
     let b = point_req("mirror", p, "p2")?;
-    if a.near(b, cadcraft_geom::EPS) {
+    if a.near(b, iridium_cad_geom::EPS) {
         return Err(bad("mirror", "mirror line points coincide"));
     }
     let erase_src = bool_or(p, "erase", false);

@@ -1,9 +1,9 @@
 //! Dimension text formatting (issue #373): DIMRND rounds the measurement only, tolerances use
 //! DIMTZIN, alternate units DIMALTRND/DIMALTU/DIMALTZ, and DIMPOST is not added to angles.
 
-use cadcraft_doc::{DimKind, DimStyle, Dimension};
-use cadcraft_geom::Vec3;
-use cadcraft_render::dimension_geometry;
+use iridium_cad_doc::{DimKind, DimStyle, Dimension};
+use iridium_cad_geom::Vec3;
+use iridium_cad_render::dimension_geometry;
 
 fn linear(len: f64) -> Dimension {
     Dimension {

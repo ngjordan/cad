@@ -4,7 +4,7 @@ use super::{Bounds2, Drawing, Entity, EntityKind, Handle, HashMap, Layout, Vec2,
 /// Layouts with viewports but without the paper-space viewport (id 1, the sheet itself), keyed
 /// by their first viewport. AutoCAD and DWG take a layout's first viewport as its paper-space
 /// viewport (DWG does not store viewport ids; readers number them in order), so a layout made in
-/// Iridium CAD, whose paper-space viewport is implicit, gets one written ahead of its viewports.
+/// Cad, whose paper-space viewport is implicit, gets one written ahead of its viewports.
 pub(super) fn paper_views(d: &Drawing) -> HashMap<Handle, usize> {
     let mut out = HashMap::new();
     'layouts: for (i, l) in d.layouts.iter().enumerate() {
@@ -42,11 +42,11 @@ fn sheet_scale(l: &Layout) -> f64 {
 }
 
 /// The paper-space viewport (id 1) of the layout whose first viewport is `e`, if it needs one
-/// ([`paper_views`]): the whole sheet, viewed 1:1. Marked with Iridium CAD xdata so that our reader
+/// ([`paper_views`]): the whole sheet, viewed 1:1. Marked with Cad xdata so that our reader
 /// leaves it implicit again.
 pub(super) fn paper_view(w: &mut W, d: &Drawing, e: &Entity, owner: &str, cx: &Ctx) {
     let Some(l) = cx.paper_views.get(&e.handle).and_then(|i| d.layouts.get(*i)) else { return };
-    let paper = cadcraft_render::paper::sheet(d, &l.name).map(|s| s.size).unwrap_or(Vec2::new(12.0, 9.0));
+    let paper = iridium_cad_render::paper::sheet(d, &l.name).map(|s| s.size).unwrap_or(Vec2::new(12.0, 9.0));
     let size = paper / sheet_scale(l);
     let center = size * 0.5;
     let h = w.h();

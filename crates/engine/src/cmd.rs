@@ -54,8 +54,8 @@ pub mod helpers;
 pub mod machines;
 pub mod options;
 
-use cadcraft_doc::Handle;
-use cadcraft_geom::Vec2;
+use iridium_cad_doc::Handle;
+use iridium_cad_geom::Vec2;
 use serde::Serialize;
 use serde_json::Value;
 

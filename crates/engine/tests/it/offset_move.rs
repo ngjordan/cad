@@ -1,7 +1,7 @@
 //! OFFSET Erase/Layer/Multiple/Undo and the MOVE/COPY Displacement option at the command line.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::EntityKind;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::EntityKind;
 use serde_json::json;
 
 /// Every line as ((ax, ay), (bx, by), layer), sorted by the first y.

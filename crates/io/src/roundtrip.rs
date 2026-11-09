@@ -1,20 +1,20 @@
 //! Round-trip checks (gaps FF1 and FF5): open a drawing, save it, open the saved file again and
 //! list everything that differs between the two drawings.
 //!
-//! [`compare`] works on Iridium CAD's own model ([`Drawing`]), so it measures what saving and
+//! [`compare`] works on Cad's own model ([`Drawing`]), so it measures what saving and
 //! reopening lose or change: entities per type in every space and block (matched by handle,
-//! geometry and properties within a tolerance), table records, blocks, layouts, the data Iridium CAD
+//! geometry and properties within a tolerance), table records, blocks, layouts, the data Cad
 //! keeps without modelling it (other programs' objects and entities, dictionaries, CLASS records,
 //! extension dictionaries, reactors, xdata) and header variables. [`census`] counts what the
 //! file itself holds, so opening a file can be checked against it too.
 //!
 //! The corpus harness ([`corpus`], native only) runs both over a folder of real files and writes
-//! a Markdown and JSON report; `cadcraft-cli roundtrip` and `cargo xtask corpus` run it.
+//! a Markdown and JSON report; `iridium-cad-cli roundtrip` and `cargo xtask corpus` run it.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
-use cadcraft_doc::foreign::{Foreign, ForeignExtra};
-use cadcraft_doc::{Drawing, Entity, EntityKind, EntityStore, Handle, RawTag};
+use iridium_cad_doc::foreign::{Foreign, ForeignExtra};
+use iridium_cad_doc::{Drawing, Entity, EntityKind, EntityStore, Handle, RawTag};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -38,7 +38,7 @@ pub enum Category {
     Geometry,
     /// An entity's common properties (layer, colour, linetype, lineweight, transparency…).
     Properties,
-    /// Entities Iridium CAD doesn't model, kept as their DXF groups.
+    /// Entities Cad doesn't model, kept as their DXF groups.
     Opaque,
     /// Other applications' extended data.
     Xdata,
@@ -51,7 +51,7 @@ pub enum Category {
     Block,
     /// Layouts and their page setups.
     Layout,
-    /// Non-graphical objects Iridium CAD doesn't model, kept as their DXF groups; constraints.
+    /// Non-graphical objects Cad doesn't model, kept as their DXF groups; constraints.
     Object,
     /// Entries of the named object dictionary.
     Dictionary,
@@ -938,7 +938,7 @@ fn compare_tables(a: &Drawing, b: &Drawing, out: &mut Out) {
     compare_named(out, Table, "PLOTSTYLE", &refs(&a.plot_style_tables), &refs(&b.plot_style_tables), |x| &x.name);
     // Blocks: renamed anonymous blocks are compared with what they were saved as.
     let renamed_to: HashSet<String> = out.renamed.values().cloned().collect();
-    let ba: Vec<&cadcraft_doc::Block> = a
+    let ba: Vec<&iridium_cad_doc::Block> = a
         .blocks
         .values()
         .map(|x| x.as_ref())
@@ -957,9 +957,9 @@ fn compare_tables(a: &Drawing, b: &Drawing, out: &mut Out) {
             format!("{n} anonymous blocks nothing refers to (e.g. {first}) were not saved"),
         );
     }
-    let bb: Vec<&cadcraft_doc::Block> =
+    let bb: Vec<&iridium_cad_doc::Block> =
         b.blocks.values().map(|x| x.as_ref()).filter(|x| !renamed_to.contains(&x.name.to_ascii_uppercase())).collect();
-    let mut pairs: Vec<(&cadcraft_doc::Block, &cadcraft_doc::Block)> = Vec::new();
+    let mut pairs: Vec<(&iridium_cad_doc::Block, &iridium_cad_doc::Block)> = Vec::new();
     for (from, to) in &out.renamed {
         if let (Some(x), Some(y)) = (a.block(from), b.block(to)) {
             pairs.push((x.as_ref(), y.as_ref()));
@@ -1001,7 +1001,7 @@ fn class_groups(c: &[RawTag]) -> Vec<RawTag> {
 
 fn compare_foreign(a: &Foreign, b: &Foreign, out: &mut Out) {
     let o = out.opts;
-    type Obj = cadcraft_doc::foreign::ForeignObject;
+    type Obj = iridium_cad_doc::foreign::ForeignObject;
     // Objects, by handle, then by content.
     let ib: HashMap<Handle, &Obj> = b.objects.iter().map(|x| (x.handle, x)).collect();
     let ia: HashSet<Handle> = a.objects.iter().map(|x| x.handle).collect();

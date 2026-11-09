@@ -100,16 +100,16 @@ fn dsettings(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
         tracking_options(ui, s);
         ui.separator();
         ui.heading(crate::tl!("Object Snap"));
-        let mut on = s.osmode & cadcraft_engine::snap::mode::OFF == 0;
+        let mut on = s.osmode & iridium_cad_engine::snap::mode::OFF == 0;
         if ui.checkbox(&mut on, crate::tl!("Object Snap On (F3)")).changed() {
             if on {
-                s.osmode &= !cadcraft_engine::snap::mode::OFF;
+                s.osmode &= !iridium_cad_engine::snap::mode::OFF;
             } else {
-                s.osmode |= cadcraft_engine::snap::mode::OFF;
+                s.osmode |= iridium_cad_engine::snap::mode::OFF;
             }
         }
         egui::Grid::new("osnap_grid").num_columns(2).show(ui, |ui| {
-            for (i, (bit, name)) in cadcraft_engine::snap::mode::ALL.iter().enumerate() {
+            for (i, (bit, name)) in iridium_cad_engine::snap::mode::ALL.iter().enumerate() {
                 let mut v = s.osmode & bit != 0;
                 if ui.checkbox(&mut v, crate::i18n::t(name)).changed() {
                     if v {
@@ -154,8 +154,8 @@ fn dsettings(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
 /// The polar and object snap tracking options of Drafting Settings: additional angles
 /// (POLARMODE bit 4, POLARADDANG), tracking on every polar angle (bit 2) and angles relative to
 /// the last segment (bit 1).
-fn tracking_options(ui: &mut egui::Ui, s: &mut cadcraft_engine::Settings) {
-    use cadcraft_engine::snap::tracking::polarmode;
+fn tracking_options(ui: &mut egui::Ui, s: &mut iridium_cad_engine::Settings) {
+    use iridium_cad_engine::snap::tracking::polarmode;
     /// A radio button for POLARMODE `bit` being `on`.
     fn flag(ui: &mut egui::Ui, flags: &mut u32, bit: u32, on: bool, label: &str) {
         if ui.radio((*flags & bit != 0) == on, label).clicked() {
@@ -170,11 +170,11 @@ fn tracking_options(ui: &mut egui::Ui, s: &mut cadcraft_engine::Settings) {
         }
         // The list as typed (degrees separated by `;`), kept while it doesn't parse yet.
         let id = ui.scope_id().with("polaraddang");
-        let shown = cadcraft_engine::sysvars::format_angle_list(&s.polaraddang);
+        let shown = iridium_cad_engine::sysvars::format_angle_list(&s.polaraddang);
         let mut text = ui.data_mut(|d| d.get_temp::<String>(id)).unwrap_or_else(|| shown.clone());
         let resp = ui.add_enabled(additional, egui::TextEdit::singleline(&mut text).desired_width(140.0)).labelled_by(additional_label.id);
         if resp.changed()
-            && let Some(angles) = cadcraft_engine::sysvars::parse_angle_list(&text)
+            && let Some(angles) = iridium_cad_engine::sysvars::parse_angle_list(&text)
         {
             s.polaraddang = angles;
         }
@@ -242,7 +242,7 @@ fn pick(ui: &mut egui::Ui, salt: &str, value: &mut i64, options: &[(i64, String)
 /// Length precision choices for a LUNITS format. Architectural (4) and Fractional (5) step through
 /// binary fractions of an inch (LUPREC n is 1/2^n, 0 is whole inches); the other formats show a decimal sample.
 fn length_precisions(lunits: i64) -> Vec<(i64, String)> {
-    use cadcraft_engine::units::format_distance;
+    use iridium_cad_engine::units::format_distance;
     if matches!(lunits, 4 | 5) {
         (0..=8).map(|p| (p, if p == 0 { "1\"".to_string() } else { format!("1/{}\"", 1i64 << p) })).collect()
     } else {
@@ -253,7 +253,7 @@ fn length_precisions(lunits: i64) -> Vec<(i64, String)> {
 /// Drawing Units (UNITS): edits a copy of LUNITS/LUPREC/AUNITS/AUPREC/INSUNITS and applies it
 /// through the `units` command on OK.
 fn units(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
-    use cadcraft_engine::units::{format_angle, format_distance};
+    use iridium_cad_engine::units::{format_angle, format_distance};
     let id = egui::Id::unique("units_dialog_values");
     let mut v = ctx.data_mut(|d| d.get_temp::<[i64; 5]>(id)).unwrap_or_else(|| {
         app.session
@@ -322,12 +322,9 @@ fn units(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
 fn about(ctx: &egui::Context, open: &mut bool) {
     let t = Tokens::get();
     let tab_id = egui::Id::unique("about_tab");
-    egui::Window::new(crate::tl!("About Iridium CAD"))
-        .id(egui::Id::unique("About Iridium CAD"))
-        .open(open)
-        .default_size(vec2(640.0, 420.0))
-        .collapsible(false)
-        .show(ctx, |ui| {
+    egui::Window::new(crate::tl!("About Cad")).id(egui::Id::unique("About Cad")).open(open).default_size(vec2(640.0, 420.0)).collapsible(false).show(
+        ctx,
+        |ui| {
             let mut tab = ui.data_mut(|d| d.get_temp::<u8>(tab_id)).unwrap_or(0);
             ui.horizontal(|ui| {
                 for (i, l) in ["About", "Contributors", "Models"].iter().enumerate() {
@@ -342,18 +339,19 @@ fn about(ctx: &egui::Context, open: &mut bool) {
                 1 => crate::credits::contributors_ui(ui),
                 2 => crate::credits::models_ui(ui),
                 _ => {
-                    ui.heading(crate::tl!("Iridium CAD"));
+                    ui.heading(crate::tl!("Cad"));
                     ui.label(crate::tf!("Version {version}", version = env!("CARGO_PKG_VERSION")));
                     ui.label(crate::tl!("Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust."));
                     ui.add_space(6.0);
-                    ui.label(RichText::new(crate::tl!("By Iridium Technologies, Inc. Based on CADCraft by the ArtCraft team.")).color(t.text_dim));
+                    ui.label(RichText::new(crate::tl!("By Iridium Technologies, Inc. Based on Cad by the upstream team.")).color(t.text_dim));
                     ui.hyperlink_to("iridium.ph", "https://iridium.ph");
-                    ui.hyperlink_to(crate::tl!("Based on CADCraft by the ArtCraft team"), "https://github.com/storytold/cadcraft");
+                    ui.hyperlink_to(crate::tl!("Based on Cad by the upstream team"), "https://github.com/ngjordan/iridium-cad");
                     ui.add_space(6.0);
                     ui.label(RichText::new(crate::tl!("MIT OR Apache-2.0. Not affiliated with Autodesk, Inc.")).small().color(t.text_faint));
                 }
             }
-        });
+        },
+    );
 }
 
 /// Command Reference window; filters commands by id or label (English or translated) and starts the clicked command after closing the dialog.
@@ -372,7 +370,7 @@ fn commands(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
             let f = filter.to_lowercase();
             egui::ScrollArea::vertical().show(ui, |ui| {
                 egui::Grid::new("cmdref").striped(true).num_columns(3).show(ui, |ui| {
-                    for c in cadcraft_engine::command_specs() {
+                    for c in iridium_cad_engine::command_specs() {
                         if !f.is_empty()
                             && !c.id.contains(&f)
                             && !c.label.to_ascii_lowercase().contains(&f)
@@ -424,7 +422,7 @@ fn insert_block(app: &mut CadApp, name: &str) {
     if app.session.running.as_ref().is_none_or(|r| r.id != "insert") {
         return;
     }
-    if let Err(e) = app.session.input(cadcraft_engine::Input::Text(name.to_string())) {
+    if let Err(e) = app.session.input(iridium_cad_engine::Input::Text(name.to_string())) {
         app.session.echo(e.to_string());
     }
 }
@@ -445,9 +443,9 @@ fn language(app: &mut CadApp, ctx: &egui::Context, open: &mut bool) {
 
 #[cfg(test)]
 mod tests {
-    use cadcraft_engine::doc::EntityKind;
-    use cadcraft_engine::geom::Vec2;
-    use cadcraft_engine::{Input, Session};
+    use iridium_cad_engine::doc::EntityKind;
+    use iridium_cad_engine::geom::Vec2;
+    use iridium_cad_engine::{Input, Session};
     use serde_json::json;
 
     use crate::{CadApp, Services};

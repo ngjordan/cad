@@ -1,6 +1,6 @@
-# Iridium CAD French interface catalog — original translations by @pechnikov2026-star.
+# CAD French interface catalog — original translations by @pechnikov2026-star.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # UTF-8: context<TAB>English source<TAB>French translation.
 # Empty context = ordinary label; @plural = one|other forms with {n}.
 # Command IDs, typed keywords, technology/product names and user data stay unchanged.
@@ -28,7 +28,7 @@
 	= Equals	= Égal à
 	> Greater than	> Supérieur à
 	About	À propos
-	About Iridium CAD	À propos de Iridium CAD
+	About Cad	À propos de CAD
 	Absolute	Absolu
 	Add Leader	Ajouter un repère
 	Align	Aligner
@@ -84,7 +84,7 @@
 	ByBlock	DuBloc
 	ByColor	Par couleur
 	ByLayer	DuCalque
-	Iridium CAD Help	Aide de Iridium CAD
+	Cad Help	Aide de CAD
 	Cancel	Annuler
 	Cartesian (x, y)	Cartésien (x, y)
 	Center	Centre
@@ -122,7 +122,7 @@
 	Command Reference	Référence des commandes
 	Commits	Révisions
 	Company	Société
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	Conception et dessin assistés par ordinateur : application de CAO open source, développée de manière indépendante en pur Rust.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	Conception et dessin assistés par ordinateur : application de CAO open source, développée de manière indépendante en pur Rust.
 	Concentric	Concentricité
 	Cone	Cône
 	Constraint Bars	Barres de contraintes
@@ -590,7 +590,7 @@
 	Quick Select Properties	Propriétés de la sélection rapide
 	Quick Select...	Sélection rapide...
 	QuickCalc	Calculatrice rapide
-	Quit Iridium CAD	Quitter Iridium CAD
+	Quit Cad	Quitter CAD
 	Radius	Rayon
 	Raster Image	Image raster
 	Ray	Rayon
@@ -997,7 +997,7 @@
 @plural	{n} contributor	{n} contributeur|{n} contributeurs
 	Drawing as bytes	Dessin sous forme d'octets
 	Services	Services
-	Hide Iridium CAD	Masquer Iridium CAD
+	Hide Cad	Masquer CAD
 	Hide Others	Masquer les autres
 	Accessibility	Accessibilité
 	Show System Cursor	Afficher le curseur système
@@ -1012,7 +1012,7 @@
 	Query Texts	Interroger les textes
 	Analyze Shapes	Analyser les formes
 	Check for Updates…	Rechercher des mises à jour…
-	Iridium CAD is up to date.	Iridium CAD est à jour.
+	Cad is up to date.	CAD est à jour.
 	Could not check for updates.	Impossible de rechercher les mises à jour.
 	Find All	Find All
 	Find what:	Find what:

@@ -15,9 +15,9 @@
 
 use std::collections::{BTreeMap, HashSet};
 
-use cadcraft_color::Color;
-use cadcraft_doc::{Circle, Common, Drawing, Ellipse, EntityKind, Layer, Line, LwPolyline, Space};
-use cadcraft_geom::{Mat3, PolyVertex, Spline, Vec2, Vec3};
+use iridium_cad_color::Color;
+use iridium_cad_doc::{Circle, Common, Drawing, Ellipse, EntityKind, Layer, Line, LwPolyline, Space};
+use iridium_cad_geom::{Mat3, PolyVertex, Spline, Vec2, Vec3};
 use quick_xml::Reader;
 use quick_xml::XmlVersion;
 use quick_xml::events::{BytesStart, Event};
@@ -197,7 +197,7 @@ impl Parser {
             return None;
         }
         let list: Vec<String> = self.left_out.iter().map(|(k, n)| k.describe(*n)).collect();
-        Some(format!("SVG: Iridium CAD doesn't read these yet, so they were left out: {}", list.join(", ")))
+        Some(format!("SVG: Cad doesn't read these yet, so they were left out: {}", list.join(", ")))
     }
 
     fn parse(&mut self, text: &str) -> Result<()> {

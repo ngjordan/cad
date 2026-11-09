@@ -5,13 +5,13 @@ use super::text_entity::{layout_mtext_entity, place_text_entity, text_style};
 use super::{Builder, Color, Ctx, DimGeometry, DimText, Drawing, Entity, EntityKind, LineRole, Lineweight, Vec2, dim, ink};
 
 /// The font settings of a dimension style's text style.
-pub fn dim_text(d: &Drawing, st: &cadcraft_doc::DimStyle) -> DimText {
+pub fn dim_text(d: &Drawing, st: &iridium_cad_doc::DimStyle) -> DimText {
     let ts = text_style(d, &st.text_style);
-    DimText { font: cadcraft_fonts::TextFont::resolve(&ts.font), fixed_height: ts.height, width_factor: ts.width_factor, oblique: ts.oblique }
+    DimText { font: iridium_cad_fonts::TextFont::resolve(&ts.font), fixed_height: ts.height, width_factor: ts.width_factor, oblique: ts.oblique }
 }
 
 /// Geometry of a dimension in a drawing: its style, overrides and text font.
-pub fn dimension_in(d: &Drawing, dm: &cadcraft_doc::Dimension) -> DimGeometry {
+pub fn dimension_in(d: &Drawing, dm: &iridium_cad_doc::Dimension) -> DimGeometry {
     let style = d.dim_style(&dm.style).cloned().unwrap_or_default();
     let st = style.with_overrides(&dm.overrides);
     dim::dimension_geometry_with(dm, &style, d.header.f64("DIMSCALE", 1.0), &dim_text(d, &st))
@@ -23,9 +23,9 @@ pub(crate) fn dimension(
     b: &mut Builder,
     ctx: &Ctx,
     e: &Entity,
-    dm: &cadcraft_doc::Dimension,
+    dm: &iridium_cad_doc::Dimension,
     lw: f32,
-    lt: Option<&cadcraft_doc::Linetype>,
+    lt: Option<&iridium_cad_doc::Linetype>,
     ltscale: f64,
 ) {
     let d = ctx.d;
@@ -57,7 +57,7 @@ pub(crate) fn dimension(
             Lineweight::Default => default_lineweight(d),
         }
     };
-    let ltype = |name: &str| -> Option<cadcraft_doc::Linetype> {
+    let ltype = |name: &str| -> Option<iridium_cad_doc::Linetype> {
         match name.trim().to_ascii_lowercase().as_str() {
             "" | "byblock" => lt.cloned(),
             "bylayer" => layer.and_then(|l| d.linetype(&l.linetype)).filter(|l| !l.pattern.is_empty()).cloned(),
@@ -85,14 +85,14 @@ pub(crate) fn dimension(
         stroke_with(b, ctx, rgb, w, t, ltscale, l);
     }
     if b.opts.text {
-        let sh = cadcraft_fonts::Shaped { strokes: g.text.clone(), glyphs: g.text_glyphs.clone(), width: 0.0, text: g.text_runs.clone() };
+        let sh = iridium_cad_fonts::Shaped { strokes: g.text.clone(), glyphs: g.text_glyphs.clone(), width: 0.0, text: g.text_runs.clone() };
         b.shaped(ctx, txt_rgb, lw, &sh);
     }
 }
 
 /// DIMTFILL: a dimension's text background (`corners` from [`DimGeometry::text_fill`]) hides
 /// what is drawn before it, in the drawing's background color (1) or DIMTFILLCLR (2).
-pub(crate) fn dim_text_fill(b: &mut Builder, ctx: &Ctx, e: &Entity, style: &cadcraft_doc::DimStyle, corners: &[Vec2]) {
+pub(crate) fn dim_text_fill(b: &mut Builder, ctx: &Ctx, e: &Entity, style: &iridium_cad_doc::DimStyle, corners: &[Vec2]) {
     let [p0, p1, p2, p3] = corners else { return };
     if !b.opts.fill || style.text_fill == 0 {
         return;
@@ -138,7 +138,7 @@ pub(crate) fn block_text_box(d: &Drawing, be: &Entity, gap: f64) -> Option<Vec<V
         EntityKind::Text(t) => return text_box(d, t, gap),
         _ => return None,
     };
-    let (bounds, at, rot) = (layout_mtext_entity(d, &cadcraft_doc::MText { rotation: 0.0, ..t.clone() }).bounds, t.insert.xy(), t.rotation);
+    let (bounds, at, rot) = (layout_mtext_entity(d, &iridium_cad_doc::MText { rotation: 0.0, ..t.clone() }).bounds, t.insert.xy(), t.rotation);
     if !(bounds.width().is_finite() && bounds.height().is_finite()) || bounds.width() <= 0.0 {
         return None;
     }
@@ -151,10 +151,12 @@ pub(crate) fn block_text_box(d: &Drawing, be: &Entity, gap: f64) -> Option<Vec<V
 /// The background of a TEXT as placed: the box of its strokes and glyph outlines along the text's
 /// direction (the baseline from the insertion to the alignment point for Aligned and Fit),
 /// widened by `gap` on every side.
-fn text_box(d: &Drawing, t: &cadcraft_doc::Text, gap: f64) -> Option<Vec<Vec2>> {
+fn text_box(d: &Drawing, t: &iridium_cad_doc::Text, gap: f64) -> Option<Vec<Vec2>> {
     let (sh, _) = place_text_entity(d, t, &t.value);
     let rot = match (t.halign, t.align_pt) {
-        (cadcraft_doc::HAlign::Aligned | cadcraft_doc::HAlign::Fit, Some(p)) if p.xy().dist(t.insert.xy()) > 1e-12 => t.insert.xy().angle_to(p.xy()),
+        (iridium_cad_doc::HAlign::Aligned | iridium_cad_doc::HAlign::Fit, Some(p)) if p.xy().dist(t.insert.xy()) > 1e-12 => {
+            t.insert.xy().angle_to(p.xy())
+        }
         _ => t.rotation,
     };
     let (x, y) = (Vec2::from_angle(rot), Vec2::from_angle(rot).perp());

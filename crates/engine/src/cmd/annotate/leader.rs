@@ -283,7 +283,7 @@ fn add_leader(s: &mut Session, pts: &[Vec2], spline: bool, arrow: bool, ann: Ann
             vertices.insert(at, Vec2::new(end.x - dir * z.arrow, end.y));
         }
     }
-    let leader = s.add_entity(EntityKind::Leader(cadcraft_doc::Leader {
+    let leader = s.add_entity(EntityKind::Leader(iridium_cad_doc::Leader {
         vertices: vertices.iter().map(|p| v3(*p)).collect(),
         arrow,
         spline,

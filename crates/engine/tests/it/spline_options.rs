@@ -1,9 +1,9 @@
 //! SPLINE's Knots, start/end Tangency, toLerance and Object options, at the command line and in
 //! the JSON form (#408).
 
-use cadcraft_doc::EntityKind;
-use cadcraft_engine::Session;
-use cadcraft_geom::{KnotParam, Spline, Vec2};
+use iridium_cad_doc::EntityKind;
+use iridium_cad_engine::Session;
+use iridium_cad_geom::{KnotParam, Spline, Vec2};
 use serde_json::json;
 
 fn last(s: &Session) -> EntityKind {

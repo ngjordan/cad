@@ -1,9 +1,9 @@
 //! DIMTEDIT at the command line and in scripts: "Select dimension", then a new text location or
 //! Left/Right/Center/Home/Angle.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{Dimension, EntityKind};
-use cadcraft_engine::geom::Vec2;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{Dimension, EntityKind};
+use iridium_cad_engine::geom::Vec2;
 
 fn the_dim(s: &Session) -> Dimension {
     s.doc()

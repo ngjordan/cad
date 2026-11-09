@@ -1,7 +1,7 @@
 //! Residual equations for each constraint type.
 
-use cadcraft_doc::{Constraint, ConstraintKind, DistAxis, GeomRef};
-use cadcraft_geom::Vec2;
+use iridium_cad_doc::{Constraint, ConstraintKind, DistAxis, GeomRef};
+use iridium_cad_geom::Vec2;
 
 use crate::curves::{Ell, circle_at};
 use crate::model::Model;
@@ -271,7 +271,7 @@ impl Built {
                 if let (2, Some((a1, b1)), Some((a2, b2))) = (n, ln(0), ln(1)) {
                     // Start-to-end directions would measure the supplement when a line is drawn
                     // towards the vertex, so use the rays the dimension draws.
-                    let rev = match cadcraft_geom::line_line_infinite(a1, b1, a2, b2) {
+                    let rev = match iridium_cad_geom::line_line_infinite(a1, b1, a2, b2) {
                         Some((_, t, u)) => [t > 0.5, u > 0.5],
                         None => [false, false],
                     };
@@ -400,8 +400,8 @@ impl Built {
         };
         let ends = |r: &GeomRef| -> &'static [bool] {
             match r.sub {
-                cadcraft_doc::Sub::Start => &[false],
-                cadcraft_doc::Sub::End => &[true],
+                iridium_cad_doc::Sub::Start => &[false],
+                iridium_cad_doc::Sub::End => &[true],
                 _ => &[false, true],
             }
         };

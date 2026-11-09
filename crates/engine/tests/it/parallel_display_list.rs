@@ -1,9 +1,9 @@
 //! Model space is built on all cores for the screen: the chunks are joined in drawing order, so
 //! the display list is exactly what one thread builds (vertex and triangle indices included).
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::Space;
-use cadcraft_engine::render::{DisplayList, Options, build, build_entities};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::Space;
+use iridium_cad_engine::render::{DisplayList, Options, build, build_entities};
 use serde_json::json;
 
 fn same(a: &DisplayList, b: &DisplayList) {

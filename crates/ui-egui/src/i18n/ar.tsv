@@ -1,6 +1,6 @@
-# Iridium CAD Arabic interface catalog — original translations.
+# CAD Arabic interface catalog — original translations.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # UTF-8: context<TAB>English source<TAB>Arabic (العربية) translation.
 # Empty context = ordinary label; @plural = zero|one|two|few|many|other forms with {n}.
 # Command IDs, typed keywords, technology/product names and user data stay unchanged.
@@ -39,7 +39,7 @@
 	A drawing opened from a file keeps that file's format.	الرسم المفتوح من ملف يحتفظ بتنسيق ذلك الملف.
 	A variable name starts with a letter and has only letters, digits and _	يبدأ اسم المتغير بحرف ولا يحوي إلا أحرفاً وأرقاماً و _
 	About	حول
-	About Iridium CAD	حول Iridium CAD
+	About Cad	حول CAD
 	Absolute	مطلق
 	Accessibility	إمكانية الوصول
 	Add	إضافة
@@ -116,8 +116,8 @@
 	ByBlock	حسب الكتلة
 	ByColor	حسب اللون
 	ByLayer	حسب الطبقة
-	Iridium CAD Help	تعليمات Iridium CAD
-	Iridium CAD keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	يحتفظ Iridium CAD بهذه التفضيلات وأنماط الالتقاط بالكائن ومفاتيح تبديل الرسم لحساب مستخدمك ويعيدها عند بدء التشغيل.
+	Cad Help	تعليمات CAD
+	Cad keeps these preferences, object snap modes and drafting toggles for your user account and restores them when it starts.	يحتفظ CAD بهذه التفضيلات وأنماط الالتقاط بالكائن ومفاتيح تبديل الرسم لحساب مستخدمك ويعيدها عند بدء التشغيل.
 	Calibrate	معايرة
 	Calibrate 3D Mouse	معايرة الفأرة ثلاثية الأبعاد
 	Cancel	إلغاء
@@ -172,7 +172,7 @@
 	Commits	الإيداعات
 	Company	الشركة
 	Compare Drawings...	مقارنة الرسومات...
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	تصميم وصياغة بمساعدة الحاسوب: تطبيق CAD مفتوح المصدر بمنهجية النسخ النظيف مكتوب بلغة Rust خالصة.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	تصميم وصياغة بمساعدة الحاسوب: تطبيق CAD مفتوح المصدر بمنهجية النسخ النظيف مكتوب بلغة Rust خالصة.
 	Concentric	تمركز
 	Cone	مخروط
 	Constraint Bars	أشرطة القيود
@@ -424,7 +424,7 @@
 	Hide All	إخفاء الكل
 	Hide All Constraint Bars	إخفاء كل أشرطة القيود
 	Hide All Dynamic Dimensions	إخفاء كل التأشيرات الديناميكية
-	Hide Iridium CAD	إخفاء Iridium CAD
+	Hide Cad	إخفاء CAD
 	Hide Layer List	إخفاء قائمة الطبقات
 	Hide Objects	إخفاء الكائنات
 	Hide Others	إخفاء الطبقات الأخرى
@@ -746,7 +746,7 @@
 	Quick Select...	تحديد سريع...
 	QuickCalc	الحاسبة السريعة
 	QuickCalc Pick	اختيار الحاسبة السريعة
-	Quit Iridium CAD	إنهاء Iridium CAD
+	Quit Cad	إنهاء CAD
 	Radius	نصف القطر
 	Raster Image	صورة نقطية
 	Ray	شعاع
@@ -1237,7 +1237,7 @@ menu	View	عرض
 @plural	{n} commit	{n} إيداع|{n} إيداع|{n} إيداعان|{n} إيداعات|{n} إيداعاً|{n} إيداع
 @plural	{n} contributor	{n} مساهم|{n} مساهم|{n} مساهمان|{n} مساهمين|{n} مساهماً|{n} مساهم
 	Check for Updates…	التحقق من وجود تحديثات…
-	Iridium CAD is up to date.	Iridium CAD محدّث.
+	Cad is up to date.	CAD محدّث.
 	Could not check for updates.	تعذّر التحقق من وجود تحديثات.
 	Add to Working Set	إضافة إلى مجموعة العمل
 	Add: Pick points	إضافة: انتقاء نقاط

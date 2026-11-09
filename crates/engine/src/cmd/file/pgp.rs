@@ -4,7 +4,7 @@
 //! A loaded file adds aliases or overrides the built-in ones for the rest of the session, for
 //! every drawing; command names themselves always win. Lines that define external commands
 //! (programs the file would have the application start) are never run: they are skipped with a
-//! note. Iridium CAD ships no alias file; the aliases built into the command catalog stay the
+//! note. Cad ships no alias file; the aliases built into the command catalog stay the
 //! defaults.
 
 use std::collections::BTreeMap;
@@ -86,7 +86,7 @@ fn parse(text: &str) -> (Vec<(String, String)>, Vec<String>) {
             continue;
         };
         if !target.trim_start().starts_with('*') {
-            warn(no, format!("{} is an external command; Iridium CAD doesn't run programs from alias files", alias.trim()));
+            warn(no, format!("{} is an external command; Cad doesn't run programs from alias files", alias.trim()));
             continue;
         }
         let name = match alias_name(alias) {

@@ -3,9 +3,9 @@
 
 use std::f64::consts::{FRAC_PI_2, FRAC_PI_4, PI};
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{DimKind, EntityKind};
-use cadcraft_engine::geom::Vec2;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{DimKind, EntityKind};
+use iridium_cad_engine::geom::Vec2;
 use serde_json::json;
 
 const QUARTER: &str = "1.5707963267948966";

@@ -1,9 +1,9 @@
 //! MTEXT's options before the text: Height, Justify, Line spacing, Rotation, Style, Width and
 //! Columns, from the command line and scripts (#408).
 
-use cadcraft_doc::{EntityKind, MText, TextStyle};
-use cadcraft_engine::Session;
-use cadcraft_geom::Vec2;
+use iridium_cad_doc::{EntityKind, MText, TextStyle};
+use iridium_cad_engine::Session;
+use iridium_cad_geom::Vec2;
 use serde_json::json;
 
 fn last_mtext(s: &Session) -> MText {

@@ -1,6 +1,6 @@
-# Iridium CAD Russian interface catalog — original translations by @pechnikov2026-star.
+# CAD Russian interface catalog — original translations by @pechnikov2026-star.
 # License: MIT OR Apache-2.0 (the repository LICENSE-MIT and LICENSE-APACHE).
-# Written from Iridium CAD's English strings; no proprietary translations were copied.
+# Written from CAD's English strings; no proprietary translations were copied.
 # UTF-8: context<TAB>English source<TAB>Russian translation.
 # Empty context = ordinary label; @plural = one|few|many forms with {n}.
 # Command IDs, typed keywords, technology/product names and user data stay unchanged.
@@ -28,7 +28,7 @@
 	= Equals	= Равно
 	> Greater than	> Больше чем
 	About	О программе
-	About Iridium CAD	О Iridium CAD
+	About Cad	О CAD
 	Absolute	Абсолютные
 	Add Leader	Добавить выноску
 	Align	Выровнять
@@ -84,7 +84,7 @@
 	ByBlock	Поблоку
 	ByColor	ПоЦвету
 	ByLayer	Послою
-	Iridium CAD Help	Справка Iridium CAD
+	Cad Help	Справка CAD
 	Cancel	Отмена
 	Cartesian (x, y)	Декартовы (x, y)
 	Center	Центр
@@ -122,7 +122,7 @@
 	Command Reference	Справочник команд
 	Commits	Коммиты
 	Company	Организация
-	Computer-aided design and drafting: an open-source, clean-room CAD application written in pure Rust.	Автоматизированное проектирование и черчение: CAD-приложение с открытым кодом, независимо разработанное на Rust.
+	Computer-aided design and drafting: an open-source, clean-room Cad application written in pure Rust.	Автоматизированное проектирование и черчение: CAD-приложение с открытым кодом, независимо разработанное на Rust.
 	Concentric	Концентричность
 	Cone	Конус
 	Constraint Bars	Панели ограничений
@@ -590,7 +590,7 @@
 	Quick Select Properties	Свойства быстрого выбора
 	Quick Select...	Быстрый выбор...
 	QuickCalc	Быстрокалькулятор
-	Quit Iridium CAD	Выйти из Iridium CAD
+	Quit Cad	Выйти из CAD
 	Radius	Радиус
 	Raster Image	Растровое изображение
 	Ray	Луч
@@ -997,7 +997,7 @@
 @plural	{n} contributor	{n} участник|{n} участника|{n} участников
 	Drawing as bytes	Чертеж как байты
 	Services	Службы
-	Hide Iridium CAD	Скрыть Iridium CAD
+	Hide Cad	Скрыть CAD
 	Hide Others	Скрыть остальные
 	Accessibility	Специальные возможности
 	Show System Cursor	Показывать системный курсор
@@ -1013,7 +1013,7 @@
 	Query Texts	Запрос текстов
 	Analyze Shapes	Анализ фигур
 	Check for Updates…	Проверить обновления…
-	Iridium CAD is up to date.	У вас последняя версия Iridium CAD.
+	Cad is up to date.	У вас последняя версия CAD.
 	Could not check for updates.	Не удалось проверить обновления.
 	Find All	Find All
 	Find what:	Find what:

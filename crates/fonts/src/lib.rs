@@ -1,7 +1,7 @@
-//! Iridium CAD text layout.
+//! Cad text layout.
 //!
 //! Turns TEXT and MTEXT into stroke polylines with the built-in single-stroke font
-//! ("Iridium CAD Stroke") or glyph outlines of installed TrueType fonts ([`ttf`]), with a
+//! ("Cad Stroke") or glyph outlines of installed TrueType fonts ([`ttf`]), with a
 //! per-character fallback to installed fonts for characters the chosen font lacks. Handles the
 //! `%%` control codes, alignment modes, width factor, obliquing, MTEXT inline formatting
 //! (paragraphs, stacking, height changes), word wrap and attachment points.
@@ -23,7 +23,7 @@ pub mod subset;
 pub mod ttf;
 pub mod windows;
 
-use cadcraft_geom::{Bounds2, Vec2};
+use iridium_cad_geom::{Bounds2, Vec2};
 
 pub use mtext::para::{DEFAULT_TAB, ListStyle, MTextColumnSpec, ParaAlign, ParaProps, Paragraphs, TabKind, list_contents};
 pub use mtext::{MTextColor, MTextLayout, MTextParams, MTextPiece, layout_mtext, layout_mtext_with, plain_mtext};
@@ -32,7 +32,7 @@ mod craft_fonts;
 pub use craft_fonts::{CRAFT_FONTS, CraftFont};
 
 /// Name of the built-in font.
-pub const BUILTIN_FONT: &str = "Iridium CAD Stroke";
+pub const BUILTIN_FONT: &str = "Cad Stroke";
 
 /// One laid-out run of text: strokes in local coordinates (baseline at y = 0, x from 0).
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -801,8 +801,8 @@ mod ttf_tests {
             assert!(crate::ttf::Face::new(arc.clone(), 3).is_none());
             assert!(!crate::ttf::Face { bytes: arc, index: u32::MAX }.has_glyph('a'));
         }
-        crate::ttf::register("cadcraft-hostile-test.ttc", ttc);
-        assert!(crate::ttf::find("cadcraft-hostile-test.ttc").is_none());
+        crate::ttf::register("iridium-cad-hostile-test.ttc", ttc);
+        assert!(crate::ttf::find("iridium-cad-hostile-test.ttc").is_none());
         let _ = crate::ttf::fallback_for('\u{4E2D}');
     }
 

@@ -9,8 +9,8 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use cadcraft_doc::{EntityKind, Handle};
-use cadcraft_geom::{Arc as GeoArc, EPS, Vec2};
+use iridium_cad_doc::{EntityKind, Handle};
+use iridium_cad_geom::{Arc as GeoArc, EPS, Vec2};
 use serde_json::{Value, json};
 
 use super::super::bad;

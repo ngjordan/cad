@@ -81,7 +81,7 @@ pub struct PlotText {
     pub verts: u32,
     pub bounds: Bounds2,
     /// The glyph; its origin and em axes are in world coordinates.
-    pub glyph: cadcraft_fonts::TextGlyph,
+    pub glyph: iridium_cad_fonts::TextGlyph,
 }
 
 impl PlotText {
@@ -93,7 +93,7 @@ impl PlotText {
 impl DPrim {
     /// The colour to draw with on `background`.
     pub fn display_rgb(&self, background: Rgb) -> Rgb {
-        cadcraft_color::display_rgb(self.color, self.aci7, background)
+        iridium_cad_color::display_rgb(self.color, self.aci7, background)
     }
     /// The opacity to draw with: 255 when opaque, down to 26 at 90 % transparency.
     pub fn alpha(&self) -> u8 {

@@ -4,8 +4,8 @@
 //! Plotting goes through the host's [`super::file::IoHooks::plot`] hook so the engine stays
 //! I/O-agnostic.
 
-use cadcraft_doc::{Drawing, Entity, EntityKind, EntityStore, Handle, Layout, PageSetup, Space, Viewport};
-use cadcraft_geom::{Bounds2, Vec2};
+use iridium_cad_doc::{Drawing, Entity, EntityKind, EntityStore, Handle, Layout, PageSetup, Space, Viewport};
+use iridium_cad_geom::{Bounds2, Vec2};
 use serde_json::{Value, json};
 
 use super::file::{base64_encode, io};
@@ -84,7 +84,7 @@ pub fn specs() -> Vec<CommandSpec> {
             .menu(&["File", "Print..."])
             .key("Cmd+P")
             .alias(&["print"])
-            .params("{path? (else returns base64 `data`), layout?: current|\"Model\", device?: \"Iridium CAD PDF\"|\"Iridium CAD PNG\"|\"Iridium CAD SVG\" | a plotter from PLOTTERMANAGER | \"None\" (default: a layout's page setup device; Model, or \"None\": no device, PDF; a device sets the output format and the papers), paper?: the device's paper (default: a layout keeps its page setup's; Model takes the device's default), landscape?, fit?: bool, scale?: number | \"1:50\", center?: bool (Model, default true), offset?: [x,y] mm (Model, when center is false; each within ±100000), lineweights?: bool, plotTransparency?: bool (default: the page setup's; PLOTTRANSPARENCYOVERRIDE 0/2 overrides it), plotArea?: extents|display|limits|window (Model) | layout, window?: [[x1,y1],[x2,y2]]} (typed or from the menu: the Plot dialog)")
+            .params("{path? (else returns base64 `data`), layout?: current|\"Model\", device?: \"Cad PDF\"|\"Cad PNG\"|\"Cad SVG\" | a plotter from PLOTTERMANAGER | \"None\" (default: a layout's page setup device; Model, or \"None\": no device, PDF; a device sets the output format and the papers), paper?: the device's paper (default: a layout keeps its page setup's; Model takes the device's default), landscape?, fit?: bool, scale?: number | \"1:50\", center?: bool (Model, default true), offset?: [x,y] mm (Model, when center is false; each within ±100000), lineweights?: bool, plotTransparency?: bool (default: the page setup's; PLOTTRANSPARENCYOVERRIDE 0/2 overrides it), plotArea?: extents|display|limits|window (Model) | layout, window?: [[x1,y1],[x2,y2]]} (typed or from the menu: the Plot dialog)")
             .noundo(),
         CommandSpec::new("exportpdf", "Export to PDF...", |s, p| run_plot(s, &super::plotters::plot_options(s, p, "exportpdf")?, "exportpdf"))
             .menu(&["File", "Export to PDF..."])
@@ -192,8 +192,8 @@ fn next_layout_name(d: &Drawing) -> String {
 /// The page setup new layouts get: ANSI A landscape (imperial) or ISO A4 landscape (metric).
 fn default_page(d: &Drawing) -> PageSetup {
     let mut p = PageSetup::default();
-    if cadcraft_render::paper::paper_unit_mm(d) == 1.0
-        && let Some(a4) = cadcraft_render::paper_size("A4")
+    if iridium_cad_render::paper::paper_unit_mm(d) == 1.0
+        && let Some(a4) = iridium_cad_render::paper_size("A4")
     {
         p.paper = a4.name.into();
         p.width_mm = a4.width_mm;
@@ -378,7 +378,7 @@ fn run_layout(s: &mut Session, p: &Value) -> Result<Value> {
 
 /// The printable area of a layout, in paper units.
 fn printable(s: &Session, layout: &str) -> Result<Bounds2> {
-    cadcraft_render::sheet(s.doc()?, layout).map(|sh| sh.printable).ok_or_else(|| bad("mview", format!("no layout `{layout}`")))
+    iridium_cad_render::sheet(s.doc()?, layout).map(|sh| sh.printable).ok_or_else(|| bad("mview", format!("no layout `{layout}`")))
 }
 
 /// The layout a viewport command acts on: `layout` param or the current layout.
@@ -568,22 +568,22 @@ fn run_viewport_set(s: &mut Session, p: &Value) -> Result<Value> {
     let freeze = layer_list(p, "freeze");
     let thaw = layer_list(p, "thaw");
     // Per-viewport layer colours: {layer: colour} (null clears the override).
-    let mut colors: Vec<(String, Option<cadcraft_color::Color>)> = Vec::new();
+    let mut colors: Vec<(String, Option<iridium_cad_color::Color>)> = Vec::new();
     if let Some(m) = p.get("colors").and_then(Value::as_object) {
         for (layer, c) in m.iter().take(10_000) {
             let col = match c {
                 Value::Null => None,
-                Value::String(t) => Some(cadcraft_color::Color::parse(t).ok_or_else(|| bad(cmd, format!("bad colour for `{layer}`")))?),
+                Value::String(t) => Some(iridium_cad_color::Color::parse(t).ok_or_else(|| bad(cmd, format!("bad colour for `{layer}`")))?),
                 Value::Number(n) => Some(
                     n.as_u64()
                         .and_then(|i| u8::try_from(i).ok())
                         .filter(|i| *i > 0)
-                        .map(cadcraft_color::Color::Index)
+                        .map(iridium_cad_color::Color::Index)
                         .ok_or_else(|| bad(cmd, "colour index 1..255"))?,
                 ),
                 _ => return Err(bad(cmd, "`colors` values are colours or null")),
             };
-            if matches!(col, Some(cadcraft_color::Color::ByLayer | cadcraft_color::Color::ByBlock)) {
+            if matches!(col, Some(iridium_cad_color::Color::ByLayer | iridium_cad_color::Color::ByBlock)) {
                 return Err(bad(cmd, "a viewport layer colour must be an index or true colour"));
             }
             colors.push((layer.clone(), col));
@@ -663,8 +663,8 @@ fn run_pagesetup(s: &mut Session, p: &Value) -> Result<Value> {
         let d = s.doc()?;
         return Ok(json!({
             "layouts": d.layouts.iter().map(|l| json!({"name": l.name, "page": serde_json::to_value(&l.page).unwrap_or(Value::Null)})).collect::<Vec<_>>(),
-            "papers": cadcraft_render::PAPER_SIZES.iter().map(|p| p.name).collect::<Vec<_>>(),
-            "plotStyleTables": cadcraft_doc::BUILTIN_PLOT_STYLE_TABLES,
+            "papers": iridium_cad_render::PAPER_SIZES.iter().map(|p| p.name).collect::<Vec<_>>(),
+            "plotStyleTables": iridium_cad_doc::BUILTIN_PLOT_STYLE_TABLES,
             "devices": super::plotters::device_names(),
         }));
     };
@@ -673,8 +673,8 @@ fn run_pagesetup(s: &mut Session, p: &Value) -> Result<Value> {
     let device_paper = super::plotters::page_device(cmd, p, &mut page)?;
     if let Some(paper) = p.get("paper").filter(|_| !device_paper) {
         let n = paper.as_str().ok_or_else(|| bad(cmd, "`paper` must be a paper name"))?;
-        let ps = cadcraft_render::paper_size(n).ok_or_else(|| {
-            let known: Vec<&str> = cadcraft_render::PAPER_SIZES.iter().filter_map(|p| p.aliases.first().copied()).collect();
+        let ps = iridium_cad_render::paper_size(n).ok_or_else(|| {
+            let known: Vec<&str> = iridium_cad_render::PAPER_SIZES.iter().filter_map(|p| p.aliases.first().copied()).collect();
             bad(cmd, format!("unknown paper size `{n}` (known: {})", known.join(", ")))
         })?;
         page.paper = ps.name.into();
@@ -744,12 +744,12 @@ fn run_pagesetup(s: &mut Session, p: &Value) -> Result<Value> {
 
 // ---------- plotting ----------
 
-/// Most sheets in one plot (the PDF writer's own limit, `cadcraft_io::pdf::MAX_PAGES`).
+/// Most sheets in one plot (the PDF writer's own limit, `iridium_cad_io::pdf::MAX_PAGES`).
 const MAX_PLOT_SHEETS: usize = 256;
 
 /// The sheets of a multi-sheet plot, as canonical names: the `layouts` list (`"Model"` or layout
 /// names, any case) or `"all"` (Model if it has objects, then every layout in tab order).
-fn plot_sheets(cmd: &str, d: &cadcraft_doc::Drawing, v: &Value) -> Result<Vec<String>> {
+fn plot_sheets(cmd: &str, d: &iridium_cad_doc::Drawing, v: &Value) -> Result<Vec<String>> {
     let names: Vec<String> = match v {
         Value::String(a) if a.eq_ignore_ascii_case("all") => {
             let mut layouts: Vec<_> = d.layouts.iter().collect();
@@ -801,8 +801,8 @@ fn run_plot(s: &mut Session, p: &Value, cmd: &str) -> Result<Value> {
         if !x.zip(y).is_some_and(|(x, y)| {
             x.is_finite()
                 && y.is_finite()
-                && x.abs() <= cadcraft_render::paper::MAX_PLOT_OFFSET_MM
-                && y.abs() <= cadcraft_render::paper::MAX_PLOT_OFFSET_MM
+                && x.abs() <= iridium_cad_render::paper::MAX_PLOT_OFFSET_MM
+                && y.abs() <= iridium_cad_render::paper::MAX_PLOT_OFFSET_MM
         }) {
             return Err(bad(cmd, "`offset` must contain exactly two finite millimetre values within ±100000"));
         }
@@ -839,7 +839,7 @@ fn run_plot(s: &mut Session, p: &Value, cmd: &str) -> Result<Value> {
             {
                 let path = _path;
                 // Exclusively create a fresh temporary file and rename it into place so a planted
-                // `<path>.cadcraft-tmp` symlink cannot redirect the plot write (CWE-59).
+                // `<path>.iridium-cad-tmp` symlink cannot redirect the plot write (CWE-59).
                 let folder = super::file::new_folder(path);
                 crate::atomic_write::write_atomic_making_folders(std::path::Path::new(path), &bytes).map_err(|e| bad(cmd, format!("{path}: {e}")))?;
                 let mut r = json!({ "path": path, "bytes": bytes.len(), "layout": layout, "pages": pages });

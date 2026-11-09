@@ -4,9 +4,9 @@
 //! thickness by the factor; OFFSET's copy is at the source's height, and a circle's or arc's copy
 //! has no thickness while a polyline's keeps it.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{Arc, Circle, Common, EntityKind, Handle, Line, LwPolyline, Point, PolyfaceMesh};
-use cadcraft_engine::geom::{PolyVertex, Vec2, Vec3};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{Arc, Circle, Common, EntityKind, Handle, Line, LwPolyline, Point, PolyfaceMesh};
+use iridium_cad_engine::geom::{PolyVertex, Vec2, Vec3};
 use serde_json::json;
 
 fn add(s: &mut Session, kind: EntityKind, thickness: f64) -> Handle {

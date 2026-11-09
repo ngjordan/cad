@@ -4,8 +4,8 @@
 
 use std::sync::Mutex;
 
-use cadcraft_engine::Session;
-use cadcraft_engine::cmd::resolve_alias;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::cmd::resolve_alias;
 use serde_json::json;
 
 #[path = "support/temp_dir.rs"]

@@ -3,9 +3,9 @@
 
 use std::sync::Arc;
 
-use cadcraft_color::Color;
-use cadcraft_doc::{Attrib, AttribModes, AttribProps, Block, Common, Entity, EntityKind, Insert, Line, Lineweight, Space, Text};
-use cadcraft_geom::Vec3;
+use iridium_cad_color::Color;
+use iridium_cad_doc::{Attrib, AttribModes, AttribProps, Block, Common, Entity, EntityKind, Insert, Line, Lineweight, Space, Text};
+use iridium_cad_geom::Vec3;
 
 use super::{Case, drawing, text};
 
@@ -195,8 +195,8 @@ pub(crate) fn multiline_attributes() -> Vec<Case> {
             let decorate = |a: &mut Attrib| {
                 a.text.insert = text_point;
                 a.text.value = "first\nsecond".into();
-                a.multiline = Some(cadcraft_doc::MultilineAttrib {
-                    mtext: cadcraft_doc::MText {
+                a.multiline = Some(iridium_cad_doc::MultilineAttrib {
+                    mtext: iridium_cad_doc::MText {
                         insert: mtext_point,
                         height: 1.0,
                         width: 6.0,

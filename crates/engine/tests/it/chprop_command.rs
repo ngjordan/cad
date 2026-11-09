@@ -1,14 +1,14 @@
 //! CHPROP as AutoCAD 2024 runs it from AutoLISP's `command` (accoreconsole, every object read back
 //! with `entget`).
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::color::{Color, Rgb};
-use cadcraft_engine::doc::{Handle, Lineweight, Transparency};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::color::{Color, Rgb};
+use iridium_cad_engine::doc::{Handle, Lineweight, Transparency};
 use serde_json::json;
 
 /// A session with line A (0,0)-(50,0) on layer 0 and line B (0,20)-(50,30) on layer L1, as `a` and
 /// `b` in LISP, after `code`; the properties of A then B.
-fn run(code: &str) -> (Session, [cadcraft_engine::doc::Common; 2]) {
+fn run(code: &str) -> (Session, [iridium_cad_engine::doc::Common; 2]) {
     let mut s = Session::new();
     s.doc_mut().unwrap().ensure_layer("L1");
     s.execute("line", &json!({ "points": [[0, 0], [50, 0]] })).unwrap();

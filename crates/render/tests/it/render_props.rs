@@ -3,13 +3,13 @@
 
 use std::sync::Arc;
 
-use cadcraft_color::{Color, Rgb};
-use cadcraft_doc::{
+use iridium_cad_color::{Color, Rgb};
+use iridium_cad_doc::{
     Attrib, Block, Common, DimKind, DimStyle, Dimension, Drawing, Entity, EntityKind, HAlign, Handle, Insert, Leader, Line, Lineweight, Space, Text,
     VAlign, Viewport,
 };
-use cadcraft_geom::{Bounds2, Vec2, Vec3};
-use cadcraft_render::{Kind, Options, VIEWPORT_CONTENT, build};
+use iridium_cad_geom::{Bounds2, Vec2, Vec3};
+use iridium_cad_render::{Kind, Options, VIEWPORT_CONTENT, build};
 
 fn rgb(i: u8) -> Rgb {
     Color::Index(i).resolve(Color::Index(7), Color::Index(7))

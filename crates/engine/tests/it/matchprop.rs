@@ -1,9 +1,9 @@
 //! MATCHPROP (#439): the typed source/destination picker with Settings, and the JSON form with a
 //! property list.
 
-use cadcraft_engine::doc::color::Color;
-use cadcraft_engine::doc::{EntityKind, Handle};
-use cadcraft_engine::{Input, Session};
+use iridium_cad_engine::doc::color::Color;
+use iridium_cad_engine::doc::{EntityKind, Handle};
+use iridium_cad_engine::{Input, Session};
 use serde_json::json;
 
 fn last(s: &Session) -> Handle {

@@ -3,10 +3,10 @@
 
 use std::sync::Arc;
 
-use cadcraft_engine::Session;
-use cadcraft_engine::cmd::file::{IoHooks, set_io};
-use cadcraft_engine::doc::geom::Vec3;
-use cadcraft_engine::doc::{Block, Common, Drawing, Entity, EntityKind, Insert, Line, Space};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::cmd::file::{IoHooks, set_io};
+use iridium_cad_engine::doc::geom::Vec3;
+use iridium_cad_engine::doc::{Block, Common, Drawing, Entity, EntityKind, Insert, Line, Space};
 use serde_json::{Value, json};
 
 fn line(ax: f64, ay: f64, bx: f64, by: f64) -> EntityKind {
@@ -138,7 +138,7 @@ fn hooks() {
 #[test]
 fn compares_a_file_read_through_the_io_hooks() {
     hooks();
-    let dir = std::env::temp_dir().join(format!("cadcraft-compare-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("iridium-cad-compare-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     let path = dir.join("other.dxf");
     std::fs::write(&path, "10").unwrap();
@@ -176,7 +176,7 @@ fn hostile_inputs_are_errors() {
         col_spacing: 0.0,
         row_spacing: 0.0,
     };
-    b.entities.push(Entity::new(cadcraft_engine::doc::Handle(0x900), EntityKind::Insert(ins.clone())));
+    b.entities.push(Entity::new(iridium_cad_engine::doc::Handle(0x900), EntityKind::Insert(ins.clone())));
     let d = s.doc_mut().unwrap();
     d.blocks.insert("LOOP".into(), Arc::new(b));
     d.add(&Space::Model, Common::default(), EntityKind::Insert(ins)).unwrap();
@@ -190,7 +190,7 @@ fn hostile_inputs_are_errors() {
 /// measurement, the text position): that is not a change.
 #[test]
 fn derived_dimension_fields_are_not_differences() {
-    use cadcraft_engine::doc::{DimKind, Dimension};
+    use iridium_cad_engine::doc::{DimKind, Dimension};
     let dim = |measurement: f64, text_x: f64| Dimension {
         kind: DimKind::Linear { rotation: 0.0 },
         defpt: Vec3::new(15.0, 5.0, 0.0),

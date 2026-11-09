@@ -1,12 +1,12 @@
 //! PLOT / EXPORTPDF with several sheets (issue #560): `layouts` names the sheets of one PDF
 //! (any case, or "all"); the engine checks them and reports the pages.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::cmd::file::{IoHooks, base64_decode, set_io};
+use iridium_cad_engine::Session;
+use iridium_cad_engine::cmd::file::{IoHooks, base64_decode, set_io};
 use serde_json::{Value, json};
 
 /// A plotter that echoes the sheets it was asked for.
-fn fake_plot(_: &cadcraft_doc::Drawing, space: &cadcraft_doc::Space, opts: &Value) -> Result<Vec<u8>, String> {
+fn fake_plot(_: &iridium_cad_doc::Drawing, space: &iridium_cad_doc::Space, opts: &Value) -> Result<Vec<u8>, String> {
     Ok(format!("%PDF-1.4 {space:?} {}", opts.get("layouts").map(Value::to_string).unwrap_or_default()).into_bytes())
 }
 

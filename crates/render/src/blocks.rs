@@ -40,8 +40,8 @@ pub(crate) fn sub_ctx<'a>(ctx: &Ctx<'a>, e: &Entity, m: Mat3) -> Ctx<'a> {
     }
 }
 
-pub(crate) fn insert(b: &mut Builder, ctx: &Ctx, e: &Entity, ins: &cadcraft_doc::Insert, rgb: Ink) {
-    if ctx.depth >= cadcraft_doc::MAX_BLOCK_DEPTH {
+pub(crate) fn insert(b: &mut Builder, ctx: &Ctx, e: &Entity, ins: &iridium_cad_doc::Insert, rgb: Ink) {
+    if ctx.depth >= iridium_cad_doc::MAX_BLOCK_DEPTH {
         return;
     }
     if let Some(blk) = ctx.d.block(&ins.block) {
@@ -108,13 +108,13 @@ pub(crate) fn insert(b: &mut Builder, ctx: &Ctx, e: &Entity, ins: &cadcraft_doc:
 }
 
 /// Properties that follow the block reference's (an attribute without a definition).
-fn by_block() -> cadcraft_doc::Common {
-    cadcraft_doc::Common {
+fn by_block() -> iridium_cad_doc::Common {
+    iridium_cad_doc::Common {
         color: Color::ByBlock,
         linetype: "ByBlock".into(),
         lineweight: Lineweight::ByBlock,
-        transparency: cadcraft_doc::Transparency::ByBlock,
-        ..cadcraft_doc::Common::default()
+        transparency: iridium_cad_doc::Transparency::ByBlock,
+        ..iridium_cad_doc::Common::default()
     }
 }
 

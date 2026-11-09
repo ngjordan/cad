@@ -19,7 +19,7 @@ concurrency:
 jobs:
   gate:
     # Tracks @main so suite-wide CI fixes reach every app without a PR in each repository.
-    uses: storytold/craft-common-actions/.github/workflows/gate.yml@main
+    uses: ngjordan/craft-common-actions/.github/workflows/gate.yml@main
     with:
       # Same craft-fonts commit as release.yml.
       craft-fonts-ref: b076417b5880bd4154bd22f00695b1d28c6bea83

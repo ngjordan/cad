@@ -67,8 +67,8 @@ pub const UI_COMMANDS: &[(&str, &str, &[&str], Option<&str>)] = &[
     ("ui.dialog.dsettings", "Drafting Settings...", &[], None),
     #[cfg(not(target_arch = "wasm32"))]
     ("ui.updates.check", "Check for Updates…", &["Help", "Check for Updates…"], None),
-    ("ui.dialog.about", "About Iridium CAD", &["Help", "About Iridium CAD"], None),
-    ("ui.dialog.commands", "Command Reference", &["Help", "Iridium CAD Help"], Some("F1")),
+    ("ui.dialog.about", "About Cad", &["Help", "About Cad"], None),
+    ("ui.dialog.commands", "Command Reference", &["Help", "Cad Help"], Some("F1")),
     ("ui.toggle.history", "Command History", &["Window", "Command History"], Some("F2")),
     ("ui.cmdline.lines", "Command Line History Lines", &[], None),
     ("ui.cmdline.clear", "Clear Command History", &[], None),
@@ -76,7 +76,7 @@ pub const UI_COMMANDS: &[(&str, &str, &[&str], Option<&str>)] = &[
     ("ui.dialog.find", "Find and Replace", &[], Some("Cmd+F")),
     ("ui.language", "Language", &[], None),
     ("ui.noop", "", &[], None),
-    ("ui.quit", "Quit Iridium CAD", &[], Some("Cmd+Q")),
+    ("ui.quit", "Quit Cad", &[], Some("Cmd+Q")),
 ];
 
 pub fn is_ui_command(id: &str) -> bool {
@@ -411,7 +411,7 @@ fn run_ui_command_inner(app: &mut CadApp, id: &str, params: &Value) -> Option<Re
             r
         }
         "ui.sample" => {
-            let d = cadcraft_engine::sample::default_sample();
+            let d = iridium_cad_engine::sample::default_sample();
             app.session.open_drawing(d, "Bracket", None);
             app.canvas.zoom_pending = true;
             app.ui.start_tab = false;
@@ -535,7 +535,7 @@ fn run_ui_command_inner(app: &mut CadApp, id: &str, params: &Value) -> Option<Re
 
 /// SAVEAS parameters for a path picked in the Save dialog: a drawing that has no file yet is saved
 /// in the default save version; one opened from a file keeps that file's version.
-fn saveas_params(ui: &crate::UiState, session: &cadcraft_engine::Session, path: &str) -> Value {
+fn saveas_params(ui: &crate::UiState, session: &iridium_cad_engine::Session, path: &str) -> Value {
     let untitled = session.state().is_ok_and(|s| s.path.is_none());
     match crate::SaveVersion::parse(&ui.save_version) {
         Some(v) if untitled => json!({ "path": path, "version": v.year() }),
@@ -617,7 +617,7 @@ pub fn tree(app: &CadApp) -> Vec<(String, Vec<Entry>)> {
             }
         }
     };
-    for c in cadcraft_engine::command_specs() {
+    for c in iridium_cad_engine::command_specs() {
         if !c.menu.is_empty() {
             add(c.menu, c.label, c.id, c.shortcut, (c.enabled)(&app.session).is_ok());
         }
@@ -805,7 +805,7 @@ pub fn run_transparent(app: &mut CadApp, id: &str) {
     }
 }
 
-/// Iridium CAD's keyboard shortcuts and function keys, each with the command it runs. Every shortcut a
+/// Cad's keyboard shortcuts and function keys, each with the command it runs. Every shortcut a
 /// command shows (its registry `key`, or a UI command's) must be here, or pressing it does nothing.
 pub(crate) fn builtin_shortcuts() -> Vec<(egui::KeyboardShortcut, &'static str)> {
     use egui::{Key, KeyboardShortcut, Modifiers};
@@ -896,13 +896,13 @@ mod tests {
     use std::cell::RefCell;
     use std::rc::Rc;
 
-    use cadcraft_engine::Session;
-    use cadcraft_engine::cmd::file::{IoHooks, io, set_io};
+    use iridium_cad_engine::Session;
+    use iridium_cad_engine::cmd::file::{IoHooks, io, set_io};
     use serde_json::{Value, json};
 
     use crate::{CadApp, Services};
 
-    fn fake_plot(_: &cadcraft_doc::Drawing, _: &cadcraft_doc::Space, _: &Value) -> Result<Vec<u8>, String> {
+    fn fake_plot(_: &iridium_cad_doc::Drawing, _: &iridium_cad_doc::Space, _: &Value) -> Result<Vec<u8>, String> {
         Ok(b"%PDF-1.4 test".to_vec())
     }
 
@@ -943,7 +943,7 @@ mod tests {
         // macOS app menu, the only place that shows it.
         let elsewhere = [("Delete", "erase.selection"), ("Cmd+8", "ui.toggle.quickcalc"), ("Cmd+Q", "ui.quit")];
         let table = super::builtin_shortcuts();
-        let shown = cadcraft_engine::command_specs()
+        let shown = iridium_cad_engine::command_specs()
             .iter()
             .filter_map(|c| Some((c.shortcut?, c.id)))
             .chain(super::UI_COMMANDS.iter().filter_map(|(id, _, _, sc)| Some(((*sc)?, *id))));
@@ -967,7 +967,7 @@ mod tests {
         if io().and_then(|h| h.plot).is_none() {
             return; // another test installed hooks without a plotter first
         }
-        let path = std::env::temp_dir().join(format!("cadcraft-print-test-{}.pdf", std::process::id()));
+        let path = std::env::temp_dir().join(format!("iridium-cad-print-test-{}.pdf", std::process::id()));
         let ps = path.to_string_lossy().to_string();
         let _ = std::fs::remove_file(&path);
         let (mut app, asked) = app_with_picker(Some(ps.clone()));
@@ -1023,7 +1023,7 @@ mod shortcut_label_tests {
 
 #[cfg(test)]
 mod units_dialog_tests {
-    use cadcraft_engine::Session;
+    use iridium_cad_engine::Session;
     use serde_json::json;
 
     use crate::{CadApp, Services};

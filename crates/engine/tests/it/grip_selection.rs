@@ -2,10 +2,10 @@
 //! coincident grips of the other selected objects with it, and Move/Rotate/Scale/Mirror
 //! transform every selected object.
 
-use cadcraft_engine::Session;
-use cadcraft_engine::doc::{EntityKind, Handle};
-use cadcraft_engine::geom::Vec2;
-use cadcraft_engine::grips::GripMode;
+use iridium_cad_engine::Session;
+use iridium_cad_engine::doc::{EntityKind, Handle};
+use iridium_cad_engine::geom::Vec2;
+use iridium_cad_engine::grips::GripMode;
 use serde_json::json;
 
 fn line(s: &mut Session, a: [f64; 2], b: [f64; 2]) -> Handle {

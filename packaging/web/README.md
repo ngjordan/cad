@@ -1,20 +1,20 @@
-# Hosting Iridium CAD for the web
+# Hosting Cad for the web
 
-`cadcraft-web-<version>.zip` (from the GitHub release, or `packaging/web/package.sh`) holds a
-static site in `cadcraft-web-<version>/`:
+`iridium-cad-web-<version>.zip` (from the GitHub release, or `packaging/web/package.sh`) holds a
+static site in `iridium-cad-web-<version>/`:
 
 | File | What it is |
 |---|---|
 | `index.html` | The page. It loads everything through relative URLs. |
-| `cadcraft-web-<hash>.js` | wasm-bindgen glue (generated, ES module) |
-| `cadcraft-web-<hash>_bg.wasm` | The app, about 13 MB, or 5 MB with compression |
+| `iridium-cad-web-<hash>.js` | wasm-bindgen glue (generated, ES module) |
+| `iridium-cad-web-<hash>_bg.wasm` | The app, about 13 MB, or 5 MB with compression |
 | `_headers`, `.htaccess` | Sample header rules for Netlify/Cloudflare Pages and Apache |
 
 There is no server-side code. Upload the folder's contents anywhere that serves static files.
 
 ## Any path works
 
-All URLs in `index.html` are relative (`public_url = "./"` in `apps/cadcraft-web/Trunk.toml`),
+All URLs in `index.html` are relative (`public_url = "./"` in `apps/iridium-cad-web/Trunk.toml`),
 so the site works at a domain root (`https://example.com/`), under a prefix
 (`https://iridium.ph/`) and from a CDN bucket. The asset names carry a content
 hash, so they can be cached forever. Only `index.html` needs revalidation.
@@ -31,7 +31,7 @@ hash, so they can be cached forever. Only `index.html` needs revalidation.
   `.js` files, and `no-cache` on `index.html`.
 - **HTTPS:** WebGPU (and the clipboard) only work in a secure context, which means `https://`
   or `http://localhost`. Over plain HTTP elsewhere, the app falls back to WebGL2.
-- **No special isolation headers:** Iridium CAD doesn't use `SharedArrayBuffer`, so it doesn't
+- **No special isolation headers:** Cad doesn't use `SharedArrayBuffer`, so it doesn't
   need `Cross-Origin-Opener-Policy` or `Cross-Origin-Embedder-Policy`. If your site already sends
   COEP `require-corp`, also send `Cross-Origin-Resource-Policy: same-origin` (or `cross-origin`
   when the files live on a CDN) on the app's files.
@@ -39,7 +39,7 @@ hash, so they can be cached forever. Only `index.html` needs revalidation.
 nginx example:
 
 ```nginx
-location /cadcraft/ {
+location /iridium-cad/ {
     types { application/wasm wasm; text/javascript js; text/html html; }
     gzip on;
     gzip_types application/wasm text/javascript text/html;
@@ -57,7 +57,7 @@ preferences in its local storage. Floating palettes remain embedded in the brows
 they do not become native operating-system windows. Window > Reset Palettes restores the
 default arrangement. This record contains panel placement and visibility, not drawing data.
 
-The optional `cadcraft.panel-layout` record uses the shared docking layout version and is
+The optional `iridium-cad.panel-layout` record uses the shared docking layout version and is
 limited to 64 KiB. Malformed, incompatible or invalid arrangements are ignored atomically,
 leaving the startup defaults usable. Storage availability and autosave follow the browser
 host's existing eframe persistence; clearing site data removes the saved layout.
@@ -67,7 +67,7 @@ host's existing eframe persistence; clearing site data removes the saved layout.
 ```html
 <iframe
   src="https://iridium.ph/"
-  title="Iridium CAD image editor"
+  title="Cad image editor"
   style="width: 100%; height: 720px; border: 0;"
   allow="fullscreen; clipboard-read; clipboard-write"
   allowfullscreen>
@@ -87,7 +87,7 @@ host's existing eframe persistence; clearing site data removes the saved layout.
 
 ## Renderer selection and fallback flags
 
-Iridium CAD renders with wgpu. It uses **WebGPU** when the browser has it and falls back to
+Cad renders with wgpu. It uses **WebGPU** when the browser has it and falls back to
 **WebGL2** on its own. URL query flags override this, and they work on the iframe `src` too:
 
 | Flag | Effect |

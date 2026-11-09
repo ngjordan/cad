@@ -15,7 +15,7 @@
   timestamp server, ...). Optional overrides: WINDOWS_TIMESTAMP_URL, SIGNTOOL (path to signtool.exe).
 
 .EXAMPLE
-  pwsh packaging/windows/sign.ps1 dist/cadcraft.exe dist/Designcraft.msi
+  pwsh packaging/windows/sign.ps1 dist/iridium-cad.exe dist/Designcraft.msi
 #>
 param(
   [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
@@ -55,8 +55,8 @@ if (-not $haveCert -and -not $haveAzure) {
 }
 
 $script:SignTool = Find-SignTool
-$common = @('sign', '/v', '/fd', 'SHA256', '/td', 'SHA256', '/d', 'Iridium CAD', '/du', 'https://github.com/storytold/cadcraft')
-$tmp = Join-Path ([IO.Path]::GetTempPath()) "cadcraft-sign-$PID"
+$common = @('sign', '/v', '/fd', 'SHA256', '/td', 'SHA256', '/d', 'CAD', '/du', 'https://github.com/ngjordan/cad')
+$tmp = Join-Path ([IO.Path]::GetTempPath()) "iridium-cad-sign-$PID"
 New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 
 try {

@@ -4,8 +4,8 @@
 
 use std::sync::Arc;
 
-use cadcraft_doc::{Block, Common, Drawing, Entity, EntityKind, Handle, Line};
-use cadcraft_geom::Vec3;
+use iridium_cad_doc::{Block, Common, Drawing, Entity, EntityKind, Handle, Line};
+use iridium_cad_geom::Vec3;
 
 use super::{Incomplete, Scan, entity_total};
 
