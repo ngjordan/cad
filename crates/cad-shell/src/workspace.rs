@@ -184,7 +184,6 @@ impl Workspace {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::ffi::OsString;
 
     fn temp_dir() -> PathBuf {
         let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
@@ -194,19 +193,9 @@ mod tests {
     }
 
     #[test]
-    fn profile_override_isolated_or_explicitly_disabled() {
-        let vars = |config: Option<&'static str>| {
-            move |key: &str| match key {
-                "IRIDIUM_CAD_CONFIG_DIR" => config.map(OsString::from),
-                "HOME" | "APPDATA" | "XDG_CONFIG_HOME" => Some(OsString::from("/unrelated-user-profile")),
-                _ => None,
-            }
-        };
-        let dir = |config| crate::env::Env::from_vars(vars(config)).config_dir;
-        assert_eq!(dir(Some("/private/test-state")), Some(PathBuf::from("/private/test-state")));
-        assert_eq!(dir(Some("")), None);
-        let (_, restored, error) = Workspace::load(dir(Some("")).as_deref());
-        assert!(restored.is_none() && error.is_none(), "no settings folder, no workspace file");
+    fn no_settings_folder_means_no_workspace_file() {
+        let (_, restored, error) = Workspace::load(None);
+        assert!(restored.is_none() && error.is_none());
     }
 
     #[test]

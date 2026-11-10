@@ -1,0 +1,44 @@
+[package]
+name = "iridium-cad-shell"
+description = "Cad desktop shell: the app's frame logic, native menu, workspace and devices, hosted by the app binary"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version = "1.95"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+iridium-cad-engine = { workspace = true }
+iridium-cad-ui-egui = { workspace = true }
+iridium-cad-io = { workspace = true }
+# For the shared per-session control-token helper (control_server.rs authentication).
+iridium-cad-mcp = { workspace = true }
+eframe = { workspace = true, features = ["clipboard", "wgpu", "accesskit", "wayland", "x11", "links", "persistence"] }
+egui = { workspace = true }
+serde_json = { workspace = true }
+log = { workspace = true }
+
+[target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
+# View ▸ Theme ▸ System: the desktop's light/dark choice from the XDG desktop portal
+# (desktop_theme.rs). Already in Cargo.lock through accesskit; pinned to that version so nothing
+# is built twice.
+zbus = { version = "=5.19.0", default-features = false, features = ["async-io", "blocking-api"] }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+rfd = { workspace = true }
+sys-locale = "0.3"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+craft-window = { workspace = true }
+muda = { version = "0.21", default-features = false }
+objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSWorkspace", "NSAccessibility"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+hidapi = { version = "2.6.7", default-features = false, features = ["windows-native"] }
+windows = { version = "0.62", features = ["UI_ViewManagement"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+hidapi = { version = "2.6.7", default-features = false, features = ["linux-native-basic-udev"] }

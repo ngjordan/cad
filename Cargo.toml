@@ -24,6 +24,7 @@ iridium-cad-io = { path = "crates/io" }
 iridium-cad-engine = { path = "crates/engine" }
 iridium-cad-ui-egui = { path = "crates/ui-egui" }
 iridium-cad-mcp = { path = "crates/mcp" }
+iridium-cad-shell = { path = "crates/cad-shell" }
 # Which paths stored in a drawing (xrefs, data links) may be opened.
 craft-docpath = { version = "0.1.0", git = "https://github.com/ngjordan/craft-libs", rev = "e9c3f87b4fb807dcb23dc85e82906510a229b72a" }
 # PDF writing (krilla) for plots, and reading them back in tests. The root patches below pin

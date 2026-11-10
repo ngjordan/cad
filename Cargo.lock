@@ -2321,26 +2321,22 @@ dependencies = [
  "clap",
  "craft-ui",
  "craft-update",
- "craft-window",
  "eframe",
  "egui",
  "hidapi",
  "iridium-cad-engine",
  "iridium-cad-io",
  "iridium-cad-mcp",
+ "iridium-cad-shell",
  "iridium-cad-ui-egui",
  "log",
- "muda",
  "objc2-app-kit 0.3.2",
- "rfd",
  "ron",
  "serde_json",
- "sys-locale",
  "thiserror 2.0.21",
  "windows",
  "winit",
  "winresource",
- "zbus",
 ]
 
 [[package]]
@@ -2489,6 +2485,28 @@ dependencies = [
  "rayon",
  "serde_json",
  "tiny-skia",
+]
+
+[[package]]
+name = "iridium-cad-shell"
+version = "0.17.0"
+dependencies = [
+ "craft-window",
+ "eframe",
+ "egui",
+ "hidapi",
+ "iridium-cad-engine",
+ "iridium-cad-io",
+ "iridium-cad-mcp",
+ "iridium-cad-ui-egui",
+ "log",
+ "muda",
+ "objc2-app-kit 0.3.2",
+ "rfd",
+ "serde_json",
+ "sys-locale",
+ "windows",
+ "zbus",
 ]
 
 [[package]]

@@ -45,6 +45,7 @@ pub const TABLE: &[(&str, Class)] = &[
     ("engine", Class::Layer(4)),
     ("ui-egui", Class::Layer(5)),
     ("mcp", Class::Layer(5)),
+    ("shell", Class::Layer(6)),
     ("testkit", Class::Testkit),
     // apps and tooling
     ("iridium-cad", Class::Exempt),
