@@ -60,11 +60,30 @@ pub struct Shell {
     /// The `movable` flag last set on the main window.
     #[cfg(target_os = "macos")]
     movable: Option<bool>,
+    /// Set by [`Shell::install_native_menu`]: `logic` rebuilds the menu.
+    #[cfg(target_os = "macos")]
+    reinstall_menu: std::sync::atomic::AtomicBool,
+    fonts: egui::FontDefinitions,
+    style: egui::Style,
+    zoom: f32,
 }
 
 impl Shell {
-    /// Install the I/O hooks and settings, restore the saved state and open `launch.files`.
+    /// The standalone app's constructor: the host-free [`Shell::new_for_host`] plus whatever needs the
+    /// real window. Cad has no such extra besides the wgpu render state, which a host sets itself.
     pub fn new(cc: &eframe::CreationContext<'_>, launch: Launch) -> Self {
+        let mut shell = Self::new_for_host(&cc.egui_ctx, cc.storage, launch);
+        if let Some(rs) = &cc.wgpu_render_state {
+            shell.cad.set_wgpu(rs, eframe::egui_wgpu::depth_format_from_bits(0, STENCIL_BITS));
+        }
+        shell
+    }
+
+    /// Host-facing constructor: no `CreationContext`, so a host can build this module later. `ctx`
+    /// is the host's egui context, `storage` its persistent store (`None`: defaults, nothing read).
+    /// Installs the I/O hooks and settings, restores the saved state, opens `launch.files`, then
+    /// lets the app install its look into `ctx` and captures it (see [`Shell::fonts`]).
+    pub fn new_for_host(ctx: &egui::Context, storage: Option<&dyn eframe::Storage>, launch: Launch) -> Self {
         install_io();
         iridium_cad_engine::settings_dir::set(launch.config_dir.clone());
         if let Some(dir) = &launch.config_dir {
@@ -88,13 +107,13 @@ impl Shell {
         }
         app.system_languages = launch.locale.map(|s| vec![s]).unwrap_or_else(|| sys_locale::get_locales().collect());
         // The user profile (Options): drafting settings, selection sizes, drawing-area colours.
-        if let Some(profile) = cc.storage.and_then(|s| s.get_string(iridium_cad_ui_egui::options::PROFILE_KEY)) {
+        if let Some(profile) = storage.and_then(|s| s.get_string(iridium_cad_ui_egui::options::PROFILE_KEY)) {
             app.load_profile(&profile);
         }
-        if let Some(prefs) = cc.storage.and_then(|s| s.get_string(iridium_cad_ui_egui::PREFS_KEY)) {
+        if let Some(prefs) = storage.and_then(|s| s.get_string(iridium_cad_ui_egui::PREFS_KEY)) {
             app.load_prefs(&prefs);
         }
-        if let Some(prefs) = cc.storage.and_then(|s| s.get_string(iridium_cad_ui_egui::autosave::PREFS_KEY)) {
+        if let Some(prefs) = storage.and_then(|s| s.get_string(iridium_cad_ui_egui::autosave::PREFS_KEY)) {
             iridium_cad_ui_egui::autosave::load_prefs(&prefs);
         }
         // Autosave files (SAVEFILEPATH) default to `<settings dir>/autosave`.
@@ -113,11 +132,8 @@ impl Shell {
         if launch.frame_cap {
             app.frame_cap = Some(iridium_cad_ui_egui::gpu::FrameCap::new(240));
         }
-        if let Some(rs) = &cc.wgpu_render_state {
-            app.set_wgpu(rs, eframe::egui_wgpu::depth_format_from_bits(0, STENCIL_BITS));
-        }
         if let Some(port) = launch.control {
-            let rx = control_server::start(port, cc.egui_ctx.clone());
+            let rx = control_server::start(port, ctx.clone());
             app = app.with_control(rx);
         }
         if launch.sample {
@@ -131,15 +147,17 @@ impl Shell {
             let metric = app.session.settings.measureinit;
             app.session.new_drawing(metric);
         }
-        let ctx = cc.egui_ctx.clone();
-        let desktop_theme = desktop_theme::DesktopTheme::start(move || ctx.request_repaint());
-        let ctx = cc.egui_ctx.clone();
-        let system_animations = system_animations::SystemAnimations::start(move || ctx.request_repaint());
+        let repaint = ctx.clone();
+        let desktop_theme = desktop_theme::DesktopTheme::start(move || repaint.request_repaint());
+        let repaint = ctx.clone();
+        let system_animations = system_animations::SystemAnimations::start(move || repaint.request_repaint());
+        app.install_look(ctx);
+        let fonts = app.installed_fonts.clone().unwrap_or_default();
         Shell {
             desktop_theme,
             system_animations,
             cad: app,
-            spacemouse: spacemouse::SpaceMouse::start(cc.egui_ctx.clone()),
+            spacemouse: spacemouse::SpaceMouse::start(ctx.clone()),
             workspace,
             workspace_error,
             #[cfg(target_os = "macos")]
@@ -148,7 +166,33 @@ impl Shell {
             menus_in_window: launch.no_native_menu,
             #[cfg(target_os = "macos")]
             movable: None,
+            #[cfg(target_os = "macos")]
+            reinstall_menu: std::sync::atomic::AtomicBool::new(false),
+            fonts,
+            style: ctx.global_style().as_ref().clone(),
+            zoom: ctx.zoom_factor(),
         }
+    }
+
+    /// The font set this module installed, captured at construction (stale if fonts change later).
+    pub fn fonts(&self) -> egui::FontDefinitions {
+        self.fonts.clone()
+    }
+
+    /// The style this module left behind, captured at construction.
+    pub fn style(&self) -> egui::Style {
+        self.style.clone()
+    }
+
+    /// The zoom factor this module left behind, captured at construction.
+    pub fn zoom(&self) -> f32 {
+        self.zoom
+    }
+
+    /// macOS: have the next [`Shell::logic`] re-install this module's native menu. No-op elsewhere.
+    pub fn install_native_menu(&self) {
+        #[cfg(target_os = "macos")]
+        self.reinstall_menu.store(true, std::sync::atomic::Ordering::Relaxed);
     }
 
     /// Per-frame logic, before [`Shell::ui`]: syncs the OS animation setting and runs `CadApp::logic`;
@@ -165,6 +209,9 @@ impl Shell {
         if ctx.current_pass_index() == 0 {
             #[cfg(target_os = "macos")]
             {
+                if self.reinstall_menu.swap(false, std::sync::atomic::Ordering::Relaxed) {
+                    self.native_menu = None;
+                }
                 if self.native_menu.is_none() && !self.menus_in_window {
                     self.native_menu = Some(native_menu::NativeMenu::install(&mut self.cad, ctx));
                 }

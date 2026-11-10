@@ -285,6 +285,8 @@ pub struct CadApp {
     pub frame_cap: Option<gpu::FrameCap>,
     /// Language whose interface fonts are installed (`None` until the first frame).
     fonts_language: Option<&'static str>,
+    /// The font set last installed by [`CadApp::install_look`] (egui cannot be read back before its first pass).
+    pub installed_fonts: Option<egui::FontDefinitions>,
     /// Language last given to egui (and so to the AccessKit root; `None` until the first frame).
     shown_language: Option<&'static str>,
     /// The theme last installed into egui (`None` until the first frame).
@@ -362,6 +364,7 @@ impl CadApp {
             #[cfg(not(target_arch = "wasm32"))]
             frame_cap: None,
             fonts_language: None,
+            installed_fonts: None,
             shown_language: None,
             shown_theme: None,
             shown_follows_system: false,
@@ -820,9 +823,25 @@ impl CadApp {
     fn ui_frame_begin(&mut self, ui: &mut egui::Ui) {
         let ctx = ui.ctx().clone();
         let ctx = &ctx;
+        self.install_look(ctx);
+        // Wait for the frame cap on a painted pass, where a wait cannot delay a hidden tick.
+        #[cfg(not(target_arch = "wasm32"))]
+        if let Some(cap) = &mut self.frame_cap {
+            cap.wait();
+        }
+        panel_state::migrate(ui);
+        self.ui_input(ctx);
+    }
+
+    /// Install fonts, theme, animation settings and zoom into `ctx`, each only when it changed
+    /// since the last call. Runs every UI frame; a host also calls it at construction so it can
+    /// capture the look.
+    pub fn install_look(&mut self, ctx: &egui::Context) {
         let language = self.language();
         if self.fonts_language != Some(language) {
-            theme::install_fonts(ctx, language);
+            let fonts = theme::font_definitions(ctx, language);
+            ctx.set_fonts(fonts.clone());
+            self.installed_fonts = Some(fonts);
             self.fonts_language = Some(language);
         }
         // The AccessKit root carries the language the interface is actually shown in; egui copies
@@ -858,13 +877,6 @@ impl CadApp {
             ctx.set_zoom_factor(scale);
             self.shown_interface_scale = Some(scale);
         }
-        // Wait for the frame cap on a painted pass, where a wait cannot delay a hidden tick.
-        #[cfg(not(target_arch = "wasm32"))]
-        if let Some(cap) = &mut self.frame_cap {
-            cap.wait();
-        }
-        panel_state::migrate(ui);
-        self.ui_input(ctx);
     }
 
     /// Input-derived work, once per layout frame.

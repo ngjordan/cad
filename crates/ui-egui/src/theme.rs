@@ -319,6 +319,12 @@ pub fn mono() -> FontId {
 /// interface adds a Hangul font only when the CJK font found doesn't cover Hangul
 /// ([`korean_font`]).
 pub fn install_fonts(ctx: &egui::Context, language: &str) {
+    let fonts = font_definitions(ctx, language);
+    ctx.set_fonts(fonts);
+}
+
+/// The font set [`install_fonts`] installs (also registers the diameter glyph on `ctx`).
+pub fn font_definitions(ctx: &egui::Context, language: &str) -> egui::FontDefinitions {
     crate::mtext_editor::install_diameter_glyph(ctx);
     let mut fonts = egui::FontDefinitions::default();
     let mut added: Vec<(String, std::sync::Arc<egui::FontData>)> = Vec::new();
@@ -398,7 +404,7 @@ pub fn install_fonts(ctx: &egui::Context, language: &str) {
     {
         f.push("Hack".into());
     }
-    ctx.set_fonts(fonts);
+    fonts
 }
 
 /// The system interface fonts [`install_fonts`] looks for, in order; it loads the first installed
