@@ -16,6 +16,7 @@ pub const UPDATE_APP: craft_update::app::App = craft_update::app::App {
     name: "Cad",
     tagline: "Computer-aided design",
     repo: "ngjordan/cad",
+    bundle: "ph.cad",
     former_ids: &[],
     former_names: &[],
     icon_png: Some(include_bytes!("../../../assets/app-icon/hicolor/128x128/apps/ph.cad.png")),
