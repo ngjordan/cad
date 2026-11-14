@@ -2,10 +2,10 @@
 
 | Tier | Applicable | Works | Partial | Broken | **Unaudited** | Wired (machine) | Stale |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| P2 | 75 | 41 (54.7 %) | 21 (28.0 %) | 12 (16.0 %) | **1 (1.3 %)** | 2 (2.7 %) | 0 |
+| P2 | 75 | 47 (62.7 %) | 17 (22.7 %) | 11 (14.7 %) | **0 (0.0 %)** | 55 (73.3 %) | 0 |
 
-**Catalogue coverage:** 62 (82.7 %) of 75 rows are works or partial; 41 (54.7 %) works outright; **1 (1.3 %) unaudited**.
+**Catalogue coverage:** 64 (85.3 %) of 75 rows are works or partial; 47 (62.7 %) works outright; **0 (0.0 %) unaudited**.
 
-**Evidence:** 61 verdict(s) rest on a handler that was read; 13 rest on the command being registered only.
+**Evidence:** 28 verdict(s) rest on a handler that was read; 47 rest on the command being registered only.
 
-Catalogue rows: 75. Verdicts recorded: 74. Registry ids: 463.
+Catalogue rows: 75. Verdicts recorded: 75. Registry ids: 463.
