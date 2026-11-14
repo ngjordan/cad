@@ -12,7 +12,7 @@ and the deep checklists are [geometry-parity.md](geometry-parity.md),
 
 | Number | Value | Kind |
 |---|---|---|
-| **Feature breadth** (AutoCAD for Mac menu items with a live command) | **245 / 491 = 50%** (233 = 47% counted by `cargo xtask parity`, which sees engine commands only; +12 UI-only items) | measured ([parity-checklist.md](parity-checklist.md), source scan) |
+| **Feature breadth** (AutoCAD for Mac menu items with a live command) |**[parity/parity.md](../parity/parity.md)**| measured ([parity-checklist.md](parity-checklist.md), source scan) |
 | Feature breadth, 2D menus only (excluding 150 3D items) | **≈ 65%** (222 / 341 by `cargo xtask parity`'s rule) | measured (source scan, 2026-10-10) |
 | Feature depth, weighted by use (features dimension) | **≈ 41%** | estimated (table below) |
 | **Ready for real work** | **≈ 38%** | estimated (dimension table below; weighted 37.7%) |
