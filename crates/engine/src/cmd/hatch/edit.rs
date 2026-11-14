@@ -373,14 +373,12 @@ pub(super) fn run_hatchedit(s: &mut Session, p: &Value) -> Result<Value> {
         Some(t) => Some(OriginMode::parse(t).ok_or_else(|| bad("hatchedit", "unknown `originMode`"))?),
         None => None,
     };
+    let as_region = matches!(p.get("recreate"), Some(Value::String(t)) if t.eq_ignore_ascii_case("region"));
     let recreate = match p.get("recreate") {
         None | Some(Value::Null) | Some(Value::Bool(false)) => false,
         Some(Value::Bool(true)) => true,
-        Some(Value::String(t)) if t.eq_ignore_ascii_case("polyline") => true,
-        Some(Value::String(t)) if t.eq_ignore_ascii_case("region") => {
-            return Err(bad("hatchedit", "region boundaries are not available yet; use \"polyline\""));
-        }
-        Some(_) => return Err(bad("hatchedit", "`recreate` is \"polyline\"")),
+        Some(Value::String(t)) if t.eq_ignore_ascii_case("polyline") || as_region => true,
+        Some(_) => return Err(bad("hatchedit", "`recreate` is \"polyline\" or \"region\"")),
     };
     let grad = gradient_edit(p)?;
     if grad.is_some() && str_param(p, "pattern").map(|v| v.trim().to_ascii_uppercase()).is_some_and(|v| !v.is_empty() && v != "SOLID") {
@@ -445,7 +443,8 @@ pub(super) fn run_hatchedit(s: &mut Session, p: &Value) -> Result<Value> {
         if recreate {
             let mut new = Vec::new();
             for l in &h.loops {
-                new.push(s.add_entity(lwpoly(l.vertices.clone(), true))?);
+                let kind = if as_region { EntityKind::Region(iridium_cad_doc::Region::from_loop(l.vertices.clone())) } else { lwpoly(l.vertices.clone(), true) };
+                new.push(s.add_entity(kind)?);
             }
             if associate {
                 for (l, n) in h.loops.iter_mut().zip(&new) {

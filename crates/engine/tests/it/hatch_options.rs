@@ -266,8 +266,12 @@ fn hatchedit_refuses_unknown_patterns_and_region_boundaries() {
     s.execute("hatchedit", &json!({ "handles": [h.clone()], "pattern": before.to_lowercase() })).unwrap();
     s.execute("hatchedit", &json!({ "handles": [h.clone()], "pattern": "solid" })).unwrap();
     assert!(hatch(&s, &h).solid);
-    // Region boundaries need REGION objects; the hatch is left as it was.
-    assert!(s.execute("hatchedit", &json!({ "handles": [h], "recreate": "region" })).is_err());
+    // Region boundaries become REGION objects.
+    let v = s.execute("hatchedit", &json!({ "handles": [h.clone()], "recreate": "region" })).unwrap();
+    let new = v["handles"][0].as_str().unwrap().to_string();
+    let hh = iridium_cad_doc::Handle::parse_hex(&new).unwrap();
+    assert!(matches!(s.doc().unwrap().entity(hh).unwrap().kind, iridium_cad_doc::EntityKind::Region(_)));
+    assert!(s.execute("hatchedit", &json!({ "handles": [h], "recreate": "bogus" })).is_err());
 }
 
 #[test]
