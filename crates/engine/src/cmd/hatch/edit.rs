@@ -443,7 +443,11 @@ pub(super) fn run_hatchedit(s: &mut Session, p: &Value) -> Result<Value> {
         if recreate {
             let mut new = Vec::new();
             for l in &h.loops {
-                let kind = if as_region { EntityKind::Region(iridium_cad_doc::Region::from_loop(l.vertices.clone())) } else { lwpoly(l.vertices.clone(), true) };
+                let kind = if as_region {
+                    EntityKind::Region(iridium_cad_doc::Region::from_loop(l.vertices.clone()))
+                } else {
+                    lwpoly(l.vertices.clone(), true)
+                };
                 new.push(s.add_entity(kind)?);
             }
             if associate {

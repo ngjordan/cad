@@ -10,6 +10,10 @@
 
 pub mod assoc;
 #[cfg(not(target_arch = "wasm32"))]
+// The atomic file replacement. It is `#![cfg(not(target_arch = "wasm32"))]`
+// inside, so the declaration has to be gated too: a browser tab writes
+// through the app's file service, not through the file system.
+#[cfg(not(target_arch = "wasm32"))]
 pub mod atomic_write;
 pub mod audit;
 pub mod autosave;

@@ -2494,6 +2494,7 @@ dependencies = [
  "craft-window",
  "eframe",
  "egui",
+ "getrandom 0.4.3",
  "hidapi",
  "iridium-cad-engine",
  "iridium-cad-io",

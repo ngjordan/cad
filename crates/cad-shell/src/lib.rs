@@ -12,7 +12,9 @@ mod system_animations;
 mod workspace;
 
 use iridium_cad_engine::Session;
-use iridium_cad_ui_egui::{CadApp, Services, i18n};
+#[cfg(not(target_arch = "wasm32"))]
+use iridium_cad_ui_egui::i18n;
+use iridium_cad_ui_egui::{CadApp, Services};
 use std::path::{Path, PathBuf};
 
 /// Stencil bits of the window's render pass; the host sets the same in `NativeOptions::stencil_buffer`.
@@ -86,6 +88,8 @@ impl Shell {
     pub fn new_for_host(ctx: &egui::Context, storage: Option<&dyn eframe::Storage>, launch: Launch) -> Self {
         install_io();
         iridium_cad_engine::settings_dir::set(launch.config_dir.clone());
+        // wasm32: no crash-report files, autosave folder, update check or frame cap in a browser tab.
+        #[cfg(not(target_arch = "wasm32"))]
         if let Some(dir) = &launch.config_dir {
             iridium_cad_ui_egui::fault::install_report_hook(dir.join(iridium_cad_ui_egui::fault::REPORT_DIR));
         }
@@ -105,7 +109,12 @@ impl Shell {
             eprintln!("Cad workspace: {error}");
             app.set_status(error);
         }
-        app.system_languages = launch.locale.map(|s| vec![s]).unwrap_or_else(|| sys_locale::get_locales().collect());
+        #[cfg(not(target_arch = "wasm32"))]
+        let system_languages = launch.locale.map(|s| vec![s]).unwrap_or_else(|| sys_locale::get_locales().collect());
+        // The browser's language list is the host's to supply (`launch.locale`).
+        #[cfg(target_arch = "wasm32")]
+        let system_languages = launch.locale.map(|s| vec![s]).unwrap_or_default();
+        app.system_languages = system_languages;
         // The user profile (Options): drafting settings, selection sizes, drawing-area colours.
         if let Some(profile) = storage.and_then(|s| s.get_string(iridium_cad_ui_egui::options::PROFILE_KEY)) {
             app.load_profile(&profile);
@@ -117,6 +126,7 @@ impl Shell {
             iridium_cad_ui_egui::autosave::load_prefs(&prefs);
         }
         // Autosave files (SAVEFILEPATH) default to `<settings dir>/autosave`.
+        #[cfg(not(target_arch = "wasm32"))]
         if let Some(dir) = &launch.config_dir {
             app.enable_autosave(&dir.join("autosave"));
             app.enable_update_check();
@@ -129,6 +139,7 @@ impl Shell {
             app.session.set_lisp_support_dir(Some(support));
         }
         app.integrated_titlebar = cfg!(target_os = "macos");
+        #[cfg(not(target_arch = "wasm32"))]
         if launch.frame_cap {
             app.frame_cap = Some(iridium_cad_ui_egui::gpu::FrameCap::new(240));
         }
@@ -317,6 +328,9 @@ fn install_io() {
 
 fn services() -> Services {
     Services {
+        // The native file dialogs are blocking; rfd offers only an async dialog in a browser, which a
+        // sync closure cannot await. Unset on wasm32: the web host takes dropped files (`no_file_system`).
+        #[cfg(not(target_arch = "wasm32"))]
         pick_open: Some(Box::new(|| {
             rfd::FileDialog::new()
                 .add_filter(i18n::t("Drawings (DWG, DXF)"), &["dwg", "dxf", "dwt"])
@@ -325,6 +339,7 @@ fn services() -> Services {
                 .pick_file()
                 .map(|p| p.to_string_lossy().to_string())
         })),
+        #[cfg(not(target_arch = "wasm32"))]
         pick_save: Some(Box::new(|name: &str| {
             filters_for_save(name)
                 .iter()
@@ -333,12 +348,14 @@ fn services() -> Services {
                 .map(|p| p.to_string_lossy().to_string())
         })),
         // APPLOAD: AutoLISP routines only, starting where the last one was loaded from.
+        #[cfg(not(target_arch = "wasm32"))]
         pick_lisp: Some(Box::new(|dir: &str| {
             let dialog = rfd::FileDialog::new().add_filter(i18n::t("AutoLISP (LSP)"), &["lsp"]).add_filter(i18n::t("All files"), &["*"]);
             let dialog = if dir.is_empty() { dialog } else { dialog.set_directory(dir) };
             dialog.pick_file().map(|p| p.to_string_lossy().to_string())
         })),
-        no_file_system: false,
+        no_file_system: cfg!(target_arch = "wasm32"),
+        ..Services::default()
     }
 }
 
@@ -346,6 +363,7 @@ fn services() -> Services {
 /// filter's extension, and macOS accepts only listed extensions, replacing any other with the
 /// first one. DWG must be listed for a `.dwg` name to survive, and a drawing opened from DWG
 /// then defaults to DWG; other names keep DXF first.
+#[cfg(not(target_arch = "wasm32"))]
 fn filters_for_save(name: &str) -> [(&'static str, &'static str); 6] {
     let mut filters =
         [("Drawing (DXF)", "dxf"), ("Drawing (DWG)", "dwg"), ("Drawing Template (DWT)", "dwt"), ("SVG", "svg"), ("PNG", "png"), ("PDF", "pdf")];

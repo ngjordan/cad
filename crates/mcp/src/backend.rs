@@ -415,8 +415,11 @@ impl Backend for Headless {
                 let (w, h) = (view.width, view.height);
                 let png = iridium_cad_render::raster::render_png(&list, &view, &iridium_cad_render::raster::RasterOptions::default())
                     .ok_or("render failed")?;
+                #[cfg_attr(target_arch = "wasm32", allow(unused_mut))]
                 let mut r =
                     json!({"pngBase64": iridium_cad_engine::cmd::file::base64_encode(&png), "width": w, "height": h, "truncated": list.truncated});
+                // The browser has no file system: on wasm32 `path` is ignored and the PNG comes back inline.
+                #[cfg(not(target_arch = "wasm32"))]
                 if let Some(path) = str_p("path") {
                     let file = std::path::Path::new(&path);
                     let folder = iridium_cad_engine::atomic_write::missing_folder(file);
