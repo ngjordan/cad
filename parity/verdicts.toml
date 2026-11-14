@@ -495,8 +495,8 @@ note = "3dorbit handler is a stub returning '3DORBIT is not available yet' (exch
 title = "Visual styles, materials, lights, render, camera"
 verdict = "ABSENT"
 level = "wired"
-evidence = ["docs/parity-checklist.md:55", "docs/parity-checklist.md:67"]
-note = "checklist lists all Visual Styles, Lights, Materials, Camera as uncovered; no matching CommandSpec"
+evidence = ["crates/engine/src/cmd.rs:174", "crates/engine/src/cmd/blocks/purge.rs:51"]
+note = "checklist lists all Visual Styles, Lights, Materials, Camera as uncovered; no matching CommandSpec. command_specs() in cmd.rs registers no visual-style, material, light, render or camera module, and purge.rs:51 marks Visualstyles as Kind::Absent"
 
 [verdict."step-iges-stl-3mf-brep-acis-import-export"]
 title = "STEP / IGES / STL / 3MF / BREP / ACIS import-export"
