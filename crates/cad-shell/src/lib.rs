@@ -355,7 +355,6 @@ fn services() -> Services {
             dialog.pick_file().map(|p| p.to_string_lossy().to_string())
         })),
         no_file_system: cfg!(target_arch = "wasm32"),
-        ..Services::default()
     }
 }
 

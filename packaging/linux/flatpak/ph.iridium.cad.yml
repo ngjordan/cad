@@ -4,13 +4,13 @@
 #
 #   curl -fsSLO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/cargo/flatpak-cargo-generator.py
 #   python3 flatpak-cargo-generator.py Cargo.lock -o packaging/linux/flatpak/cargo-sources.json
-#   flatpak-builder --user --install --force-clean build-flatpak packaging/linux/flatpak/ph.cad.yml
-#   flatpak run ph.cad
+#   flatpak-builder --user --install --force-clean build-flatpak packaging/linux/flatpak/ph.iridium.cad.yml
+#   flatpak run ph.iridium.cad
 #
 # For Flathub, replace the `dir` source with a `git` source pinned to a release tag and commit.
-# The single-file .flatpak attached to each release comes from ph.cad.bundle.yml,
+# The single-file .flatpak attached to each release comes from ph.iridium.cad.bundle.yml,
 # which repackages the prebuilt release binaries. Keep runtime-version and finish-args identical.
-id: ph.cad
+id: ph.iridium.cad
 runtime: org.freedesktop.Platform
 runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
@@ -48,8 +48,8 @@ modules:
       - cargo --offline build --release --locked -p iridium-cad -p iridium-cad-cli
       - install -Dm755 target/release/iridium-cad /app/bin/iridium-cad
       - install -Dm755 target/release/iridium-cad-cli /app/bin/iridium-cad-cli
-      - install -Dm644 packaging/linux/ph.cad.desktop /app/share/applications/ph.cad.desktop
-      - install -Dm644 packaging/linux/ph.cad.mime.xml /app/share/mime/packages/ph.cad.xml
+      - install -Dm644 packaging/linux/ph.iridium.cad.desktop /app/share/applications/ph.iridium.cad.desktop
+      - install -Dm644 packaging/linux/ph.iridium.cad.mime.xml /app/share/mime/packages/ph.iridium.cad.xml
       - mkdir -p /app/share/icons && cp -R assets/app-icon/hicolor /app/share/icons/
       - install -Dm644 NOTICE /app/share/doc/iridium-cad/NOTICE
       - install -Dm644 ATTRIBUTION.md /app/share/doc/iridium-cad/ATTRIBUTION.md
@@ -57,7 +57,7 @@ modules:
         version=$(awk '/^\[/{p=($0=="[workspace.package]");next} p&&$1=="version"{gsub(/[" ]/,"",$3);print $3;exit}' Cargo.toml);
         install -d /app/share/metainfo;
         sed -e "s/@VERSION@/$version/" -e "s/@DATE@/$(date -u +%Y-%m-%d)/"
-        packaging/linux/ph.cad.metainfo.xml.in > /app/share/metainfo/ph.cad.metainfo.xml
+        packaging/linux/ph.iridium.cad.metainfo.xml.in > /app/share/metainfo/ph.iridium.cad.metainfo.xml
     sources:
       - type: dir
         path: ../../..

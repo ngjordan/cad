@@ -18,7 +18,7 @@ set -euo pipefail
 # shellcheck source=../env.sh
 . "$(dirname "${BASH_SOURCE[0]}")/../env.sh"
 LINUX="$ROOT/packaging/linux"
-APP_ID=ph.cad
+APP_ID=ph.iridium.cad
 
 SKIP_BUILD=0
 DRY_RUN=0

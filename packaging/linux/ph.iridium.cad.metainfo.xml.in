@@ -2,12 +2,12 @@
 <!-- AppStream metadata (software centres, Flathub). Template: package.sh and the Flatpak
      manifest substitute @VERSION@ and @DATE@ from Cargo.toml and the build date. -->
 <component type="desktop-application">
-  <id>ph.cad</id>
+  <id>ph.iridium.cad</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT OR Apache-2.0</project_license>
   <name>Cad</name>
   <summary>Draft, dimension and plot 2D drawings</summary>
-  <developer id="ph.cad">
+  <developer id="ph.iridium.cad">
     <name>Iridium Technologies, Inc.</name>
   </developer>
   <description>
@@ -17,8 +17,8 @@
       and DWG drawings, exports SVG and PNG, and can be driven by AI agents over MCP.
     </p>
   </description>
-  <launchable type="desktop-id">ph.cad.desktop</launchable>
-  <icon type="stock">ph.cad</icon>
+  <launchable type="desktop-id">ph.iridium.cad.desktop</launchable>
+  <icon type="stock">ph.iridium.cad</icon>
   <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
   <url type="homepage">https://iridium.ph</url>
   <url type="bugtracker">https://github.com/ngjordan/iridium-cad/issues</url>

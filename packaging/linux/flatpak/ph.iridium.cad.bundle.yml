@@ -9,9 +9,9 @@
 # xkbcommon and Vulkan at runtime; the freedesktop runtime has all of them, and the GPU driver
 # comes from its org.freedesktop.Platform.GL extension.
 #
-# ph.cad.yml (same directory) is the from-source manifest for Flathub. Keep
+# ph.iridium.cad.yml (same directory) is the from-source manifest for Flathub. Keep
 # runtime, runtime-version, sdk and finish-args identical in both (packaging-lint checks this).
-id: ph.cad
+id: ph.iridium.cad
 runtime: org.freedesktop.Platform
 runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
@@ -40,11 +40,11 @@ modules:
     build-commands:
       - install -Dm755 bin/iridium-cad /app/bin/iridium-cad
       - install -Dm755 bin/iridium-cad-cli /app/bin/iridium-cad-cli
-      - install -Dm644 share/applications/ph.cad.desktop /app/share/applications/ph.cad.desktop
+      - install -Dm644 share/applications/ph.iridium.cad.desktop /app/share/applications/ph.iridium.cad.desktop
       # .dxf and .dwg.
-      - install -Dm644 share/mime/packages/ph.cad.xml /app/share/mime/packages/ph.cad.xml
+      - install -Dm644 share/mime/packages/ph.iridium.cad.xml /app/share/mime/packages/ph.iridium.cad.xml
       # Already has the release's version and date substituted by package.sh.
-      - install -Dm644 share/metainfo/ph.cad.metainfo.xml /app/share/metainfo/ph.cad.metainfo.xml
+      - install -Dm644 share/metainfo/ph.iridium.cad.metainfo.xml /app/share/metainfo/ph.iridium.cad.metainfo.xml
       - mkdir -p /app/share/icons /app/share/doc && cp -R share/icons/hicolor /app/share/icons/ && cp -R share/doc/iridium-cad /app/share/doc/
     sources:
       - type: dir

@@ -88,7 +88,7 @@ fn window_options(restoring: bool) -> eframe::NativeOptions {
     }
 }
 
-const APP_ID: &str = "ph.cad";
+const APP_ID: &str = "ph.iridium.cad";
 
 /// The key eframe saves the main window state under in its storage.
 const WINDOW_KEY: &str = "window";

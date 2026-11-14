@@ -19,8 +19,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 PRODUCT = "Cad"
 OLD = "Cad"
-APP_ID = "ph.cad"
-NEW_APP_ID = "ph.cad"
+APP_ID = "ph.iridium.cad"
+NEW_APP_ID = "ph.iridium.cad"
 ICON_OLD = "iridium-cad"
 ICON_NEW = "iridium-cad"
 

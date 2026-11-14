@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/app-icon/hicolor/256x256/apps/ph.cad.png" width="128" height="128" alt="CAD icon: a drafting set square and compass arc on a blue grid tile">
+  <img src="assets/app-icon/hicolor/256x256/apps/ph.iridium.cad.png" width="128" height="128" alt="CAD icon: a drafting set square and compass arc on a blue grid tile">
 </p>
 
 <h1 align="center">CAD</h1>
