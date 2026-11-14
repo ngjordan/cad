@@ -327,6 +327,11 @@ fn install_io() {
 }
 
 fn services() -> Services {
+    // The desktop sets every field, so clippy calls the struct update
+    // needless; the browser sets only `no_file_system`, because the three
+    // native file dialogs do not exist there. The update is what fills the
+    // three in on wasm.
+    #[cfg_attr(not(target_arch = "wasm32"), allow(clippy::needless_update))]
     Services {
         // The native file dialogs are blocking; rfd offers only an async dialog in a browser, which a
         // sync closure cannot await. Unset on wasm32: the web host takes dropped files (`no_file_system`).
@@ -355,6 +360,7 @@ fn services() -> Services {
             dialog.pick_file().map(|p| p.to_string_lossy().to_string())
         })),
         no_file_system: cfg!(target_arch = "wasm32"),
+        ..Services::default()
     }
 }
 
