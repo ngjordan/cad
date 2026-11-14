@@ -220,7 +220,7 @@ title = "Leaders / multileaders / MLEADER styles"
 verdict = "PARTIAL"
 level = "read"
 evidence = ["crates/engine/src/cmd/annotate.rs:87", "crates/engine/src/cmd/annotate/leader.rs:180", "crates/engine/src/cmd/props.rs:77"]
-note = "leader, mleader, mleaderstyle, mleaderedit/align/collect registered; some leader prompt keywords echo 'not available here yet' (leader.rs:180)"
+note = "leader, mleader, mleaderstyle, mleaderedit/align/collect registered. The leader prompt handles None, Block and Copy (leader.rs:123-125); the 'not available here yet' echo is the branch at the block-point prompt, which takes a point and no keyword, not a missing keyword."
 commands = ["leader", "mleader", "mleaderstyle", "mleaderedit"]
 
 [verdict."tolerance-gd-t-frames"]
@@ -410,7 +410,7 @@ title = "Inquiry: DIST, AREA, ID, LIST, MASSPROP, MEASURE, COUNT"
 verdict = "PARTIAL"
 level = "read"
 evidence = ["crates/engine/src/cmd/inquiry.rs:24", "crates/engine/src/cmd/inquiry.rs:879", "crates/engine/src/cmd/inquiry.rs:1250"]
-note = "dist, id, list, area, massprop, measuregeom, count registered; AREA/DIST keywords unsupported echo 'not available yet' (inquiry.rs:879,1250)"
+note = "dist, id, list, area, massprop, measuregeom, count registered. AREA and DIST take the arc keywords (Arc, Line and the polyline prompt set) through arcs.keyword (inquiry/arcs.rs:132); the 'not available yet' echo is the branch for a keyword outside that set, not a missing keyword."
 commands = ["dist", "list", "area", "massprop", "measuregeom", "count"]
 
 [verdict."block-entity-data-xdata-preserved-on-round-trip"]
