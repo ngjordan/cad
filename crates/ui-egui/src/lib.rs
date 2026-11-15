@@ -200,7 +200,7 @@ impl Default for UiState {
             show_command_line: true,
             show_viewcube: true,
             show_ucs_icon: true,
-            show_layer_list: false,
+            show_layer_list: true,
             system_cursor: false,
             toolset_tab: "Drafting".into(),
             collapsed_groups: Vec::new(),

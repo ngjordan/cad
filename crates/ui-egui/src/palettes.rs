@@ -180,6 +180,7 @@ pub fn toolsets(app: &mut CadApp, ui: &mut egui::Ui) {
         let mut toggle_group = None;
         let mut tool_visible: Option<(String, bool)> = None;
         let mut restore: Vec<String> = Vec::new();
+        let running = app.session.running.as_ref().map(|r| r.id.clone());
         ui.scope_builder(egui::UiBuilder::new().max_rect(body), |ui| {
             egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
                 ui.spacing_mut().item_spacing = vec2(0.0, 0.0);
@@ -236,7 +237,7 @@ pub fn toolsets(app: &mut CadApp, ui: &mut egui::Ui) {
                                         continue;
                                     }
                                     ui.add_enabled_ui(command_known(cmd), |ui| {
-                                        if icons::button(ui, *icon, 40.0, tip, false).clicked() {
+                                        if icons::button(ui, *icon, 40.0, tip, running.as_deref() == Some(*cmd)).clicked() {
                                             clicked = Some(cmd);
                                         }
                                     });
@@ -252,7 +253,7 @@ pub fn toolsets(app: &mut CadApp, ui: &mut egui::Ui) {
                                 ui.spacing_mut().item_spacing = vec2(2.0, 0.0);
                                 for (icon, cmd, tip) in row.iter() {
                                     ui.add_enabled_ui(command_known(cmd), |ui| {
-                                        if icons::button(ui, *icon, 23.0, tip, false).clicked() {
+                                        if icons::button(ui, *icon, 23.0, tip, running.as_deref() == Some(*cmd)).clicked() {
                                             clicked = Some(cmd);
                                         }
                                     });
@@ -457,16 +458,16 @@ pub(crate) fn layers_section(app: &mut CadApp, ui: &mut egui::Ui) {
     ui.horizontal(|ui| {
         ui.add_space(8.0);
         let w = ui.available_width() - 10.0;
-        let (rect, _) = ui.allocate_exact_size(vec2(w, 24.0), Sense::hover());
-        ui.painter().rect_filled(rect, 3.0, t.control);
+        let (rect, resp) = ui.allocate_exact_size(vec2(w, 24.0), Sense::hover());
+        ui.painter().rect_filled(rect, 3.0, t.panel);
         ui.painter().text(
             pos2(rect.left() + 8.0, rect.center().y),
             egui::Align2::LEFT_CENTER,
             crate::tl!("Unsaved Layer State"),
             crate::theme::body(),
-            t.text,
+            t.text_faint,
         );
-        icons::paint(ui.painter(), Rect::from_center_size(pos2(rect.right() - 12.0, rect.center().y), vec2(12.0, 12.0)), Icon::ChevronDown, false);
+        resp.on_hover_text(crate::tl!("Layer states: not available yet"));
     });
     ui.add_space(4.0);
     let label = if app.ui.show_layer_list { "Hide Layer List" } else { "Show Layer List" };
@@ -545,7 +546,7 @@ fn value_box(ui: &mut egui::Ui, text: &str, combo: bool, enabled: bool) -> egui:
         crate::theme::body(),
         if enabled { t.text } else { t.text_faint },
     );
-    if combo {
+    if combo && enabled {
         icons::paint(ui.painter(), Rect::from_center_size(pos2(rect.right() - 10.0, rect.center().y), vec2(11.0, 11.0)), Icon::ChevronDown, false);
     }
     resp
@@ -642,6 +643,9 @@ fn properties_header(app: &mut CadApp, ui: &mut egui::Ui) {
     let my = half.translate(vec2(35.0, 0.0));
     ui.painter().rect_filled(if app.ui.properties_all { half } else { my }, 3.0, t.control);
     ui.painter().text(half.center(), egui::Align2::CENTER_CENTER, crate::tl!("All"), crate::theme::small(), t.text);
+    if ui.interact(half, ui.scope_id().with("prop_all"), Sense::click()).clicked() {
+        app.ui.properties_all = true;
+    }
     ui.painter().text(my.center(), egui::Align2::CENTER_CENTER, crate::tl!("My"), crate::theme::small(), t.text_faint);
     ui.interact(my, ui.scope_id().with("prop_my"), Sense::hover()).on_hover_text(crate::tl!("My properties: not available yet"));
     let sel = app.session.selection();
@@ -1208,5 +1212,11 @@ mod tests {
             output.textures_delta.clear();
         }
         assert!(painted_blue, "a ByLayer entity on a blue layer needs a blue Properties swatch");
+    }
+
+    #[test]
+    fn layer_list_starts_visible() {
+        let app = CadApp::new(Session::default(), Services::default());
+        assert!(app.ui.show_layer_list);
     }
 }

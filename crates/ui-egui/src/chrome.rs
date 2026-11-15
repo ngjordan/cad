@@ -376,7 +376,6 @@ pub fn status_bar(app: &mut CadApp, ui: &mut egui::Ui) {
             (Icon::DynInput, s.dynmode, "dynmode", "Dynamic Input (F12)"),
             (Icon::QuickProps, s.qpmode, "qpmode", "Quick Properties"),
             (Icon::Annotation, anno_all, "annovisible.toggle", "Annotation Visibility"),
-            (Icon::Workspace, false, "ui.noop", "Workspace Switching"),
             (Icon::Gear, false, "ui.dialog.dsettings", "Drafting Settings"),
         ];
         let size = 20.0;
@@ -558,22 +557,32 @@ pub fn start_page(app: &mut CadApp, ui: &mut egui::Ui) {
     let main = Rect::from_min_max(pos2(left.right() + 36.0, r.top() + 40.0), r.max);
     p.text(main.min, egui::Align2::LEFT_TOP, crate::tl!("Recent"), egui::FontId::proportional(22.0), t.text);
     let mut recent = None;
-    let mut y = main.top() + 44.0;
-    for (i, path) in app.ui.recent_files.iter().enumerate() {
-        let row = Rect::from_min_size(pos2(main.left(), y), vec2((r.right() - main.left() - 36.0).clamp(0.0, 640.0), 42.0));
-        let resp = ui.interact(row, ui.scope_id().with(("recent", i)), Sense::click());
-        if resp.hovered() {
-            p.rect_filled(row, 2.0, t.control_hover.gamma_multiply(0.5));
-        }
-        let dir = std::path::Path::new(path).parent().map(|d| d.display().to_string()).unwrap_or_default();
-        let clip = p.with_clip_rect(row.shrink(2.0));
-        clip.text(pos2(row.left() + 10.0, row.top() + 13.0), egui::Align2::LEFT_CENTER, crate::menus::file_name(path), crate::theme::body(), t.text);
-        clip.text(pos2(row.left() + 10.0, row.top() + 30.0), egui::Align2::LEFT_CENTER, dir, crate::theme::small(), t.text_faint);
-        if resp.on_hover_text(path).clicked() {
-            recent = Some(path.clone());
-        }
-        y += 46.0;
-    }
+    let list = Rect::from_min_max(pos2(main.left(), main.top() + 44.0), r.max);
+    ui.scope_builder(egui::UiBuilder::new().max_rect(list), |ui| {
+        egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+            ui.spacing_mut().item_spacing.y = 4.0;
+            let p = ui.painter().clone();
+            for path in app.ui.recent_files.iter() {
+                let (row, resp) = ui.allocate_exact_size(vec2((r.right() - main.left() - 36.0).clamp(0.0, 640.0), 42.0), Sense::click());
+                if resp.hovered() {
+                    p.rect_filled(row, 2.0, t.control_hover.gamma_multiply(0.5));
+                }
+                let dir = std::path::Path::new(path).parent().map(|d| d.display().to_string()).unwrap_or_default();
+                let clip = p.with_clip_rect(row.shrink(2.0));
+                clip.text(
+                    pos2(row.left() + 10.0, row.top() + 13.0),
+                    egui::Align2::LEFT_CENTER,
+                    crate::menus::file_name(path),
+                    crate::theme::body(),
+                    t.text,
+                );
+                clip.text(pos2(row.left() + 10.0, row.top() + 30.0), egui::Align2::LEFT_CENTER, dir, crate::theme::small(), t.text_faint);
+                if resp.on_hover_text(path).clicked() {
+                    recent = Some(path.clone());
+                }
+            }
+        });
+    });
     if let Some(path) = recent {
         app.open_path(std::path::Path::new(&path));
     } else if app.ui.recent_files.is_empty() {
